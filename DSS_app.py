@@ -14,6 +14,14 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+# ─── Ensure project root is on sys.path (needed for Dataiku DSS exec-based loading) ──
+import sys
+from pathlib import Path
+
+_PROJECT_ROOT = str(Path("/home/dataiku/lib/project/project-python-libs/USPRIMARYCAREADHOCANALYTICSPARTC/Webapp/Primary_Care_Intelligence_Hub"))
+if _PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, _PROJECT_ROOT)
+
 # ─── Imports ────────────────────────────────────────────────────────────────
 from frontend.styles import get_global_css
 from frontend.sidebar import render_sidebar
