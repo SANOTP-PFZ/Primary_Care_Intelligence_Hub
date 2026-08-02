@@ -268,7 +268,7 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
     overflow: hidden;
     min-width: 0;
 }
-.content { flex: 1; min-height: 0; overflow-y: auto; padding: 1.4rem; display: flex; flex-direction: column; justify-content: center; gap: 0; }
+.content { flex: 1; min-height: 0; overflow-y: auto; padding: 1.4rem; display: flex; flex-direction: column; }
 
 /* SECTION HEADER */
 .section-header {
@@ -407,10 +407,13 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
 
 /* MISSION STATEMENT */
 .hub-mission {
-    margin-top: 1.2rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     text-align: center;
-    padding: 1.5rem 3rem;
-    flex-shrink: 0;
+    padding: 1rem 3rem;
 }
 .mission-divider {
     width: 80px;
@@ -426,6 +429,7 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
     line-height: 1.55;
     margin-bottom: 0.6rem;
     letter-spacing: -0.01em;
+    max-width: 520px;
 }
 .mission-sub {
     font-size: 13px;
@@ -433,6 +437,7 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
     font-weight: 400;
     line-height: 1.55;
     margin-bottom: 1.2rem;
+    max-width: 480px;
 }
 .mission-sub strong {
     color: var(--navy-700);
