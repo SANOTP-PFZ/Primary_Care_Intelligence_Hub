@@ -185,7 +185,7 @@ def get_global_css():
        SIDEBAR BRAND
        ═══════════════════════════════════════════════════════════════════════ */
     .sidebar-brand {
-        padding: 1.2rem 1rem 1rem;
+        padding: 10px 1rem 1rem;
         display: flex;
         flex-direction: column;
         gap: 0.6rem;
