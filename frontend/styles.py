@@ -109,14 +109,15 @@ def get_global_css():
         color: var(--text) !important;
     }
 
+    /* Streamlit nav buttons - styled to match reference nav items */
     [data-testid="stSidebar"] .stButton > button {
         width: 100% !important;
         text-align: left !important;
         background: transparent !important;
         border: none !important;
         border-radius: var(--radius-sm) !important;
-        padding: 9px 12px !important;
-        margin: 1px 0 !important;
+        padding: 10px 14px !important;
+        margin: 2px 0 !important;
         color: var(--text-soft) !important;
         font-family: 'Inter', sans-serif !important;
         font-size: 13px !important;
@@ -130,38 +131,28 @@ def get_global_css():
         color: var(--text) !important;
     }
 
-    /* Active nav item - gradient background + left border indicator */
-    .nav-active + div .stButton > button,
-    .nav-active > div .stButton > button,
-    [data-testid="stSidebar"] .nav-active + div button {
+    /* Active nav item via marker div */
+    .nav-active-marker + div .stButton > button {
         background: linear-gradient(90deg, rgba(28,79,192,0.10) 0%, rgba(28,79,192,0.04) 100%) !important;
         color: var(--navy-700) !important;
         font-weight: 600 !important;
-        border-left: 3px solid transparent !important;
-        border-image: linear-gradient(180deg, var(--navy-600), var(--accent)) 1 !important;
-        box-shadow: 0 0 8px rgba(28,79,192,0.06) !important;
+        border-left: 3px solid var(--navy-600) !important;
     }
 
-    /* ─── Sidebar Brand (Containerized Button-style Title) ─── */
+    .nav-active-marker {
+        display: none;
+    }
+
+    /* ─── Sidebar Brand (flat, part of sidebar flow) ─── */
     .sidebar-brand {
-        padding: 16px 14px;
+        padding: 20px 14px 16px;
         display: flex;
         align-items: center;
         gap: 12px;
-        background: rgba(255,255,255,0.7);
-        border: 1px solid var(--hairline);
-        border-radius: 10px;
-        margin: 12px 8px 8px;
-        box-shadow: var(--shadow-xs);
-        transition: box-shadow 0.18s var(--ease);
-    }
-
-    .sidebar-brand:hover {
-        box-shadow: var(--shadow-sm);
     }
 
     .sidebar-brand-logo {
-        height: 24px;
+        height: 26px;
         width: auto;
         object-fit: contain;
         flex-shrink: 0;
@@ -175,7 +166,7 @@ def get_global_css():
     .sidebar-brand-title {
         font-family: 'Manrope', sans-serif;
         font-weight: 800;
-        font-size: 13px;
+        font-size: 14px;
         color: var(--navy-900);
         line-height: 1.2;
         letter-spacing: -0.02em;
@@ -190,7 +181,7 @@ def get_global_css():
 
     /* Collapse button styling - aligns with Streamlit's sidebar arrows */
     [data-testid="stSidebar"] [data-testid="stSidebarCollapseButton"] {
-        top: 16px !important;
+        top: 20px !important;
         right: 12px !important;
     }
 
