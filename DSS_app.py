@@ -47,6 +47,10 @@ try:
 except Exception:
     max_date_raw = latest_qtr
 
+# Compute refresh timestamp
+from datetime import datetime
+refresh_ts = datetime.now().strftime("%b %d, %Y")
+
 
 def build_brand_card_data(df):
     """For each brand: latest value, QoQ delta, SVG sparkline points, and date range."""
@@ -404,6 +408,15 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
     color: var(--navy-900);
     font-weight: 600;
 }
+.data-freshness-divider {
+    width: 1px;
+    height: 14px;
+    background: rgba(28,79,192,0.2);
+}
+.data-refreshed {
+    margin-left: auto;
+    color: var(--text-muted);
+}
 
 /* MISSION STATEMENT */
 .hub-mission {
@@ -496,6 +509,8 @@ __BRAND_CARDS__
                 <span class="data-freshness-item"><strong>NPA:</strong> Till __MAX_DATE__</span>
                 <span class="data-freshness-item"><strong>DDD:</strong> Till __MAX_DATE__</span>
                 <span class="data-freshness-item"><strong>LAAD:</strong> Till __MAX_DATE__</span>
+                <span class="data-freshness-divider"></span>
+                <span class="data-freshness-item data-refreshed"><strong>Refreshed:</strong> __REFRESH_TS__</span>
             </div>
         </div>
 
@@ -516,5 +531,6 @@ __BRAND_CARDS__
 
 html_content = html_content.replace("__BRAND_CARDS__", brand_cards_html)
 html_content = html_content.replace("__MAX_DATE__", max_date_raw)
+html_content = html_content.replace("__REFRESH_TS__", refresh_ts)
 
 st.components.v1.html(html_content, height=920, scrolling=False)
