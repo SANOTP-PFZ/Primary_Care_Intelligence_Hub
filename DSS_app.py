@@ -191,53 +191,81 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
     margin-bottom: 1rem;
 }
 
-/* BRAND SUMMARY TABLE */
+/* BRAND SUMMARY CONTAINER */
 .brand-summary {
-    background: rgba(255,255,255,0.6);
+    background: rgba(255,255,255,0.62);
+    backdrop-filter: saturate(180%) blur(22px);
+    -webkit-backdrop-filter: saturate(180%) blur(22px);
+    border: 1px solid var(--hairline);
+    border-radius: var(--panel-radius);
+    box-shadow: var(--shadow-panel);
+    padding: 1.1rem;
+}
+
+/* BRAND CARDS GRID - 3 top, 2 bottom centered */
+.brand-cards-top {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+}
+.brand-cards-bottom {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+    max-width: 66.66%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* INDIVIDUAL BRAND CARD */
+.brand-card {
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: saturate(160%) blur(12px);
+    -webkit-backdrop-filter: saturate(160%) blur(12px);
     border: 1px solid var(--hairline);
     border-radius: 12px;
-    padding: 0.15rem 0;
+    padding: 0.75rem 0.9rem 0.55rem;
     box-shadow: 0 2px 8px rgba(15,23,42,0.03);
+    transition: box-shadow 0.2s var(--ease), transform 0.2s var(--ease);
 }
-.brand-row {
-    display: grid;
-    grid-template-columns: 110px 1fr 90px;
-    align-items: center;
-    padding: 0.6rem 1.1rem;
-    border-bottom: 1px solid rgba(15,23,42,0.04);
-    transition: background 0.15s var(--ease);
+.brand-card:hover {
+    box-shadow: 0 6px 16px rgba(15,23,42,0.08);
+    transform: translateY(-1px);
 }
-.brand-row:last-child { border-bottom: none; }
-.brand-row:hover { background: rgba(15,23,42,0.02); }
+.card-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 0.35rem;
+}
 .brand-name {
     font-family: 'Manrope', sans-serif;
-    font-weight: 600;
-    font-size: 0.8rem;
+    font-weight: 700;
+    font-size: 0.78rem;
     color: var(--navy-900);
 }
-.brand-spark { display: flex; align-items: center; }
-.brand-spark svg { height: 26px; width: 100%; max-width: 180px; }
 .brand-metric {
-    text-align: right;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    gap: 0.35rem;
+    gap: 0.3rem;
 }
 .brand-value {
     font-family: 'Manrope', sans-serif;
-    font-weight: 700;
-    font-size: 0.82rem;
+    font-weight: 800;
+    font-size: 0.9rem;
     color: var(--text);
 }
 .brand-delta {
-    font-size: 0.65rem;
+    font-size: 0.62rem;
     font-weight: 600;
     padding: 1px 5px;
     border-radius: 4px;
 }
 .brand-delta.up { color: #059669; background: rgba(16,185,129,0.1); }
 .brand-delta.down { color: #DC2626; background: rgba(239,68,68,0.08); }
+.brand-spark { width: 100%; }
+.brand-spark svg { width: 100%; height: 28px; display: block; }
 </style>
 </head>
 <body>
@@ -282,30 +310,47 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
         <div class="section-subtitle">TRx Market Share Trend | 2024 Q1 onwards</div>
 
         <div class="brand-summary">
-            <div class="brand-row">
-                <span class="brand-name">Nurtec</span>
-                <span class="brand-spark"><svg viewBox="0 0 120 26" preserveAspectRatio="none"><polyline points="0,22 24,19 48,17 72,14 96,12 120,8" fill="none" stroke="#1C4FC0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                <span class="brand-metric"><span class="brand-value">4.2%</span><span class="brand-delta up">+0.3</span></span>
+            <!-- Top row: 3 cards -->
+            <div class="brand-cards-top">
+                <div class="brand-card">
+                    <div class="card-top">
+                        <span class="brand-name">Nurtec</span>
+                        <span class="brand-metric"><span class="brand-value">4.2%</span><span class="brand-delta up">+0.3</span></span>
+                    </div>
+                    <div class="brand-spark"><svg viewBox="0 0 120 26" preserveAspectRatio="none"><polyline points="0,22 24,19 48,17 72,14 96,12 120,8" fill="none" stroke="#1C4FC0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                </div>
+                <div class="brand-card">
+                    <div class="card-top">
+                        <span class="brand-name">Eliquis</span>
+                        <span class="brand-metric"><span class="brand-value">62.1%</span><span class="brand-delta up">+1.2</span></span>
+                    </div>
+                    <div class="brand-spark"><svg viewBox="0 0 120 26" preserveAspectRatio="none"><polyline points="0,22 24,18 48,14 72,11 96,8 120,5" fill="none" stroke="#41B6E6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                </div>
+                <div class="brand-card">
+                    <div class="card-top">
+                        <span class="brand-name">Prevnar</span>
+                        <span class="brand-metric"><span class="brand-value">48.7%</span><span class="brand-delta down">-0.5</span></span>
+                    </div>
+                    <div class="brand-spark"><svg viewBox="0 0 120 26" preserveAspectRatio="none"><polyline points="0,6 24,9 48,12 72,15 96,17 120,20" fill="none" stroke="#7C3AED" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                </div>
             </div>
-            <div class="brand-row">
-                <span class="brand-name">Eliquis</span>
-                <span class="brand-spark"><svg viewBox="0 0 120 26" preserveAspectRatio="none"><polyline points="0,22 24,18 48,14 72,11 96,8 120,5" fill="none" stroke="#41B6E6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                <span class="brand-metric"><span class="brand-value">62.1%</span><span class="brand-delta up">+1.2</span></span>
-            </div>
-            <div class="brand-row">
-                <span class="brand-name">Prevnar</span>
-                <span class="brand-spark"><svg viewBox="0 0 120 26" preserveAspectRatio="none"><polyline points="0,6 24,9 48,12 72,15 96,17 120,20" fill="none" stroke="#7C3AED" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                <span class="brand-metric"><span class="brand-value">48.7%</span><span class="brand-delta down">-0.5</span></span>
-            </div>
-            <div class="brand-row">
-                <span class="brand-name">Comirnaty</span>
-                <span class="brand-spark"><svg viewBox="0 0 120 26" preserveAspectRatio="none"><polyline points="0,5 24,8 48,12 72,16 96,19 120,22" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                <span class="brand-metric"><span class="brand-value">35.4%</span><span class="brand-delta down">-2.1</span></span>
-            </div>
-            <div class="brand-row">
-                <span class="brand-name">Abrysvo</span>
-                <span class="brand-spark"><svg viewBox="0 0 120 26" preserveAspectRatio="none"><polyline points="0,24 24,20 48,15 72,11 96,7 120,3" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                <span class="brand-metric"><span class="brand-value">18.9%</span><span class="brand-delta up">+3.4</span></span>
+
+            <!-- Bottom row: 2 cards centered -->
+            <div class="brand-cards-bottom">
+                <div class="brand-card">
+                    <div class="card-top">
+                        <span class="brand-name">Comirnaty</span>
+                        <span class="brand-metric"><span class="brand-value">35.4%</span><span class="brand-delta down">-2.1</span></span>
+                    </div>
+                    <div class="brand-spark"><svg viewBox="0 0 120 26" preserveAspectRatio="none"><polyline points="0,5 24,8 48,12 72,16 96,19 120,22" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                </div>
+                <div class="brand-card">
+                    <div class="card-top">
+                        <span class="brand-name">Abrysvo</span>
+                        <span class="brand-metric"><span class="brand-value">18.9%</span><span class="brand-delta up">+3.4</span></span>
+                    </div>
+                    <div class="brand-spark"><svg viewBox="0 0 120 26" preserveAspectRatio="none"><polyline points="0,24 24,20 48,15 72,11 96,7 120,3" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                </div>
             </div>
         </div>
     </main>
