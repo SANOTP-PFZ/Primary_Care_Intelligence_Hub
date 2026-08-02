@@ -92,6 +92,13 @@ def get_global_css():
         margin: 10px !important;
         height: calc(100vh - 20px) !important;
         top: 10px !important;
+        min-width: 260px !important;
+        width: 260px !important;
+        transform: none !important;
+        display: block !important;
+        position: fixed !important;
+        left: 0 !important;
+        z-index: 100 !important;
     }
 
     [data-testid="stSidebar"] > div:first-child {

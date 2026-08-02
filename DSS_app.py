@@ -14,11 +14,14 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# Hide sidebar collapse button via config
+# Hide sidebar collapse/expand toggle (keep sidebar always visible)
 st.markdown("""
 <style>
     [data-testid="stSidebarCollapseButton"] { display: none !important; }
     [data-testid="collapsedControl"] { display: none !important; }
+    button[kind="headerNoPadding"] { display: none !important; }
+    [data-testid="stSidebar"][aria-expanded="false"] { display: block !important; transform: none !important; margin-left: 0 !important; }
+    [data-testid="stSidebar"] { transform: none !important; min-width: 260px !important; width: 260px !important; }
 </style>
 """, unsafe_allow_html=True)
 
