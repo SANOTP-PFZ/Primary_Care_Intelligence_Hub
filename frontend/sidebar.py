@@ -17,27 +17,15 @@ def render_sidebar():
         st.markdown("""
         <div class="sidebar-logo">
             <h2>Primary Care<br>Intelligence Hub</h2>
-            <p>Pfizer IIS Analytics</p>
+            <p>Pfizer Analytics</p>
         </div>
         """, unsafe_allow_html=True)
 
-        # ─── Workspace Section ──────────────────────────────────────────
-        st.markdown('<p class="sidebar-section-header">Workspace</p>', unsafe_allow_html=True)
-
-        _nav_button("Home", "home")
-
-        # ─── Earnings Reports Section ───────────────────────────────────
-        st.markdown('<div class="sidebar-divider"></div>', unsafe_allow_html=True)
-        st.markdown('<p class="sidebar-section-header">Earnings Reports</p>', unsafe_allow_html=True)
+        # ─── Earnings Reports Brand Analytics ───────────────────────────
+        st.markdown('<p class="sidebar-section-header">Earnings Reports Brand Analytics</p>', unsafe_allow_html=True)
 
         for key, config in BRAND_CONFIG.items():
             _nav_button(config['display_name'], key)
-
-        # ─── Cortex Agents Section ──────────────────────────────────────
-        st.markdown('<div class="sidebar-divider"></div>', unsafe_allow_html=True)
-        st.markdown('<p class="sidebar-section-header">Cortex Agents</p>', unsafe_allow_html=True)
-
-        _nav_button("Agent Hub", "agents")
 
         # ─── Footer ────────────────────────────────────────────────────
         st.markdown("---")
