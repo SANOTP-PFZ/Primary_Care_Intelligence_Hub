@@ -1,6 +1,6 @@
 """
-Primary Care Intelligence Hub - Dataiku DSS Streamlit Webapp
-Renders the full UI as an HTML component for pixel-perfect layout control.
+Primary Care Intelligence Hub - Landing Page
+Sidebar-only implementation using full HTML component for pixel-perfect UI.
 """
 import streamlit as st
 
@@ -83,38 +83,85 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
     flex-direction: column;
     overflow: hidden;
 }
-.sidebar-brand { padding: 1.4rem 1.2rem 1.2rem; display: flex; flex-direction: column; gap: 0.7rem; }
-.sidebar-brand img { height: 28px; align-self: flex-start; }
-.sidebar-brand .title { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 1.22rem; color: var(--navy-900); line-height: 1.18; letter-spacing: -0.025em; }
-.sidebar-brand .subtitle { font-size: 0.72rem; color: var(--text-muted); font-weight: 500; }
-.sidebar-divider { height: 1px; background: var(--hairline); margin: 0 0.85rem; }
-.sidebar-section-label { font-family: 'Manrope', sans-serif; font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); padding: 0.95rem 1.15rem 0.4rem; }
 
+/* Brand section (top) */
+.sidebar-brand {
+    padding: 10px 1.2rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+}
+.sidebar-brand img { height: 28px; align-self: flex-start; }
+.sidebar-brand .title {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 800;
+    font-size: 1.22rem;
+    color: var(--navy-900);
+    line-height: 1.18;
+    letter-spacing: -0.025em;
+}
+.sidebar-brand .subtitle { font-size: 0.72rem; color: var(--text-muted); font-weight: 500; }
+
+/* Divider */
+.sidebar-divider { height: 1px; background: var(--hairline); margin: 0 0.85rem; }
+
+/* Section label */
+.sidebar-section-label {
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+    padding: 0.95rem 1.15rem 0.4rem;
+}
+
+/* Nav items */
 .nav { padding: 0 0.55rem; }
 .nav-item {
-    position: relative; display: flex; align-items: center; gap: 0.7rem;
-    padding: 0.55rem 0.7rem; margin: 0.08rem 0; border-radius: 8px;
-    font-size: 0.84rem; font-weight: 500; color: var(--text-soft);
-    cursor: pointer; transition: background 0.18s var(--ease), color 0.18s var(--ease);
-    background: transparent; border: none; width: 100%; text-align: left; font-family: inherit;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.55rem 0.7rem;
+    margin: 0.08rem 0;
+    border-radius: 8px;
+    font-size: 0.84rem;
+    font-weight: 500;
+    color: var(--text-soft);
+    cursor: pointer;
+    transition: background 0.18s var(--ease), color 0.18s var(--ease);
+    background: transparent;
+    border: none;
+    width: 100%;
+    text-align: left;
+    font-family: inherit;
 }
 .nav-item .nav-icon { width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); transition: color 0.18s var(--ease); flex-shrink: 0; }
 .nav-item .nav-icon svg { width: 16px; height: 16px; stroke-width: 1.8; fill: none; stroke: currentColor; }
 .nav-item .nav-label { flex: 1; min-width: 0; }
-.nav-item .nav-count { font-size: 0.66rem; font-weight: 600; color: var(--text-muted); background: rgba(15,23,42,0.06); padding: 0.12rem 0.42rem; border-radius: 5px; font-variant-numeric: tabular-nums; flex-shrink: 0; line-height: 1.3; }
 .nav-item:hover { background: rgba(15,23,42,0.04); color: var(--text); }
 .nav-item:hover .nav-icon { color: var(--navy-700); }
 .nav-item.active { background: linear-gradient(90deg, rgba(28,79,192,0.10) 0%, rgba(28,79,192,0.04) 100%); color: var(--navy-700); font-weight: 600; }
 .nav-item.active .nav-icon { color: var(--navy-700); }
-.nav-item.active .nav-count { background: rgba(28,79,192,0.14); color: var(--navy-700); }
 .nav-item.active::before { content: ''; position: absolute; left: -0.55rem; top: 6px; bottom: 6px; width: 3px; border-radius: 0 3px 3px 0; background: linear-gradient(180deg, var(--navy-600), var(--accent)); box-shadow: 0 0 8px rgba(28,79,192,0.3); }
 
+/* Spacer pushes footer to bottom */
 .sidebar-spacer { flex: 1; }
-.sidebar-meta { padding: 0.85rem 1.15rem 1rem; font-size: 0.7rem; color: var(--text-muted); line-height: 1.55; border-top: 1px solid var(--hairline); background: linear-gradient(180deg, transparent 0%, rgba(28,79,192,0.025) 100%); }
+
+/* Footer (bottom) */
+.sidebar-meta {
+    padding: 0.85rem 1.15rem 1rem;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    line-height: 1.55;
+    border-top: 1px solid var(--hairline);
+    background: linear-gradient(180deg, transparent 0%, rgba(28,79,192,0.025) 100%);
+}
 .sidebar-meta strong { color: var(--text-soft); font-weight: 600; }
 .sidebar-meta .meta-row { margin-bottom: 0.2rem; }
 
-/* MAIN */
+/* MAIN PANEL */
 .main {
     background: rgba(255,255,255,0.55);
     backdrop-filter: saturate(180%) blur(14px);
@@ -128,14 +175,12 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
     min-width: 0;
 }
 .content { flex: 1; min-height: 0; overflow-y: auto; padding: 1.4rem; }
-.content::-webkit-scrollbar { width: 6px; }
-.content::-webkit-scrollbar-track { background: transparent; }
-.content::-webkit-scrollbar-thumb { background: rgba(15,23,42,0.14); border-radius: 3px; }
 </style>
 </head>
 <body>
 <div class="app">
 
+<!-- SIDEBAR -->
 <aside class="sidebar">
     <div class="sidebar-brand">
         <img src="https://cdn.pfizer.com/pfizercom/2022-10/Pfizer_Logo_Color_CMYK.png" alt="Pfizer">
@@ -144,30 +189,32 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
             <div class="subtitle">Pfizer Analytics</div>
         </div>
     </div>
+
     <div class="sidebar-divider"></div>
+
     <div class="sidebar-section-label">Primary Care Workspace</div>
     <nav class="nav">
-        <button class="nav-item active" data-target="dashboards">
+        <button class="nav-item active">
             <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
             <span class="nav-label">Deep Dive Dashboards</span>
-            <span class="nav-count">8</span>
         </button>
-        <button class="nav-item" data-target="agents">
+        <button class="nav-item">
             <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="10" rx="2"/><path d="M9 16v3M15 16v3M9 6V3M15 6V3M3 11h3M18 11h3"/></svg></span>
             <span class="nav-label">CoWork Agents</span>
-            <span class="nav-count">6</span>
         </button>
     </nav>
+
     <div class="sidebar-spacer"></div>
+
     <div class="sidebar-meta">
         <div class="meta-row"><strong>Primary Care Analytics</strong></div>
         <div class="meta-row">Team_ZS_PC_Analytics@zs.com</div>
     </div>
 </aside>
 
+<!-- MAIN (placeholder for next phase) -->
 <div class="main">
     <main class="content">
-        <p style="color: var(--text-muted); font-size: 0.9rem;">Main content area — ready for next phase.</p>
     </main>
 </div>
 
