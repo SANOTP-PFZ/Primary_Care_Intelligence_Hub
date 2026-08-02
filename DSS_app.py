@@ -1,8 +1,9 @@
 """
 Primary Care Intelligence Hub - Landing Page
-Sidebar-only implementation using full HTML component for pixel-perfect UI.
 """
 import streamlit as st
+import dataiku
+import pandas as pd
 
 st.set_page_config(
     page_title="Primary Care Intelligence Hub",
@@ -10,6 +11,83 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed",
 )
+
+# --- DATA LOADING ---
+BRANDS = ['NURTEC', 'ELIQUIS', 'PREVNAR', 'COMIRNATY', 'ABRYSVO']
+BRAND_COLORS = {
+    'NURTEC': '#1C4FC0',
+    'ELIQUIS': '#41B6E6',
+    'PREVNAR': '#7C3AED',
+    'COMIRNATY': '#10B981',
+    'ABRYSVO': '#F59E0B',
+}
+
+@st.cache_data(ttl=3600)
+def load_brand_data():
+    df = dataiku.Dataset("SQL_EARNINGS_REPORT_MASTER_DATASET_SF").get_dataframe()
+    df = df[
+        (df['DATASET'] == 'NPA_TRX') &
+        (df['METRICS'] == 'TRX MARKET SHARE') &
+        (df['BRAND'].isin(BRANDS)) &
+        (df['YR_QTR_TXT'] >= '2024')
+    ].sort_values(['BRAND', 'YR_QTR_TXT'])
+    return df
+
+df = load_brand_data()
+
+
+def build_brand_card_data(df):
+    """For each brand: latest value, QoQ delta, SVG sparkline points."""
+    cards = []
+    for brand in BRANDS:
+        bdf = df[df['BRAND'] == brand].sort_values('YR_QTR_TXT')
+        if bdf.empty:
+            continue
+        values = bdf['VALUE'].tolist()
+        latest = values[-1]
+        delta = latest - values[-2] if len(values) >= 2 else 0.0
+
+        # Generate SVG polyline points (normalize values to 2-24 y-range, 26px height)
+        v_min, v_max = min(values), max(values)
+        v_range = v_max - v_min if v_max != v_min else 1
+        n = len(values)
+        points = []
+        for i, v in enumerate(values):
+            x = round((i / (n - 1)) * 120, 1) if n > 1 else 60
+            y = round(24 - ((v - v_min) / v_range) * 22, 1)
+            points.append(f"{x},{y}")
+        polyline = " ".join(points)
+
+        cards.append({
+            'brand': brand,
+            'value': f"{latest:.1f}%",
+            'delta': f"{delta:+.1f}",
+            'delta_class': 'up' if delta >= 0 else 'down',
+            'color': BRAND_COLORS[brand],
+            'polyline': polyline,
+        })
+    return cards
+
+
+brand_cards = build_brand_card_data(df)
+
+
+def render_brand_cards_html(cards):
+    """Generate HTML for brand cards."""
+    html_cards = []
+    for c in cards:
+        html_cards.append(f'''
+                <div class="brand-card">
+                    <div class="card-top">
+                        <span class="brand-name">{c['brand'].title()}</span>
+                        <span class="brand-metric"><span class="brand-value">{c['value']}</span><span class="brand-delta {c['delta_class']}">{c['delta']}</span></span>
+                    </div>
+                    <div class="brand-spark"><svg viewBox="0 0 120 26" preserveAspectRatio="none"><polyline points="{c['polyline']}" fill="none" stroke="{c['color']}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                </div>''')
+    return "\n".join(html_cards)
+
+
+brand_cards_html = render_brand_cards_html(brand_cards)
 
 # Hide all Streamlit chrome
 st.markdown("""
@@ -306,41 +384,7 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
             <div class="section-subtitle">TRx Market Share Trend | 2024 Q1 onwards</div>
 
             <div class="brand-cards">
-                <div class="brand-card">
-                    <div class="card-top">
-                        <span class="brand-name">Nurtec</span>
-                        <span class="brand-metric"><span class="brand-value">4.2%</span><span class="brand-delta up">+0.3</span></span>
-                    </div>
-                    <div class="brand-spark"><svg viewBox="0 0 120 26" preserveAspectRatio="none"><polyline points="0,22 24,19 48,17 72,14 96,12 120,8" fill="none" stroke="#1C4FC0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                </div>
-                <div class="brand-card">
-                    <div class="card-top">
-                        <span class="brand-name">Eliquis</span>
-                        <span class="brand-metric"><span class="brand-value">62.1%</span><span class="brand-delta up">+1.2</span></span>
-                    </div>
-                    <div class="brand-spark"><svg viewBox="0 0 120 26" preserveAspectRatio="none"><polyline points="0,22 24,18 48,14 72,11 96,8 120,5" fill="none" stroke="#41B6E6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                </div>
-                <div class="brand-card">
-                    <div class="card-top">
-                        <span class="brand-name">Prevnar</span>
-                        <span class="brand-metric"><span class="brand-value">48.7%</span><span class="brand-delta down">-0.5</span></span>
-                    </div>
-                    <div class="brand-spark"><svg viewBox="0 0 120 26" preserveAspectRatio="none"><polyline points="0,6 24,9 48,12 72,15 96,17 120,20" fill="none" stroke="#7C3AED" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                </div>
-                <div class="brand-card">
-                    <div class="card-top">
-                        <span class="brand-name">Comirnaty</span>
-                        <span class="brand-metric"><span class="brand-value">35.4%</span><span class="brand-delta down">-2.1</span></span>
-                    </div>
-                    <div class="brand-spark"><svg viewBox="0 0 120 26" preserveAspectRatio="none"><polyline points="0,5 24,8 48,12 72,16 96,19 120,22" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                </div>
-                <div class="brand-card">
-                    <div class="card-top">
-                        <span class="brand-name">Abrysvo</span>
-                        <span class="brand-metric"><span class="brand-value">18.9%</span><span class="brand-delta up">+3.4</span></span>
-                    </div>
-                    <div class="brand-spark"><svg viewBox="0 0 120 26" preserveAspectRatio="none"><polyline points="0,24 24,20 48,15 72,11 96,7 120,3" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                </div>
+__BRAND_CARDS__
             </div>
         </div>
     </main>
@@ -350,5 +394,7 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
 </body>
 </html>
 """
+
+html_content = html_content.replace("__BRAND_CARDS__", brand_cards_html)
 
 st.components.v1.html(html_content, height=920, scrolling=False)
