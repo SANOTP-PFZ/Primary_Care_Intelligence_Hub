@@ -1,9 +1,8 @@
 """
 Persistent sidebar component for the Primary Care Intelligence Hub.
-Renders frosted-glass containerized navigation with Pfizer branding.
+Frosted-glass containerized panel with Pfizer branding.
 """
 import streamlit as st
-from backend.config import BRAND_CONFIG
 
 
 def render_sidebar():
@@ -13,25 +12,22 @@ def render_sidebar():
     Returns the currently active screen key.
     """
     with st.sidebar:
-        # ─── Pfizer Logo + Title Bar ────────────────────────────────────
+        # ─── Brand Title Bar (containerized, aligned with collapse arrows) ─
         st.markdown("""
         <div class="sidebar-brand">
             <img src="https://cdn.pfizer.com/pfizercom/2022-10/Pfizer_Logo_Color_CMYK.png" alt="Pfizer" class="sidebar-brand-logo">
-            <div>
+            <div class="sidebar-brand-text">
                 <div class="sidebar-brand-title">Primary Care<br>Intelligence Hub</div>
                 <div class="sidebar-brand-subtitle">Pfizer Analytics</div>
             </div>
         </div>
         """, unsafe_allow_html=True)
 
-        # ─── Divider ────────────────────────────────────────────────────
-        st.markdown('<div class="sidebar-divider"></div>', unsafe_allow_html=True)
+        # ─── Primary Care Workspace ─────────────────────────────────────
+        st.markdown('<p class="sidebar-section-header">Primary Care Workspace</p>', unsafe_allow_html=True)
 
-        # ─── Earnings Reports Brand Analytics ───────────────────────────
-        st.markdown('<p class="sidebar-section-header">Earnings Reports Brand Analytics</p>', unsafe_allow_html=True)
-
-        for key, config in BRAND_CONFIG.items():
-            _nav_button(config['display_name'], key)
+        _nav_button("Deep Dive Dashboards", "dashboards")
+        _nav_button("CoWork Agents", "agents")
 
         # ─── Footer ────────────────────────────────────────────────────
         st.markdown('<div class="sidebar-spacer"></div>', unsafe_allow_html=True)

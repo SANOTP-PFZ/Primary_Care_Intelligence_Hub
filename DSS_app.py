@@ -33,7 +33,7 @@ st.markdown(get_global_css(), unsafe_allow_html=True)
 
 # ─── Initialize Session State ───────────────────────────────────────────────
 if "screen" not in st.session_state:
-    st.session_state["screen"] = "home"
+    st.session_state["screen"] = "dashboards"
 
 if "agent_screen" not in st.session_state:
     st.session_state["agent_screen"] = "landing"
@@ -42,14 +42,13 @@ if "agent_screen" not in st.session_state:
 current_screen = render_sidebar()
 
 # ─── Main Content Routing ───────────────────────────────────────────────────
-if current_screen == "home":
+if current_screen == "dashboards":
     home.render()
 
 elif current_screen in BRAND_CONFIG:
     brand_page.render(current_screen)
 
 elif current_screen == "agents":
-    # Sub-routing within the Agent Hub
     agent_screen = st.session_state.get("agent_screen", "landing")
 
     if agent_screen == "landing":
@@ -64,5 +63,4 @@ elif current_screen == "agents":
         agent_landing.render()
 
 else:
-    # Fallback to home
     home.render()

@@ -67,8 +67,17 @@ def get_global_css():
     }
 
     .stApp > header { display: none !important; }
+    [data-testid="stHeader"] { display: none !important; }
+    [data-testid="stToolbar"] { display: none !important; }
+    [data-testid="stDecoration"] { display: none !important; }
     #MainMenu { visibility: hidden; }
     footer { visibility: hidden; }
+
+    /* Remove top padding from main block so hero is top-aligned */
+    .block-container {
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
+    }
 
     /* ═══════════════════════════════════════════════════════════════════════
        SIDEBAR STYLING (Frosted Glass Containerized Panel)
@@ -133,34 +142,56 @@ def get_global_css():
         box-shadow: 0 0 8px rgba(28,79,192,0.06) !important;
     }
 
-    /* ─── Sidebar Brand (Logo + Title) ─── */
+    /* ─── Sidebar Brand (Containerized Button-style Title) ─── */
     .sidebar-brand {
-        padding: 20px 16px 16px;
+        padding: 16px 14px;
         display: flex;
-        flex-direction: column;
-        gap: 10px;
+        align-items: center;
+        gap: 12px;
+        background: rgba(255,255,255,0.7);
+        border: 1px solid var(--hairline);
+        border-radius: 10px;
+        margin: 12px 8px 8px;
+        box-shadow: var(--shadow-xs);
+        transition: box-shadow 0.18s var(--ease);
+    }
+
+    .sidebar-brand:hover {
+        box-shadow: var(--shadow-sm);
     }
 
     .sidebar-brand-logo {
-        height: 28px;
+        height: 24px;
         width: auto;
         object-fit: contain;
-        align-self: flex-start;
+        flex-shrink: 0;
+    }
+
+    .sidebar-brand-text {
+        flex: 1;
+        min-width: 0;
     }
 
     .sidebar-brand-title {
         font-family: 'Manrope', sans-serif;
         font-weight: 800;
-        font-size: 17px;
+        font-size: 13px;
         color: var(--navy-900);
-        line-height: 1.18;
-        letter-spacing: -0.025em;
+        line-height: 1.2;
+        letter-spacing: -0.02em;
     }
 
     .sidebar-brand-subtitle {
-        font-size: 11.5px;
+        font-size: 10.5px;
         color: var(--text-muted);
         font-weight: 500;
+        margin-top: 2px;
+    }
+
+    /* Collapse button styling - aligns with Streamlit's sidebar arrows */
+    [data-testid="stSidebar"] [data-testid="stSidebarCollapseButton"] {
+        top: 16px !important;
+        right: 12px !important;
     }
 
     /* ─── Sidebar Section Headers ─── */
@@ -263,11 +294,11 @@ def get_global_css():
             radial-gradient(ellipse 60% 70% at 80% 80%, rgba(65,182,230,0.05) 0%, transparent 50%),
             linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(248,250,253,0.95) 100%);
         border-radius: var(--radius-lg);
-        padding: 28px 28px 24px;
+        padding: 24px 24px 20px;
         border: 1px solid var(--hairline-2);
         box-shadow: var(--shadow-sm);
         overflow: hidden;
-        margin-bottom: 28px;
+        margin-bottom: 0;
     }
 
     .hero-card::before {
