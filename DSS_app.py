@@ -133,9 +133,12 @@ st.markdown("""
     [data-testid="stSidebar"], [data-testid="collapsedControl"],
     [data-testid="stSidebarCollapseButton"], #MainMenu, footer,
     .stApp > header { display: none !important; }
-    .stApp { background: transparent !important; }
+    .stApp { background: transparent !important; overflow: hidden !important; }
     .block-container { padding: 0 !important; max-width: 100% !important; }
     [data-testid="stAppViewBlockContainer"] { padding: 0 !important; }
+    [data-testid="stMainBlockContainer"] { padding: 0 !important; }
+    [data-testid="stMain"] { overflow: hidden !important; }
+    [data-testid="stVerticalBlock"] { gap: 0 !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -201,10 +204,10 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
 
 /* Brand section (top) */
 .sidebar-brand {
-    padding: 10px 1.2rem 1.2rem;
+    padding: 10px 1.2rem 1rem;
     display: flex;
     flex-direction: column;
-    gap: 0.7rem;
+    gap: 0.5rem;
 }
 .sidebar-brand img { height: 28px; align-self: flex-start; }
 .sidebar-brand .title {
@@ -289,7 +292,7 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
     overflow: hidden;
     min-width: 0;
 }
-.content { flex: 1; min-height: 0; overflow-y: auto; padding: 1.4rem; display: flex; flex-direction: column; }
+.content { flex: 1; min-height: 0; overflow: hidden; padding: 1.2rem; display: flex; flex-direction: column; }
 
 /* SECTION HEADER */
 .section-header {
@@ -443,13 +446,13 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 1rem 3rem;
+    padding: 0.6rem 3rem;
 }
 .mission-divider {
     width: 80px;
     height: 1px;
     background: linear-gradient(90deg, transparent, rgba(28,79,192,0.3), transparent);
-    margin: 0 auto 1.2rem;
+    margin: 0 auto 0.8rem;
 }
 .mission-text {
     font-family: 'Manrope', sans-serif;
@@ -550,4 +553,4 @@ html_content = html_content.replace("__BRAND_CARDS__", brand_cards_html)
 html_content = html_content.replace("__MAX_DATE__", max_date_raw)
 html_content = html_content.replace("__REFRESH_TS__", refresh_ts)
 
-st.components.v1.html(html_content, height=920, scrolling=False)
+st.components.v1.html(html_content, height=1000, scrolling=False)
