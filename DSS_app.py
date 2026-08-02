@@ -35,15 +35,28 @@ def load_brand_data():
 
 df = load_brand_data()
 
+# Compute date range for display
+all_quarters = sorted(df['YR_QTR_TXT'].unique())
+first_qtr = all_quarters[0] if all_quarters else '2024Q1'
+latest_qtr = all_quarters[-1] if all_quarters else 'N/A'
+
+# Load max date for data freshness
+try:
+    max_date_df = dataiku.Dataset("SQL_NPA_MAX_DATE_SF").get_dataframe()
+    max_date_raw = str(max_date_df.iloc[0, 0]).split(" ")[0]
+except Exception:
+    max_date_raw = latest_qtr
+
 
 def build_brand_card_data(df):
-    """For each brand: latest value, QoQ delta, SVG sparkline points."""
+    """For each brand: latest value, QoQ delta, SVG sparkline points, and date range."""
     cards = []
     for brand in BRANDS:
         bdf = df[df['BRAND'] == brand].sort_values('YR_QTR_TXT')
         if bdf.empty:
             continue
         values = bdf['VALUE'].tolist()
+        quarters = bdf['YR_QTR_TXT'].tolist()
         latest = values[-1]
         delta = latest - values[-2] if len(values) >= 2 else 0.0
 
@@ -65,6 +78,8 @@ def build_brand_card_data(df):
             'delta_class': 'up' if delta >= 0 else 'down',
             'color': BRAND_COLORS[brand],
             'polyline': polyline,
+            'first_qtr': quarters[0] if quarters else '',
+            'latest_qtr': quarters[-1] if quarters else '',
         })
     return cards
 
@@ -83,6 +98,7 @@ def render_brand_cards_html(cards):
                         <span class="brand-metric"><span class="brand-value">{c['value']}</span><span class="brand-delta {c['delta_class']}">{c['delta']}</span></span>
                     </div>
                     <div class="brand-spark"><svg viewBox="0 0 120 26" preserveAspectRatio="none"><polyline points="{c['polyline']}" fill="none" stroke="{c['color']}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                    <div class="card-footer"><span class="card-source">NPA</span> {c['first_qtr']} → {c['latest_qtr']}</div>
                 </div>''')
     return "\n".join(html_cards)
 
@@ -287,17 +303,17 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
     gap: 0.75rem;
 }
 
-/* INDIVIDUAL BRAND CARD - squarish */
+/* INDIVIDUAL BRAND CARD - compact squarish */
 .brand-card {
     background: rgba(255,255,255,0.72);
     backdrop-filter: saturate(160%) blur(12px);
     -webkit-backdrop-filter: saturate(160%) blur(12px);
     border: 1px solid var(--hairline);
     border-radius: 16px;
-    padding: 0.85rem 0.8rem 0.65rem;
+    padding: 0.7rem 0.75rem 0.5rem;
     box-shadow: 0 2px 8px rgba(15,23,42,0.03);
     transition: box-shadow 0.2s var(--ease), transform 0.2s var(--ease);
-    aspect-ratio: 1.15 / 1;
+    aspect-ratio: 1.4 / 1;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -339,6 +355,55 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
 .brand-delta.down { color: #DC2626; background: rgba(239,68,68,0.08); }
 .brand-spark { width: 100%; }
 .brand-spark svg { width: 100%; height: 28px; display: block; }
+.card-footer {
+    font-size: 0.58rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-align: center;
+    margin-top: 0.25rem;
+    letter-spacing: 0.02em;
+}
+.card-source {
+    display: inline-block;
+    background: rgba(28,79,192,0.08);
+    color: var(--navy-700);
+    font-size: 0.52rem;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 3px;
+    letter-spacing: 0.05em;
+    margin-right: 3px;
+}
+
+/* DATA FRESHNESS STRIP */
+.data-freshness {
+    margin-top: 0.85rem;
+    padding: 0.6rem 0.9rem;
+    border-radius: 10px;
+    background: rgba(28,79,192,0.03);
+    border: 1px solid rgba(28,79,192,0.08);
+    display: flex;
+    gap: 1.8rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.data-freshness-label {
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--navy-700);
+}
+.data-freshness-item {
+    font-size: 0.62rem;
+    color: var(--text-soft);
+    font-weight: 500;
+}
+.data-freshness-item strong {
+    color: var(--navy-900);
+    font-weight: 600;
+}
 </style>
 </head>
 <body>
@@ -381,10 +446,17 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
     <main class="content">
         <div class="brand-summary">
             <div class="section-header">Primary Care Brand Performance Summary</div>
-            <div class="section-subtitle">TRx Market Share Trend | 2024 Q1 onwards</div>
+            <div class="section-subtitle">QoQ TRx Market Share Trends</div>
 
             <div class="brand-cards">
 __BRAND_CARDS__
+            </div>
+
+            <div class="data-freshness">
+                <span class="data-freshness-label">Data Availability</span>
+                <span class="data-freshness-item"><strong>NPA:</strong> Till __MAX_DATE__</span>
+                <span class="data-freshness-item"><strong>DDD:</strong> Till __MAX_DATE__</span>
+                <span class="data-freshness-item"><strong>LAAD:</strong> Till __MAX_DATE__</span>
             </div>
         </div>
     </main>
@@ -396,5 +468,6 @@ __BRAND_CARDS__
 """
 
 html_content = html_content.replace("__BRAND_CARDS__", brand_cards_html)
+html_content = html_content.replace("__MAX_DATE__", max_date_raw)
 
 st.components.v1.html(html_content, height=920, scrolling=False)
