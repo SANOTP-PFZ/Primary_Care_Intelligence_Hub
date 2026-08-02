@@ -123,10 +123,24 @@ def get_global_css():
 
     [data-testid="stSidebar"] [data-testid="stSidebarUserContent"] {
         padding-top: 0 !important;
+        padding-bottom: 0 !important;
         height: 100% !important;
         display: flex !important;
         flex-direction: column !important;
         flex: 1 !important;
+    }
+
+    /* Remove any extra spacing Streamlit adds above first element */
+    [data-testid="stSidebar"] [data-testid="stSidebarUserContent"] > div:first-child {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }
+
+    [data-testid="stSidebar"] [data-testid="stVerticalBlock"] {
+        display: flex !important;
+        flex-direction: column !important;
+        height: 100% !important;
+        gap: 0 !important;
     }
 
     [data-testid="stSidebar"] * {
@@ -175,6 +189,7 @@ def get_global_css():
         display: flex;
         flex-direction: column;
         gap: 0.6rem;
+        flex-shrink: 0;
     }
 
     .sidebar-brand-logo {
