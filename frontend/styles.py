@@ -1,6 +1,6 @@
 """
 Unified CSS for the Primary Care Intelligence Hub.
-Glassmorphism design system aligned with the Migraine Intelligence Hub reference.
+Matches the Migraine Intelligence Hub reference: grid shell with two glass panels.
 """
 
 
@@ -14,7 +14,7 @@ def get_global_css():
     @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
 
     /* ═══════════════════════════════════════════════════════════════════════
-       CSS VARIABLES (matched to reference)
+       CSS VARIABLES
        ═══════════════════════════════════════════════════════════════════════ */
     :root {
         --navy-900: #0A1A3D;
@@ -49,10 +49,26 @@ def get_global_css():
         --radius: 14px;
         --radius-sm: 8px;
         --radius-lg: 16px;
+        --shell-pad: 10px;
+        --sidebar-w: 250px;
     }
 
     /* ═══════════════════════════════════════════════════════════════════════
-       GLOBAL RESET
+       HIDE ALL STREAMLIT CHROME
+       ═══════════════════════════════════════════════════════════════════════ */
+    .stApp > header,
+    [data-testid="stHeader"],
+    [data-testid="stToolbar"],
+    [data-testid="stDecoration"],
+    [data-testid="stSidebarCollapseButton"],
+    [data-testid="collapsedControl"],
+    #MainMenu,
+    footer {
+        display: none !important;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════
+       APP SHELL (grid: sidebar | main)
        ═══════════════════════════════════════════════════════════════════════ */
     .stApp {
         background:
@@ -60,27 +76,13 @@ def get_global_css():
             radial-gradient(ellipse 70% 50% at 100% 0%, rgba(65,182,230,0.07) 0%, transparent 55%),
             radial-gradient(ellipse 60% 50% at 50% 100%, rgba(124,58,237,0.04) 0%, transparent 60%),
             var(--bg) !important;
-        font-family: 'Inter', system-ui, -apple-system, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif !important;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
         color: var(--text);
         -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-    }
-
-    .stApp > header { display: none !important; }
-    [data-testid="stHeader"] { display: none !important; }
-    [data-testid="stToolbar"] { display: none !important; }
-    [data-testid="stDecoration"] { display: none !important; }
-    #MainMenu { visibility: hidden; }
-    footer { visibility: hidden; }
-
-    /* Remove top padding from main block so hero is top-aligned */
-    .block-container {
-        padding-top: 1rem !important;
-        padding-bottom: 1rem !important;
     }
 
     /* ═══════════════════════════════════════════════════════════════════════
-       SIDEBAR STYLING (Frosted Glass Containerized Panel)
+       SIDEBAR - Frosted Glass Panel
        ═══════════════════════════════════════════════════════════════════════ */
     [data-testid="stSidebar"] {
         background: rgba(255,255,255,0.62) !important;
@@ -89,29 +91,26 @@ def get_global_css():
         border: 1px solid var(--hairline) !important;
         border-radius: var(--panel-radius) !important;
         box-shadow: var(--shadow-panel) !important;
-        margin: 10px !important;
-        height: calc(100vh - 20px) !important;
-        top: 10px !important;
-        min-width: 260px !important;
-        width: 260px !important;
-        transform: none !important;
-        display: block !important;
-        position: fixed !important;
-        left: 0 !important;
-        z-index: 100 !important;
+        margin: var(--shell-pad) !important;
+        height: calc(100vh - 2 * var(--shell-pad)) !important;
+        top: var(--shell-pad) !important;
+        width: var(--sidebar-w) !important;
+        min-width: var(--sidebar-w) !important;
+        max-width: var(--sidebar-w) !important;
+        z-index: 10 !important;
+        overflow: hidden !important;
     }
 
     [data-testid="stSidebar"] > div:first-child {
         background: transparent !important;
-        border-radius: var(--panel-radius) !important;
         padding: 0 !important;
-        padding-top: 0 !important;
+        height: 100% !important;
+        border-radius: var(--panel-radius) !important;
     }
 
     [data-testid="stSidebar"] [data-testid="stSidebarContent"] {
         background: transparent !important;
-        padding: 0 8px !important;
-        padding-top: 0 !important;
+        padding: 0 !important;
     }
 
     [data-testid="stSidebar"] [data-testid="stSidebarUserContent"] {
@@ -122,15 +121,17 @@ def get_global_css():
         color: var(--text) !important;
     }
 
-    /* Streamlit nav buttons - styled to match reference nav items */
+    /* ═══════════════════════════════════════════════════════════════════════
+       SIDEBAR NAV BUTTONS
+       ═══════════════════════════════════════════════════════════════════════ */
     [data-testid="stSidebar"] .stButton > button {
         width: 100% !important;
         text-align: left !important;
         background: transparent !important;
         border: none !important;
         border-radius: var(--radius-sm) !important;
-        padding: 10px 14px !important;
-        margin: 2px 0 !important;
+        padding: 9px 12px !important;
+        margin: 2px 4px !important;
         color: var(--text-soft) !important;
         font-family: 'Inter', sans-serif !important;
         font-size: 13px !important;
@@ -144,7 +145,7 @@ def get_global_css():
         color: var(--text) !important;
     }
 
-    /* Active nav item via marker div */
+    /* Active state via marker */
     .nav-active-marker + div .stButton > button {
         background: linear-gradient(90deg, rgba(28,79,192,0.10) 0%, rgba(28,79,192,0.04) 100%) !important;
         color: var(--navy-700) !important;
@@ -152,81 +153,73 @@ def get_global_css():
         border-left: 3px solid var(--navy-600) !important;
     }
 
-    .nav-active-marker {
-        display: none;
-    }
+    .nav-active-marker { display: none; }
 
-    /* ─── Sidebar Brand (flat, top-aligned) ─── */
+    /* ═══════════════════════════════════════════════════════════════════════
+       SIDEBAR BRAND
+       ═══════════════════════════════════════════════════════════════════════ */
     .sidebar-brand {
-        padding: 16px 14px 14px;
+        padding: 1.2rem 1rem 1rem;
         display: flex;
-        align-items: center;
-        gap: 12px;
+        flex-direction: column;
+        gap: 0.6rem;
     }
 
     .sidebar-brand-logo {
-        height: 26px;
+        height: 28px;
         width: auto;
         object-fit: contain;
-        flex-shrink: 0;
-    }
-
-    .sidebar-brand-text {
-        flex: 1;
-        min-width: 0;
+        align-self: flex-start;
     }
 
     .sidebar-brand-title {
         font-family: 'Manrope', sans-serif;
         font-weight: 800;
-        font-size: 14px;
+        font-size: 1.1rem;
         color: var(--navy-900);
-        line-height: 1.2;
-        letter-spacing: -0.02em;
+        line-height: 1.18;
+        letter-spacing: -0.025em;
     }
 
     .sidebar-brand-subtitle {
-        font-size: 10.5px;
+        font-size: 0.72rem;
         color: var(--text-muted);
         font-weight: 500;
-        margin-top: 2px;
     }
 
-    /* ─── Sidebar Section Headers ─── */
-    .sidebar-section-header {
-        font-family: 'Manrope', sans-serif !important;
-        font-size: 10px !important;
-        font-weight: 700 !important;
-        text-transform: uppercase !important;
-        letter-spacing: 1.4px !important;
-        color: var(--text-muted) !important;
-        padding: 14px 12px 6px 12px !important;
-        margin: 0 !important;
-    }
-
-    /* ─── Sidebar Divider ─── */
+    /* ═══════════════════════════════════════════════════════════════════════
+       SIDEBAR SECTION / DIVIDER / FOOTER
+       ═══════════════════════════════════════════════════════════════════════ */
     .sidebar-divider {
         height: 1px;
         background: var(--hairline);
-        margin: 4px 12px;
+        margin: 0 0.85rem;
     }
 
-    /* ─── Sidebar Spacer ─── */
-    .sidebar-spacer {
-        flex: 1;
-        min-height: 40px;
+    .sidebar-section-header {
+        font-family: 'Manrope', sans-serif !important;
+        font-size: 0.62rem !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.12em !important;
+        color: var(--text-muted) !important;
+        padding: 0.95rem 1rem 0.4rem !important;
+        margin: 0 !important;
     }
 
-    /* ─── Sidebar Footer ─── */
     .sidebar-footer {
-        padding: 12px 16px 16px;
+        padding: 0.85rem 1rem 1rem;
+        font-size: 0.7rem;
+        color: var(--text-muted);
+        line-height: 1.55;
         border-top: 1px solid var(--hairline);
         background: linear-gradient(180deg, transparent 0%, rgba(28,79,192,0.025) 100%);
         border-radius: 0 0 var(--panel-radius) var(--panel-radius);
+        margin-top: auto;
     }
 
     .sidebar-footer p {
-        font-size: 11px !important;
+        font-size: 0.7rem !important;
         color: var(--text-muted) !important;
         margin: 2px 0 !important;
         line-height: 1.55 !important;
@@ -238,7 +231,7 @@ def get_global_css():
     }
 
     /* ═══════════════════════════════════════════════════════════════════════
-       MAIN CONTENT AREA (Glass Panel)
+       MAIN CONTENT - Frosted Glass Panel
        ═══════════════════════════════════════════════════════════════════════ */
     section[data-testid="stMain"] {
         background: rgba(255,255,255,0.55) !important;
@@ -247,39 +240,14 @@ def get_global_css():
         border: 1px solid var(--hairline) !important;
         border-radius: var(--panel-radius) !important;
         box-shadow: var(--shadow-panel) !important;
-        margin: 10px 10px 10px 0 !important;
+        margin: var(--shell-pad) var(--shell-pad) var(--shell-pad) 0 !important;
+        min-width: 0 !important;
         overflow: hidden !important;
     }
 
-    section[data-testid="stMain"] > div {
-        max-width: 100%;
-    }
-
-    .main-header {
-        background: rgba(255,255,255,0.7);
-        backdrop-filter: saturate(180%) blur(20px);
-        -webkit-backdrop-filter: saturate(180%) blur(20px);
-        border: 1px solid var(--hairline);
-        border-radius: var(--radius-lg);
-        padding: 24px 28px;
-        margin-bottom: 24px;
-        box-shadow: var(--shadow-sm);
-    }
-
-    .main-header h1 {
-        font-family: 'Manrope', sans-serif !important;
-        font-size: 22px !important;
-        font-weight: 700 !important;
-        color: var(--navy-900) !important;
-        margin: 0 0 4px 0 !important;
-        letter-spacing: -0.02em !important;
-    }
-
-    .main-header p {
-        font-size: 13px;
-        color: var(--text-muted);
-        margin: 0;
-        font-weight: 500;
+    .block-container {
+        padding: 1.2rem 1.4rem !important;
+        max-width: 100% !important;
     }
 
     /* ═══════════════════════════════════════════════════════════════════════
@@ -292,7 +260,7 @@ def get_global_css():
             radial-gradient(ellipse 60% 70% at 80% 80%, rgba(65,182,230,0.05) 0%, transparent 50%),
             linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(248,250,253,0.95) 100%);
         border-radius: var(--radius-lg);
-        padding: 24px 24px 20px;
+        padding: 1.6rem 1.6rem 1.3rem;
         border: 1px solid var(--hairline-2);
         box-shadow: var(--shadow-sm);
         overflow: hidden;
@@ -315,26 +283,26 @@ def get_global_css():
         display: flex;
         align-items: flex-start;
         justify-content: space-between;
-        margin-bottom: 20px;
+        margin-bottom: 1.2rem;
     }
 
     .hero-title {
         font-family: 'Manrope', sans-serif !important;
-        font-size: 22px !important;
+        font-size: 1.5rem !important;
         font-weight: 800 !important;
         color: var(--navy-900) !important;
         letter-spacing: -0.025em !important;
         line-height: 1.15 !important;
-        margin: 0 0 6px 0 !important;
+        margin: 0 0 0.3rem 0 !important;
     }
 
     .hero-subtitle {
-        font-size: 13px;
+        font-size: 0.82rem;
         font-weight: 500;
         color: var(--text-muted);
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 0.5rem;
     }
 
     .hero-subtitle .dot {
@@ -348,23 +316,23 @@ def get_global_css():
     .hero-badge {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        font-size: 11px;
+        gap: 0.4rem;
+        font-size: 0.68rem;
         font-weight: 600;
         color: var(--navy-700);
         background: rgba(28,79,192,0.08);
-        padding: 5px 12px;
+        padding: 0.3rem 0.7rem;
         border-radius: var(--radius-sm);
         flex-shrink: 0;
     }
 
     /* ═══════════════════════════════════════════════════════════════════════
-       KPI TILES (Hero)
+       KPI TILES
        ═══════════════════════════════════════════════════════════════════════ */
     .kpi-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-        gap: 12px;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 0.75rem;
     }
 
     .kpi-tile {
@@ -372,7 +340,7 @@ def get_global_css():
         backdrop-filter: blur(8px);
         border: 1px solid var(--hairline-2);
         border-radius: 12px;
-        padding: 14px 16px 12px;
+        padding: 0.75rem 0.9rem 0.7rem;
         transition: transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease);
     }
 
@@ -382,64 +350,72 @@ def get_global_css():
     }
 
     .kpi-tile .kpi-label {
-        font-size: 11px;
+        font-size: 0.7rem;
         color: var(--text-muted);
         font-weight: 500;
-        margin-bottom: 4px;
+        margin-bottom: 0.2rem;
     }
 
     .kpi-tile .kpi-value {
         font-family: 'Manrope', sans-serif;
-        font-size: 22px;
+        font-size: 1.4rem;
         font-weight: 700;
         color: var(--navy-900);
         line-height: 1.1;
         letter-spacing: -0.02em;
         font-variant-numeric: tabular-nums;
-        margin-bottom: 5px;
+        margin-bottom: 0.25rem;
     }
 
     .kpi-tile .kpi-sub {
-        font-size: 12px;
+        font-size: 0.7rem;
         color: var(--text-muted);
-        margin-top: 2px;
     }
 
     .kpi-delta {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
-        font-size: 11.5px;
+        gap: 0.25rem;
+        font-size: 0.7rem;
         font-weight: 600;
         font-variant-numeric: tabular-nums;
     }
     .kpi-delta.up { color: var(--up); }
     .kpi-delta.down { color: var(--down); }
     .kpi-delta.flat { color: var(--flat); }
-    .kpi-delta .tri { font-size: 10px; line-height: 1; }
+    .kpi-delta .tri { font-size: 0.6rem; line-height: 1; }
     .kpi-delta .vs { color: var(--text-muted); font-weight: 500; }
 
     /* ═══════════════════════════════════════════════════════════════════════
-       GLASSMORPHISM CARDS
+       WORKSPACE DIVIDER
        ═══════════════════════════════════════════════════════════════════════ */
-    .glass-card {
-        background: rgba(255,255,255,0.75);
-        backdrop-filter: saturate(180%) blur(20px);
-        -webkit-backdrop-filter: saturate(180%) blur(20px);
-        border: 1px solid var(--hairline);
-        border-radius: var(--radius);
-        padding: 24px;
-        box-shadow: var(--shadow-sm);
-        transition: transform 0.28s var(--ease-out), box-shadow 0.28s var(--ease);
-    }
-
-    .glass-card:hover {
-        box-shadow: var(--shadow-lg);
-        transform: translateY(-3px);
+    .workspace-divider {
+        height: 1px;
+        background: var(--hairline);
+        margin: 1.2rem 0;
     }
 
     /* ═══════════════════════════════════════════════════════════════════════
-       BRAND / CONTENT CARDS (with icon chips + destination pills)
+       SECTION HEADERS
+       ═══════════════════════════════════════════════════════════════════════ */
+    .section-header {
+        font-family: 'Manrope', sans-serif !important;
+        font-size: 1.2rem !important;
+        font-weight: 700 !important;
+        color: var(--navy-900) !important;
+        letter-spacing: -0.02em !important;
+        margin: 0 0 0.2rem 0 !important;
+    }
+
+    .section-desc {
+        font-size: 0.84rem;
+        color: var(--text-muted);
+        margin-bottom: 1rem;
+        max-width: 680px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════
+       CARDS
        ═══════════════════════════════════════════════════════════════════════ */
     .card {
         position: relative;
@@ -447,7 +423,7 @@ def get_global_css():
         flex-direction: column;
         background: var(--surface);
         border-radius: var(--radius);
-        padding: 18px 20px;
+        padding: 1rem 1.1rem;
         min-height: 148px;
         overflow: hidden;
         box-shadow: var(--shadow-sm);
@@ -466,20 +442,14 @@ def get_global_css():
         pointer-events: none;
     }
 
-    .card:hover {
-        transform: translateY(-3px);
-        box-shadow: var(--shadow-lg);
-    }
-
-    .card:hover::after {
-        opacity: 1;
-    }
+    .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+    .card:hover::after { opacity: 1; }
 
     .card-top {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 10px;
+        margin-bottom: 0.6rem;
     }
 
     .icon-chip {
@@ -490,43 +460,44 @@ def get_global_css():
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-        font-size: 18px;
+        font-size: 13px;
+        font-weight: 700;
     }
 
-    .chip-blue { background: linear-gradient(135deg, #DBEAFE, #BFDBFE); }
-    .chip-indigo { background: linear-gradient(135deg, #E0E7FF, #C7D2FE); }
-    .chip-purple { background: linear-gradient(135deg, #EDE9FE, #DDD6FE); }
-    .chip-cyan { background: linear-gradient(135deg, #CFFAFE, #A5F3FC); }
-    .chip-green { background: linear-gradient(135deg, #DCFCE7, #BBF7D0); }
-    .chip-rose { background: linear-gradient(135deg, #FCE7F3, #FBCFE8); }
-    .chip-amber { background: linear-gradient(135deg, #FEF3C7, #FDE68A); }
-    .chip-orange { background: linear-gradient(135deg, #FFEDD5, #FED7AA); }
+    .chip-blue { background: linear-gradient(135deg, #DBEAFE, #BFDBFE); color: #1D4ED8; }
+    .chip-indigo { background: linear-gradient(135deg, #E0E7FF, #C7D2FE); color: #4338CA; }
+    .chip-purple { background: linear-gradient(135deg, #EDE9FE, #DDD6FE); color: #6D28D9; }
+    .chip-cyan { background: linear-gradient(135deg, #CFFAFE, #A5F3FC); color: #0E7490; }
+    .chip-green { background: linear-gradient(135deg, #DCFCE7, #BBF7D0); color: #047857; }
+    .chip-rose { background: linear-gradient(135deg, #FCE7F3, #FBCFE8); color: #BE185D; }
+    .chip-amber { background: linear-gradient(135deg, #FEF3C7, #FDE68A); color: #92400E; }
+    .chip-orange { background: linear-gradient(135deg, #FFEDD5, #FED7AA); color: #C2410C; }
 
     .card-title {
         font-family: 'Manrope', sans-serif;
-        font-size: 15px;
+        font-size: 0.95rem;
         font-weight: 700;
         color: var(--navy-900);
         line-height: 1.25;
-        margin-bottom: 5px;
+        margin-bottom: 0.25rem;
     }
 
     .card-desc {
-        font-size: 12.5px;
+        font-size: 0.78rem;
         color: var(--text-muted);
         line-height: 1.5;
         flex: 1;
-        margin-bottom: 12px;
+        margin-bottom: 0.7rem;
     }
 
     .dest-pill {
         display: inline-flex;
         align-items: center;
-        gap: 5px;
-        font-size: 11px;
+        gap: 0.3rem;
+        font-size: 0.68rem;
         font-weight: 600;
         color: var(--text-soft);
-        padding: 3px 9px;
+        padding: 0.2rem 0.5rem;
         border-radius: 6px;
         background: rgba(15,23,42,0.05);
         align-self: flex-start;
@@ -540,11 +511,11 @@ def get_global_css():
     .dest-doc .swatch { color: #475569; }
 
     .badge {
-        font-size: 9.5px;
+        font-size: 0.6rem;
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.08em;
-        padding: 3px 8px;
+        padding: 0.2rem 0.5rem;
         border-radius: 5px;
         background: rgba(15,23,42,0.05);
         color: var(--text-muted);
@@ -552,87 +523,25 @@ def get_global_css():
     .badge.weekly { background: rgba(16,185,129,0.12); color: #047857; }
     .badge.monthly { background: rgba(59,130,246,0.12); color: #1E40AF; }
 
-    /* Legacy brand-card (backwards compat) */
+    /* ═══════════════════════════════════════════════════════════════════════
+       BRAND CARDS (legacy compat)
+       ═══════════════════════════════════════════════════════════════════════ */
     .brand-card {
         position: relative;
         display: flex;
         flex-direction: column;
         background: var(--surface);
         border-radius: var(--radius);
-        padding: 18px 20px;
+        padding: 1rem 1.1rem;
         min-height: 148px;
         overflow: hidden;
         box-shadow: var(--shadow-sm);
         transition: transform 0.28s var(--ease-out), box-shadow 0.28s var(--ease);
         cursor: pointer;
     }
-
-    .brand-card::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        border-radius: inherit;
-        background: linear-gradient(135deg, rgba(255,255,255,0) 55%, rgba(65,182,230,0.05) 80%, rgba(28,79,192,0.07) 100%);
-        opacity: 0;
-        transition: opacity 0.28s var(--ease);
-        pointer-events: none;
-    }
-
-    .brand-card:hover {
-        transform: translateY(-3px);
-        box-shadow: var(--shadow-lg);
-    }
-
-    .brand-card:hover::after {
-        opacity: 1;
-    }
-
-    .brand-card .brand-icon {
-        font-size: 18px;
-        margin-bottom: 10px;
-        width: 38px;
-        height: 38px;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(135deg, #DBEAFE, #BFDBFE);
-    }
-
-    .brand-card .brand-name {
-        font-family: 'Manrope', sans-serif;
-        font-size: 15px;
-        font-weight: 700;
-        color: var(--navy-900);
-        margin-bottom: 4px;
-    }
-
-    .brand-card .brand-market {
-        font-size: 12px;
-        color: var(--text-muted);
-        margin-bottom: 12px;
-        line-height: 1.5;
-        flex: 1;
-    }
-
-    .brand-card .brand-kpi {
-        font-family: 'Manrope', sans-serif;
-        font-size: 18px;
-        font-weight: 800;
-        color: var(--navy-900);
-    }
-
-    .brand-card .brand-kpi-label {
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
-        font-size: 11px;
-        font-weight: 600;
-        color: var(--text-soft);
-        padding: 3px 9px;
-        border-radius: 6px;
-        background: rgba(15,23,42,0.05);
-    }
+    .brand-card::after { content: ''; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(135deg, rgba(255,255,255,0) 55%, rgba(65,182,230,0.05) 80%, rgba(28,79,192,0.07) 100%); opacity: 0; transition: opacity 0.28s var(--ease); pointer-events: none; }
+    .brand-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+    .brand-card:hover::after { opacity: 1; }
 
     /* ═══════════════════════════════════════════════════════════════════════
        AGENT CARDS
@@ -643,116 +552,67 @@ def get_global_css():
         flex-direction: column;
         background: var(--surface);
         border-radius: var(--radius);
-        padding: 18px 20px;
+        padding: 1rem 1.1rem;
         min-height: 148px;
         overflow: hidden;
         box-shadow: var(--shadow-sm);
         transition: transform 0.28s var(--ease-out), box-shadow 0.28s var(--ease);
         cursor: pointer;
     }
-
-    .agent-category-card::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        border-radius: inherit;
-        background: linear-gradient(135deg, rgba(255,255,255,0) 55%, rgba(124,58,237,0.05) 80%, rgba(28,79,192,0.07) 100%);
-        opacity: 0;
-        transition: opacity 0.28s var(--ease);
-        pointer-events: none;
-    }
-
-    .agent-category-card:hover {
-        transform: translateY(-3px);
-        box-shadow: var(--shadow-lg);
-    }
-
-    .agent-category-card:hover::after {
-        opacity: 1;
-    }
-
-    .agent-category-card .category-icon {
-        font-size: 18px;
-        margin-bottom: 10px;
-        width: 38px;
-        height: 38px;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(135deg, #EDE9FE, #DDD6FE);
-    }
-
-    .agent-category-card .category-name {
-        font-family: 'Manrope', sans-serif;
-        font-size: 15px;
-        font-weight: 700;
-        color: var(--navy-900);
-        margin-bottom: 5px;
-    }
-
-    .agent-category-card .category-desc {
-        font-size: 12.5px;
-        color: var(--text-muted);
-        line-height: 1.5;
-        flex: 1;
-    }
+    .agent-category-card::after { content: ''; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(135deg, rgba(255,255,255,0) 55%, rgba(124,58,237,0.05) 80%, rgba(28,79,192,0.07) 100%); opacity: 0; transition: opacity 0.28s var(--ease); pointer-events: none; }
+    .agent-category-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+    .agent-category-card:hover::after { opacity: 1; }
 
     .agent-tag {
         display: inline-block;
         background: rgba(65,182,230,0.1);
         color: #0E7490;
-        font-size: 10.5px;
+        font-size: 10px;
         font-weight: 600;
-        padding: 3px 8px;
+        padding: 2px 7px;
         border-radius: 5px;
-        margin: 2px 4px 2px 0;
+        margin: 2px 3px 2px 0;
     }
 
     /* ═══════════════════════════════════════════════════════════════════════
-       SECTION HEADERS
+       MAIN HEADER (brand pages)
        ═══════════════════════════════════════════════════════════════════════ */
-    .section-header {
+    .main-header {
+        background: rgba(255,255,255,0.7);
+        backdrop-filter: saturate(180%) blur(20px);
+        border: 1px solid var(--hairline);
+        border-radius: var(--radius-lg);
+        padding: 1.2rem 1.4rem;
+        margin-bottom: 1.2rem;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .main-header h1 {
         font-family: 'Manrope', sans-serif !important;
-        font-size: 18px !important;
+        font-size: 1.2rem !important;
         font-weight: 700 !important;
         color: var(--navy-900) !important;
+        margin: 0 0 0.2rem 0 !important;
         letter-spacing: -0.02em !important;
-        margin: 28px 0 6px 0 !important;
     }
 
-    .section-desc {
-        font-size: 13px;
+    .main-header p {
+        font-size: 0.82rem;
         color: var(--text-muted);
-        margin-bottom: 16px;
-        max-width: 680px;
-    }
-
-    .workspace-divider {
-        height: 1px;
-        background: var(--hairline);
-        margin: 20px 0;
+        margin: 0;
+        font-weight: 500;
     }
 
     /* ═══════════════════════════════════════════════════════════════════════
        BREADCRUMBS
        ═══════════════════════════════════════════════════════════════════════ */
     .breadcrumb {
-        font-size: 13px;
+        font-size: 0.82rem;
         color: var(--text-muted);
-        margin-bottom: 16px;
+        margin-bottom: 1rem;
     }
-
-    .breadcrumb a {
-        color: var(--navy-700);
-        text-decoration: none;
-        font-weight: 500;
-    }
-
-    .breadcrumb span {
-        margin: 0 6px;
-        color: var(--text-muted);
-    }
+    .breadcrumb a { color: var(--navy-700); text-decoration: none; font-weight: 500; }
+    .breadcrumb span { margin: 0 6px; color: var(--text-muted); }
 
     /* ═══════════════════════════════════════════════════════════════════════
        DATA TABLES
@@ -760,34 +620,13 @@ def get_global_css():
     .styled-table {
         width: 100%;
         border-collapse: collapse;
-        font-size: 13px;
+        font-size: 0.82rem;
         font-family: 'Inter', sans-serif;
     }
-
-    .styled-table thead {
-        background: var(--surface-2);
-    }
-
-    .styled-table th {
-        padding: 10px 12px;
-        text-align: left;
-        font-weight: 600;
-        color: var(--text-muted);
-        border-bottom: 1px solid var(--hairline);
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-    }
-
-    .styled-table td {
-        padding: 10px 12px;
-        border-bottom: 1px solid var(--hairline-2);
-        color: var(--text-soft);
-    }
-
-    .styled-table tbody tr:hover {
-        background: rgba(28,79,192,0.03);
-    }
+    .styled-table thead { background: var(--surface-2); }
+    .styled-table th { padding: 0.6rem 0.75rem; text-align: left; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--hairline); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em; }
+    .styled-table td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--hairline-2); color: var(--text-soft); }
+    .styled-table tbody tr:hover { background: rgba(28,79,192,0.03); }
 
     /* ═══════════════════════════════════════════════════════════════════════
        CHART CONTAINERS
@@ -797,17 +636,17 @@ def get_global_css():
         backdrop-filter: saturate(180%) blur(20px);
         border: 1px solid var(--hairline);
         border-radius: var(--radius);
-        padding: 20px;
-        margin-bottom: 20px;
+        padding: 1.2rem;
+        margin-bottom: 1rem;
         box-shadow: var(--shadow-xs);
     }
 
     .chart-container h3 {
         font-family: 'Manrope', sans-serif;
-        font-size: 14px;
+        font-size: 0.88rem;
         font-weight: 700;
         color: var(--navy-900);
-        margin: 0 0 16px 0;
+        margin: 0 0 1rem 0;
     }
 
     /* ═══════════════════════════════════════════════════════════════════════
@@ -816,30 +655,23 @@ def get_global_css():
     .download-btn {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
+        gap: 0.4rem;
         background: rgba(28,79,192,0.06);
         color: var(--navy-700);
         border: 1px solid rgba(28,79,192,0.15);
         border-radius: var(--radius-sm);
-        padding: 8px 16px;
-        font-size: 13px;
+        padding: 0.5rem 1rem;
+        font-size: 0.82rem;
         font-weight: 600;
         text-decoration: none;
         transition: all 0.18s var(--ease);
     }
-
-    .download-btn:hover {
-        background: rgba(28,79,192,0.12);
-        border-color: rgba(28,79,192,0.3);
-        box-shadow: var(--shadow-xs);
-    }
+    .download-btn:hover { background: rgba(28,79,192,0.12); border-color: rgba(28,79,192,0.3); }
 
     /* ═══════════════════════════════════════════════════════════════════════
-       STREAMLIT OVERRIDES
+       STREAMLIT ELEMENT OVERRIDES
        ═══════════════════════════════════════════════════════════════════════ */
-    .stPlotlyChart {
-        border-radius: var(--radius) !important;
-    }
+    .stPlotlyChart { border-radius: var(--radius) !important; }
 
     div[data-testid="stExpander"] {
         border: 1px solid var(--hairline) !important;
@@ -847,32 +679,18 @@ def get_global_css():
         background: rgba(255,255,255,0.6) !important;
     }
 
-    /* Hide Streamlit button borders in card areas */
+    /* Card action buttons */
+    .card + div .stButton > button,
     .brand-card + div .stButton > button,
     .agent-category-card + div .stButton > button {
         border: 1px solid var(--hairline) !important;
         border-radius: var(--radius-sm) !important;
-        font-size: 12px !important;
+        font-size: 0.75rem !important;
         font-weight: 600 !important;
         color: var(--navy-700) !important;
         background: rgba(28,79,192,0.04) !important;
-        padding: 6px 12px !important;
-        margin-top: -8px !important;
+        padding: 0.4rem 0.75rem !important;
     }
-
-    .brand-card + div .stButton > button:hover,
-    .agent-category-card + div .stButton > button:hover {
-        background: rgba(28,79,192,0.10) !important;
-        border-color: rgba(28,79,192,0.25) !important;
-    }
-
-    /* ═══════════════════════════════════════════════════════════════════════
-       UTILITY
-       ═══════════════════════════════════════════════════════════════════════ */
-    .mt-4 { margin-top: 16px; }
-    .mt-6 { margin-top: 24px; }
-    .mb-4 { margin-bottom: 16px; }
-    .mb-6 { margin-bottom: 24px; }
 
     </style>
     """
