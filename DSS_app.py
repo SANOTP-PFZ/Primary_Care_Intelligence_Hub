@@ -9,7 +9,7 @@ import streamlit as st
 # ─── Page Config (must be first Streamlit call) ─────────────────────────────
 st.set_page_config(
     page_title="Primary Care Intelligence Hub",
-    page_icon="💊",
+    page_icon="P",
     layout="wide",
     initial_sidebar_state="expanded",
 )

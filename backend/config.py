@@ -13,8 +13,9 @@ BRAND_CONFIG = {
         "market": "MIGRAINE",
         "market_display": "Migraine Acute Treatment Market",
         "source": "NPA",
-        "icon": "💊",
+        "icon": "Rx",
         "color": "#41B6E6",
+        "chip": "chip-blue",
     },
     "eliquis": {
         "display_name": "Eliquis",
@@ -22,8 +23,9 @@ BRAND_CONFIG = {
         "market": "ORAL ANTICOAGULANTS",
         "market_display": "Oral Anticoagulants Market",
         "source": "NPA",
-        "icon": "🩸",
+        "icon": "Rx",
         "color": "#6366F1",
+        "chip": "chip-indigo",
     },
     "prevnar": {
         "display_name": "Prevnar Family",
@@ -31,8 +33,9 @@ BRAND_CONFIG = {
         "market": "PNEUMOCOCCAL VACCINES",
         "market_display": "Pneumococcal Vaccine Market",
         "source": "DDD",
-        "icon": "🛡️",
+        "icon": "Vx",
         "color": "#10B981",
+        "chip": "chip-green",
     },
     "comirnaty": {
         "display_name": "Comirnaty",
@@ -40,8 +43,9 @@ BRAND_CONFIG = {
         "market": "COVID VACCINES",
         "market_display": "COVID-19 Vaccine Market",
         "source": "DDD",
-        "icon": "💉",
+        "icon": "Vx",
         "color": "#F59E0B",
+        "chip": "chip-amber",
     },
     "abrysvo": {
         "display_name": "Abrysvo",
@@ -49,8 +53,9 @@ BRAND_CONFIG = {
         "market": "RSV VACCINES",
         "market_display": "RSV Vaccine Market",
         "source": "DDD",
-        "icon": "🫁",
+        "icon": "Vx",
         "color": "#EC4899",
+        "chip": "chip-rose",
     },
     "paxlovid": {
         "display_name": "Paxlovid",
@@ -58,8 +63,9 @@ BRAND_CONFIG = {
         "market": "COVID TREATMENTS",
         "market_display": "COVID-19 Treatment Market",
         "source": "NPA",
-        "icon": "⚕️",
+        "icon": "Rx",
         "color": "#8B5CF6",
+        "chip": "chip-purple",
     },
     "zavzpret": {
         "display_name": "Zavzpret",
@@ -67,8 +73,9 @@ BRAND_CONFIG = {
         "market": "MIGRAINE",
         "market_display": "Migraine Acute Treatment Market",
         "source": "ELAAD",
-        "icon": "🧠",
+        "icon": "Rx",
         "color": "#14B8A6",
+        "chip": "chip-cyan",
     },
     "beyfortus": {
         "display_name": "Beyfortus",
@@ -76,8 +83,9 @@ BRAND_CONFIG = {
         "market": "RSV PREVENTION",
         "market_display": "RSV Infant Prevention Market",
         "source": "ELAAD",
-        "icon": "👶",
+        "icon": "Ab",
         "color": "#F97316",
+        "chip": "chip-orange",
     },
 }
 
@@ -97,7 +105,7 @@ AGENT_CATEGORIES = [
         "id": "npa",
         "name": "NPA Analytics",
         "description": "New Prescription Analytics for branded drugs",
-        "icon": "📊",
+        "icon": "NPA",
         "color": "#41B6E6",
         "agents": [
             {
@@ -118,7 +126,7 @@ AGENT_CATEGORIES = [
         "id": "ddd",
         "name": "DDD Shipments",
         "description": "Dose-level distribution and shipment analytics",
-        "icon": "📦",
+        "icon": "DDD",
         "color": "#10B981",
         "agents": [
             {
@@ -139,7 +147,7 @@ AGENT_CATEGORIES = [
         "id": "elaad",
         "name": "ELAAD Claims",
         "description": "Claims and patient-level analytics",
-        "icon": "📋",
+        "icon": "CLM",
         "color": "#8B5CF6",
         "agents": [
             {

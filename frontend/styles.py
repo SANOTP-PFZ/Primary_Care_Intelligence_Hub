@@ -71,14 +71,29 @@ def get_global_css():
     footer { visibility: hidden; }
 
     /* ═══════════════════════════════════════════════════════════════════════
-       SIDEBAR STYLING (Frosted Glass - Light)
+       SIDEBAR STYLING (Frosted Glass Containerized Panel)
        ═══════════════════════════════════════════════════════════════════════ */
     [data-testid="stSidebar"] {
         background: rgba(255,255,255,0.62) !important;
         backdrop-filter: saturate(180%) blur(22px) !important;
         -webkit-backdrop-filter: saturate(180%) blur(22px) !important;
-        border-right: 1px solid var(--hairline) !important;
+        border: 1px solid var(--hairline) !important;
+        border-radius: var(--panel-radius) !important;
         box-shadow: var(--shadow-panel) !important;
+        margin: 10px !important;
+        height: calc(100vh - 20px) !important;
+        top: 10px !important;
+    }
+
+    [data-testid="stSidebar"] > div:first-child {
+        background: transparent !important;
+        border-radius: var(--panel-radius) !important;
+        padding: 0 !important;
+    }
+
+    [data-testid="stSidebar"] [data-testid="stSidebarContent"] {
+        background: transparent !important;
+        padding: 0 8px !important;
     }
 
     [data-testid="stSidebar"] * {
@@ -91,11 +106,11 @@ def get_global_css():
         background: transparent !important;
         border: none !important;
         border-radius: var(--radius-sm) !important;
-        padding: 9px 14px !important;
+        padding: 9px 12px !important;
         margin: 1px 0 !important;
         color: var(--text-soft) !important;
         font-family: 'Inter', sans-serif !important;
-        font-size: 13.5px !important;
+        font-size: 13px !important;
         font-weight: 500 !important;
         transition: background 0.18s var(--ease), color 0.18s var(--ease) !important;
         cursor: pointer !important;
@@ -106,7 +121,7 @@ def get_global_css():
         color: var(--text) !important;
     }
 
-    /* Active nav item */
+    /* Active nav item - gradient background + left border indicator */
     .nav-active + div .stButton > button,
     .nav-active > div .stButton > button,
     [data-testid="stSidebar"] .nav-active + div button {
@@ -115,9 +130,40 @@ def get_global_css():
         font-weight: 600 !important;
         border-left: 3px solid transparent !important;
         border-image: linear-gradient(180deg, var(--navy-600), var(--accent)) 1 !important;
+        box-shadow: 0 0 8px rgba(28,79,192,0.06) !important;
     }
 
-    /* Sidebar section headers */
+    /* ─── Sidebar Brand (Logo + Title) ─── */
+    .sidebar-brand {
+        padding: 20px 16px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .sidebar-brand-logo {
+        height: 28px;
+        width: auto;
+        object-fit: contain;
+        align-self: flex-start;
+    }
+
+    .sidebar-brand-title {
+        font-family: 'Manrope', sans-serif;
+        font-weight: 800;
+        font-size: 17px;
+        color: var(--navy-900);
+        line-height: 1.18;
+        letter-spacing: -0.025em;
+    }
+
+    .sidebar-brand-subtitle {
+        font-size: 11.5px;
+        color: var(--text-muted);
+        font-weight: 500;
+    }
+
+    /* ─── Sidebar Section Headers ─── */
     .sidebar-section-header {
         font-family: 'Manrope', sans-serif !important;
         font-size: 10px !important;
@@ -125,46 +171,36 @@ def get_global_css():
         text-transform: uppercase !important;
         letter-spacing: 1.4px !important;
         color: var(--text-muted) !important;
-        padding: 18px 16px 6px 16px !important;
+        padding: 14px 12px 6px 12px !important;
         margin: 0 !important;
     }
 
-    /* Sidebar logo area */
-    .sidebar-logo {
-        padding: 22px 20px 18px 20px;
-        border-bottom: 1px solid var(--hairline);
-        margin-bottom: 8px;
+    /* ─── Sidebar Divider ─── */
+    .sidebar-divider {
+        height: 1px;
+        background: var(--hairline);
+        margin: 4px 12px;
     }
 
-    .sidebar-logo h2 {
-        font-family: 'Manrope', sans-serif !important;
-        font-size: 17px !important;
-        font-weight: 800 !important;
-        color: var(--navy-900) !important;
-        margin: 6px 0 4px 0 !important;
-        line-height: 1.2 !important;
-        letter-spacing: -0.025em !important;
+    /* ─── Sidebar Spacer ─── */
+    .sidebar-spacer {
+        flex: 1;
+        min-height: 40px;
     }
 
-    .sidebar-logo p {
-        font-size: 11px !important;
-        color: var(--text-muted) !important;
-        margin: 0 !important;
-        font-weight: 500 !important;
-    }
-
-    /* Sidebar footer */
+    /* ─── Sidebar Footer ─── */
     .sidebar-footer {
-        padding: 14px 20px;
+        padding: 12px 16px 16px;
         border-top: 1px solid var(--hairline);
         background: linear-gradient(180deg, transparent 0%, rgba(28,79,192,0.025) 100%);
+        border-radius: 0 0 var(--panel-radius) var(--panel-radius);
     }
 
     .sidebar-footer p {
         font-size: 11px !important;
         color: var(--text-muted) !important;
         margin: 2px 0 !important;
-        line-height: 1.5 !important;
+        line-height: 1.55 !important;
     }
 
     .sidebar-footer strong {
@@ -172,16 +208,20 @@ def get_global_css():
         font-weight: 600 !important;
     }
 
-    /* Sidebar divider */
-    .sidebar-divider {
-        height: 1px;
-        background: var(--hairline);
-        margin: 0 16px;
+    /* ═══════════════════════════════════════════════════════════════════════
+       MAIN CONTENT AREA (Glass Panel)
+       ═══════════════════════════════════════════════════════════════════════ */
+    section[data-testid="stMain"] {
+        background: rgba(255,255,255,0.55) !important;
+        backdrop-filter: saturate(180%) blur(14px) !important;
+        -webkit-backdrop-filter: saturate(180%) blur(14px) !important;
+        border: 1px solid var(--hairline) !important;
+        border-radius: var(--panel-radius) !important;
+        box-shadow: var(--shadow-panel) !important;
+        margin: 10px 10px 10px 0 !important;
+        overflow: hidden !important;
     }
 
-    /* ═══════════════════════════════════════════════════════════════════════
-       MAIN CONTENT AREA
-       ═══════════════════════════════════════════════════════════════════════ */
     section[data-testid="stMain"] > div {
         max-width: 100%;
     }

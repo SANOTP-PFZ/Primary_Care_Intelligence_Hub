@@ -7,18 +7,6 @@ from backend.config import BRAND_CONFIG, AGENT_CATEGORIES
 from backend.data_loader import load_master_data, get_brand_summary_kpis, get_data_freshness
 
 
-# Icon chip color mapping per brand
-BRAND_CHIP_COLORS = {
-    "nurtec": "chip-blue",
-    "eliquis": "chip-indigo",
-    "prevnar": "chip-green",
-    "comirnaty": "chip-amber",
-    "abrysvo": "chip-rose",
-    "paxlovid": "chip-purple",
-    "zavzpret": "chip-cyan",
-    "beyfortus": "chip-orange",
-}
-
 AGENT_CHIP_COLORS = {
     "npa": "chip-blue",
     "ddd": "chip-green",
@@ -28,7 +16,6 @@ AGENT_CHIP_COLORS = {
 
 def render():
     """Render the Home screen."""
-    # ─── Hero Banner ────────────────────────────────────────────────────
     freshness = get_data_freshness()
 
     st.markdown(f"""
@@ -37,12 +24,12 @@ def render():
             <div>
                 <h2 class="hero-title">Primary Care Portfolio Performance</h2>
                 <div class="hero-subtitle">
-                    <span>Pfizer IIS Analytics</span>
+                    <span>Pfizer Analytics</span>
                     <span class="dot"></span>
                     <span>8 Brands Tracked</span>
                 </div>
             </div>
-            <span class="hero-badge">&#9728; Executive KPIs</span>
+            <span class="hero-badge">Executive KPIs</span>
         </div>
         <div class="kpi-grid">
             <div class="kpi-tile">
@@ -53,7 +40,7 @@ def render():
             <div class="kpi-tile">
                 <div class="kpi-label">Data Sources</div>
                 <div class="kpi-value">3</div>
-                <div class="kpi-delta flat"><span class="vs">NPA · DDD · ELAAD</span></div>
+                <div class="kpi-delta flat"><span class="vs">NPA / DDD / ELAAD</span></div>
             </div>
             <div class="kpi-tile">
                 <div class="kpi-label">Cortex Agents</div>
@@ -94,8 +81,7 @@ def render():
 
 def _render_brand_card(key, config):
     """Render a single brand quick-access card."""
-    chip_class = BRAND_CHIP_COLORS.get(key, "chip-blue")
-    source_class = f"dest-{'ppt' if config['source'] == 'NPA' else 'xlsx'}"
+    chip_class = config.get("chip", "chip-blue")
 
     st.markdown(f"""
     <div class="card" style="margin-bottom:12px;">
@@ -105,7 +91,7 @@ def _render_brand_card(key, config):
         </div>
         <div class="card-title">{config['display_name']}</div>
         <div class="card-desc">{config['market_display']}</div>
-        <span class="dest-pill {source_class}"><span class="swatch">&#9632;</span>{config['source']}</span>
+        <span class="dest-pill"><span class="swatch">&#9632;</span>{config['source']}</span>
     </div>
     """, unsafe_allow_html=True)
 

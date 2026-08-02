@@ -9,7 +9,7 @@ def render():
     """Render the agent hub landing page."""
     st.markdown("""
     <div class="main-header">
-        <h1>🤖 Cortex Agent Hub</h1>
+        <h1>Cortex Agent Hub</h1>
         <p>AI-powered analytics agents for Primary Care data exploration</p>
     </div>
     """, unsafe_allow_html=True)
