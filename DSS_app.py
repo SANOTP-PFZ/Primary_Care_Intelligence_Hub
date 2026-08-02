@@ -47,9 +47,26 @@ try:
 except Exception:
     max_date_raw = latest_qtr
 
-# Compute refresh timestamp
+# Compute refresh timestamp (from dataset build metrics, converted UTC → IST)
 from datetime import datetime
-refresh_ts = datetime.now().strftime("%b %d, %Y")
+try:
+    import pytz
+    client = dataiku.api_client()
+    project = client.get_default_project()
+    ds = project.get_dataset("SQL_EARNINGS_REPORT_MASTER_DATASET_SF")
+    last_metrics = ds.get_last_metric_values()
+    build_date_metric = last_metrics.get_metric_by_id("reporting:BUILD_START_DATE")
+    build_date_val = build_date_metric.get("lastValues", [{}])[0].get("value", None) if build_date_metric else None
+
+    if build_date_val:
+        utc_time = datetime.strptime(build_date_val, "%Y-%m-%dT%H:%M:%S.%fZ")
+        ist = pytz.timezone("Asia/Kolkata")
+        ist_time = pytz.utc.localize(utc_time).astimezone(ist)
+        refresh_ts = ist_time.strftime("%B %d, %Y at %I:%M %p IST")
+    else:
+        refresh_ts = max_date_raw if max_date_raw != "N/A" else "N/A"
+except Exception:
+    refresh_ts = max_date_raw if max_date_raw != "N/A" else "N/A"
 
 
 def build_brand_card_data(df):
