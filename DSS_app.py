@@ -404,6 +404,39 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
     color: var(--navy-900);
     font-weight: 600;
 }
+
+/* MISSION STATEMENT */
+.hub-mission {
+    margin-top: 1.4rem;
+    text-align: center;
+    padding: 0 2rem;
+}
+.mission-divider {
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(28,79,192,0.25), transparent);
+    margin: 0 auto 1rem;
+}
+.mission-text {
+    font-family: 'Manrope', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy-900);
+    line-height: 1.5;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.01em;
+}
+.mission-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 400;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+.mission-sub strong {
+    color: var(--navy-700);
+    font-weight: 600;
+}
 </style>
 </head>
 <body>
@@ -458,6 +491,14 @@ __BRAND_CARDS__
                 <span class="data-freshness-item"><strong>DDD:</strong> Till __MAX_DATE__</span>
                 <span class="data-freshness-item"><strong>LAAD:</strong> Till __MAX_DATE__</span>
             </div>
+        </div>
+
+        <!-- MISSION STATEMENT -->
+        <div class="hub-mission">
+            <div class="mission-divider"></div>
+            <p class="mission-text">Your single source of truth for Primary Care brand performance analytics across NPA, DDD, and LAAD data sources.</p>
+            <p class="mission-sub">Use <strong>Deep Dive Dashboards</strong> in the sidebar for detailed QoQ analysis, competitive trends, and exportable reports.</p>
+            <div class="mission-divider"></div>
         </div>
     </main>
 </div>
