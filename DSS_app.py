@@ -202,32 +202,27 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
     padding: 1.1rem;
 }
 
-/* BRAND CARDS GRID - 3 top, 2 bottom centered */
-.brand-cards-top {
+/* BRAND CARDS GRID - single row */
+.brand-cards {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 0.75rem;
-}
-.brand-cards-bottom {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
-    margin-top: 0.75rem;
-    max-width: 66.66%;
-    margin-left: auto;
-    margin-right: auto;
 }
 
-/* INDIVIDUAL BRAND CARD */
+/* INDIVIDUAL BRAND CARD - squarish */
 .brand-card {
     background: rgba(255,255,255,0.72);
     backdrop-filter: saturate(160%) blur(12px);
     -webkit-backdrop-filter: saturate(160%) blur(12px);
     border: 1px solid var(--hairline);
-    border-radius: 12px;
-    padding: 0.75rem 0.9rem 0.55rem;
+    border-radius: 16px;
+    padding: 0.85rem 0.8rem 0.65rem;
     box-shadow: 0 2px 8px rgba(15,23,42,0.03);
     transition: box-shadow 0.2s var(--ease), transform 0.2s var(--ease);
+    aspect-ratio: 1.15 / 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 .brand-card:hover {
     box-shadow: 0 6px 16px rgba(15,23,42,0.08);
@@ -306,12 +301,11 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
 <!-- MAIN PANEL -->
 <div class="main">
     <main class="content">
-        <div class="section-header">Primary Care Brand Performance Summary</div>
-        <div class="section-subtitle">TRx Market Share Trend | 2024 Q1 onwards</div>
-
         <div class="brand-summary">
-            <!-- Top row: 3 cards -->
-            <div class="brand-cards-top">
+            <div class="section-header">Primary Care Brand Performance Summary</div>
+            <div class="section-subtitle">TRx Market Share Trend | 2024 Q1 onwards</div>
+
+            <div class="brand-cards">
                 <div class="brand-card">
                     <div class="card-top">
                         <span class="brand-name">Nurtec</span>
@@ -333,10 +327,6 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
                     </div>
                     <div class="brand-spark"><svg viewBox="0 0 120 26" preserveAspectRatio="none"><polyline points="0,6 24,9 48,12 72,15 96,17 120,20" fill="none" stroke="#7C3AED" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                 </div>
-            </div>
-
-            <!-- Bottom row: 2 cards centered -->
-            <div class="brand-cards-bottom">
                 <div class="brand-card">
                     <div class="card-top">
                         <span class="brand-name">Comirnaty</span>
