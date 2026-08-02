@@ -274,7 +274,7 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
 .section-header {
     font-family: 'Manrope', sans-serif;
     font-weight: 700;
-    font-size: 1.05rem;
+    font-size: 17.5px;
     color: var(--navy-900);
     margin-bottom: 0.25rem;
 }
@@ -331,7 +331,7 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
 .brand-name {
     font-family: 'Manrope', sans-serif;
     font-weight: 700;
-    font-size: 0.78rem;
+    font-size: 14px;
     color: var(--navy-900);
 }
 .brand-metric {
@@ -342,11 +342,11 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
 .brand-value {
     font-family: 'Manrope', sans-serif;
     font-weight: 800;
-    font-size: 0.9rem;
+    font-size: 16px;
     color: var(--text);
 }
 .brand-delta {
-    font-size: 0.62rem;
+    font-size: 11px;
     font-weight: 600;
     padding: 1px 5px;
     border-radius: 4px;
@@ -356,7 +356,7 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
 .brand-spark { width: 100%; }
 .brand-spark svg { width: 100%; height: 28px; display: block; }
 .card-footer {
-    font-size: 0.58rem;
+    font-size: 10.5px;
     color: var(--text-muted);
     font-weight: 500;
     text-align: center;
@@ -367,7 +367,7 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
     display: inline-block;
     background: rgba(28,79,192,0.08);
     color: var(--navy-700);
-    font-size: 0.52rem;
+    font-size: 9.5px;
     font-weight: 700;
     padding: 1px 5px;
     border-radius: 3px;
@@ -389,14 +389,14 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
 }
 .data-freshness-label {
     font-family: 'Manrope', sans-serif;
-    font-size: 0.6rem;
+    font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     color: var(--navy-700);
 }
 .data-freshness-item {
-    font-size: 0.62rem;
+    font-size: 12px;
     color: var(--text-soft);
     font-weight: 500;
 }
