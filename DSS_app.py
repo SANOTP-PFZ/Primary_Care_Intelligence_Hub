@@ -14,6 +14,14 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+# Hide sidebar collapse button via config
+st.markdown("""
+<style>
+    [data-testid="stSidebarCollapseButton"] { display: none !important; }
+    [data-testid="collapsedControl"] { display: none !important; }
+</style>
+""", unsafe_allow_html=True)
+
 # ─── Ensure project root is on sys.path (needed for Dataiku DSS exec-based loading) ──
 import sys
 from pathlib import Path

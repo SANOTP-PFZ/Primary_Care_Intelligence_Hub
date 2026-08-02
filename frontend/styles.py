@@ -98,11 +98,17 @@ def get_global_css():
         background: transparent !important;
         border-radius: var(--panel-radius) !important;
         padding: 0 !important;
+        padding-top: 0 !important;
     }
 
     [data-testid="stSidebar"] [data-testid="stSidebarContent"] {
         background: transparent !important;
         padding: 0 8px !important;
+        padding-top: 0 !important;
+    }
+
+    [data-testid="stSidebar"] [data-testid="stSidebarUserContent"] {
+        padding-top: 0 !important;
     }
 
     [data-testid="stSidebar"] * {
@@ -143,9 +149,9 @@ def get_global_css():
         display: none;
     }
 
-    /* ─── Sidebar Brand (flat, part of sidebar flow) ─── */
+    /* ─── Sidebar Brand (flat, top-aligned) ─── */
     .sidebar-brand {
-        padding: 20px 14px 16px;
+        padding: 16px 14px 14px;
         display: flex;
         align-items: center;
         gap: 12px;
@@ -177,12 +183,6 @@ def get_global_css():
         color: var(--text-muted);
         font-weight: 500;
         margin-top: 2px;
-    }
-
-    /* Collapse button styling - aligns with Streamlit's sidebar arrows */
-    [data-testid="stSidebar"] [data-testid="stSidebarCollapseButton"] {
-        top: 20px !important;
-        right: 12px !important;
     }
 
     /* ─── Sidebar Section Headers ─── */
