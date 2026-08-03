@@ -237,9 +237,8 @@ if nav in ("home", "deepdive"):
 
     sidebar_col, main_col = st.columns([232, 900], gap="small")
 
-    # --- LEFT COLUMN: Sidebar with clickable Deep Dive button ---
+    # --- LEFT COLUMN: Decorative sidebar ---
     with sidebar_col:
-        # Top part of sidebar (logo + title)
         st.markdown("""
         <div style="background:rgba(255,255,255,0.62); backdrop-filter:saturate(180%) blur(22px); -webkit-backdrop-filter:saturate(180%) blur(22px); border:1px solid rgba(15,23,42,0.08); border-radius:18px; box-shadow:0 8px 24px rgba(15,23,42,0.07),0 2px 6px rgba(15,23,42,0.04); display:flex; flex-direction:column; height:calc(100vh - 20px); overflow:hidden;">
             <div style="padding:14px 1.2rem 1rem; display:flex; flex-direction:column; gap:0.5rem;">
@@ -249,45 +248,13 @@ if nav in ("home", "deepdive"):
             </div>
             <div style="height:1px; background:rgba(15,23,42,0.08); margin:0 0.85rem;"></div>
             <div style="font-family:'Manrope',sans-serif; font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:#64748B; padding:0.95rem 1.15rem 0.4rem;">Primary Care Workspace</div>
-            <div style="padding:0 0.55rem; display:flex; flex-direction:column; gap:0.08rem;">
-        """, unsafe_allow_html=True)
-
-        # Deep Dive Dashboards button — styled to look like sidebar nav item
-        st.markdown("""
-        <style>
-            /* Override sidebar button to look like nav item */
-            [data-testid="stVerticalBlock"] > [data-testid="stVerticalBlock"]:first-child .stButton > button {
-                background: linear-gradient(90deg,rgba(28,79,192,0.10) 0%,rgba(28,79,192,0.04) 100%) !important;
-                border: none !important;
-                border-radius: 8px !important;
-                padding: 0.55rem 0.7rem !important;
-                color: #163990 !important;
-                font-size: 0.84rem !important;
-                font-weight: 600 !important;
-                font-family: 'Inter', sans-serif !important;
-                min-height: auto !important;
-                width: 100% !important;
-                text-align: left !important;
-                justify-content: flex-start !important;
-                box-shadow: none !important;
-                transform: none !important;
-                aspect-ratio: unset !important;
-            }
-            [data-testid="stVerticalBlock"] > [data-testid="stVerticalBlock"]:first-child .stButton > button:hover {
-                background: linear-gradient(90deg,rgba(28,79,192,0.15) 0%,rgba(28,79,192,0.06) 100%) !important;
-                transform: none !important;
-                box-shadow: none !important;
-            }
-        </style>
-        """, unsafe_allow_html=True)
-
-        if st.button("📊  Deep Dive Dashboards", key="sidebar_deepdive_btn"):
-            st.session_state["nav_state"] = "deepdive"
-            st.rerun()
-
-        # Rest of sidebar (CoWork Agents + footer)
-        st.markdown("""
-                <div style="display:flex; align-items:center; gap:0.7rem; padding:0.55rem 0.7rem; border-radius:8px; color:#475569; font-size:0.84rem; font-weight:500; font-family:'Inter',sans-serif;">
+            <div style="padding:0 0.55rem;">
+                <div style="position:relative; display:flex; align-items:center; gap:0.7rem; padding:0.55rem 0.7rem; border-radius:8px; background:linear-gradient(90deg,rgba(28,79,192,0.10) 0%,rgba(28,79,192,0.04) 100%); color:#163990; font-size:0.84rem; font-weight:600; font-family:'Inter',sans-serif;">
+                    <span style="width:18px;height:18px;display:flex;align-items:center;justify-content:center;color:#163990;flex-shrink:0;"><svg viewBox="0 0 24 24" width="16" height="16" style="fill:none;stroke:currentColor;stroke-width:1.8;"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
+                    <span>Deep Dive Dashboards</span>
+                    <div style="position:absolute;left:-0.55rem;top:6px;bottom:6px;width:3px;border-radius:0 3px 3px 0;background:linear-gradient(180deg,#1C4FC0,#41B6E6);box-shadow:0 0 8px rgba(28,79,192,0.3);"></div>
+                </div>
+                <div style="display:flex; align-items:center; gap:0.7rem; padding:0.55rem 0.7rem; margin-top:0.08rem; border-radius:8px; color:#475569; font-size:0.84rem; font-weight:500; font-family:'Inter',sans-serif;">
                     <span style="width:18px;height:18px;display:flex;align-items:center;justify-content:center;color:#64748B;flex-shrink:0;"><svg viewBox="0 0 24 24" width="16" height="16" style="fill:none;stroke:currentColor;stroke-width:1.8;"><rect x="6" y="6" width="12" height="10" rx="2"/><path d="M9 16v3M15 16v3M9 6V3M15 6V3M3 11h3M18 11h3"/></svg></span>
                     <span>CoWork Agents</span>
                 </div>
@@ -299,6 +266,33 @@ if nav in ("home", "deepdive"):
             </div>
         </div>
         """, unsafe_allow_html=True)
+
+        # Invisible clickable button overlaid on the sidebar "Deep Dive Dashboards" area
+        st.markdown("""
+        <style>
+            /* Hide the sidebar activation button visually but keep it clickable */
+            [data-testid="column"]:first-child .stButton > button[kind="secondary"] {
+                position: absolute !important;
+                top: 175px !important;
+                left: 12px !important;
+                width: 200px !important;
+                height: 36px !important;
+                opacity: 0 !important;
+                cursor: pointer !important;
+                z-index: 100 !important;
+                min-height: auto !important;
+                padding: 0 !important;
+                border: none !important;
+                background: transparent !important;
+                box-shadow: none !important;
+                transform: none !important;
+                aspect-ratio: unset !important;
+            }
+        </style>
+        """, unsafe_allow_html=True)
+        if st.button("Deep Dive", key="sidebar_deepdive_btn"):
+            st.session_state["nav_state"] = "deepdive"
+            st.rerun()
 
     # --- RIGHT COLUMN: Summary + Brand Tiles ---
     with main_col:
@@ -357,17 +351,15 @@ if nav in ("home", "deepdive"):
 
         # --- Conditional: Mission Text (home) vs Brand Tiles (deepdive) ---
         if nav == "home":
-            # Mission text — shown on first load before Deep Dive is clicked
+            # Mission text — plain text below separator, no container
             st.markdown("""
             <div style="text-align:center; padding:0.7rem 0 0.6rem;">
                 <div style="width:80px; height:1px; background:linear-gradient(90deg,transparent,rgba(28,79,192,0.3),transparent); margin:0 auto 0.8rem;"></div>
-            </div>
-            <div style="background:rgba(255,255,255,0.55); backdrop-filter:saturate(180%) blur(14px); -webkit-backdrop-filter:saturate(180%) blur(14px); border:1px solid rgba(15,23,42,0.08); border-radius:18px; box-shadow:0 8px 24px rgba(15,23,42,0.07),0 2px 6px rgba(15,23,42,0.04); padding:1.8rem 2rem; text-align:center;">
-                <div style="font-family:'Manrope',sans-serif; font-weight:800; font-size:20px; color:#0A1A3D; letter-spacing:-0.02em; margin-bottom:0.6rem;">Primary Care Intelligence Hub</div>
-                <div style="font-size:13px; color:#475569; line-height:1.7; max-width:600px; margin:0 auto;">
+                <div style="font-family:'Manrope',sans-serif; font-weight:800; font-size:18px; color:#0A1A3D; letter-spacing:-0.02em; margin-bottom:0.5rem;">Primary Care Intelligence Hub</div>
+                <div style="font-size:13px; color:#475569; line-height:1.7; max-width:580px; margin:0 auto;">
                     Empowering Pfizer's Primary Care business with real-time market intelligence, competitive analytics, and actionable insights across our key therapeutic brands. This platform consolidates NPA, DDD, and LAAD data sources into unified quarterly performance views.
                 </div>
-                <div style="margin-top:1.2rem; font-size:12px; color:#64748B; font-style:italic;">
+                <div style="margin-top:0.8rem; font-size:12px; color:#64748B;">
                     Click <strong style="color:#1C4FC0;">Deep Dive Dashboards</strong> in the sidebar to explore brand-level QoQ analysis.
                 </div>
             </div>
