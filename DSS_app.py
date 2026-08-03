@@ -136,8 +136,8 @@ st.markdown("""
     .stApp { background: transparent !important; }
     .block-container { padding: 0 !important; max-width: 100% !important; }
     [data-testid="stAppViewBlockContainer"] { padding: 0 !important; }
-    [data-testid="stMainBlockContainer"] { padding: 0 !important; }
-    [data-testid="stVerticalBlock"] { gap: 0 !important; }
+    [data-testid="stMainBlockContainer"] { padding: 0 10px !important; }
+    [data-testid="stVerticalBlock"] { gap: 0.5rem !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -687,19 +687,64 @@ BRAND_CONFIG = {
 nav = st.session_state["nav_state"]
 
 if nav in ("home", "deepdive"):
-    # === RENDER ORIGINAL LANDING PAGE (unchanged) ===
+    # === RENDER ORIGINAL LANDING PAGE ===
+    # Render the iframe (visual landing page with sidebar + summary cards)
+    st.components.v1.html(html_content, height=620, scrolling=False)
 
-    # Hidden text input that receives brand selection from iframe JS
-    brand_selection = st.text_input("brand_nav", value="", key="brand_nav_input", label_visibility="collapsed")
-    # Hide it completely
-    st.markdown('<style>div[data-testid="stTextInput"]:has(input[aria-label="brand_nav"]) { position:absolute; top:-9999px; }</style>', unsafe_allow_html=True)
+    # === NATIVE STREAMLIT BRAND BUTTONS (clickable, no iframe limitation) ===
+    st.markdown("""
+    <style>
+    /* Style brand buttons to match glassmorphism tiles */
+    div[data-testid="stHorizontalBlock"] .stButton > button {
+        background: rgba(255,255,255,0.72) !important;
+        backdrop-filter: saturate(160%) blur(12px) !important;
+        -webkit-backdrop-filter: saturate(160%) blur(12px) !important;
+        border: 1px solid rgba(15,23,42,0.08) !important;
+        border-radius: 14px !important;
+        padding: 1.5rem 1.2rem !important;
+        color: #0A1A3D !important;
+        font-size: 15px !important;
+        font-weight: 700 !important;
+        font-family: 'Manrope', 'Inter', system-ui, sans-serif !important;
+        cursor: pointer !important;
+        transition: transform 0.22s cubic-bezier(0.4,0,0.2,1), box-shadow 0.22s cubic-bezier(0.4,0,0.2,1), border-color 0.18s cubic-bezier(0.4,0,0.2,1) !important;
+        box-shadow: 0 2px 6px rgba(15,23,42,0.03) !important;
+        min-height: 80px !important;
+        width: 100% !important;
+    }
+    div[data-testid="stHorizontalBlock"] .stButton > button:hover {
+        transform: translateY(-3px) !important;
+        box-shadow: 0 8px 20px rgba(15,23,42,0.09) !important;
+        border-color: rgba(28,79,192,0.3) !important;
+        background: rgba(255,255,255,0.9) !important;
+    }
+    </style>
+    <div style="padding: 0 10px; margin-top: -10px;">
+        <div style="font-family:'Manrope',sans-serif; font-weight:700; font-size:15px; color:#0A1A3D; margin-bottom:8px;">Deep Dive Dashboards</div>
+        <div style="font-size:12px; color:#64748B; margin-bottom:12px;">Select a brand to explore detailed QoQ analysis</div>
+    </div>
+    """, unsafe_allow_html=True)
 
-    # If a brand was selected via the hidden input, navigate
-    if brand_selection and brand_selection in BRAND_CONFIG:
-        st.session_state["nav_state"] = brand_selection
-        st.rerun()
+    brands_list = [
+        ("Nurtec", "nurtec"), ("Eliquis", "eliquis"), ("Prevnar", "prevnar"), ("Comirnaty", "comirnaty"),
+        ("Abrysvo", "abrysvo"), ("Paxlovid", "paxlovid"), ("Zavzpret", "zavzpret"), ("Beyfortus", "beyfortus"),
+    ]
 
-    st.components.v1.html(html_content, height=1000, scrolling=False)
+    # Row 1: first 4 brands
+    cols1 = st.columns(4)
+    for i, (name, key) in enumerate(brands_list[:4]):
+        with cols1[i]:
+            if st.button(name, key=f"brand_btn_{key}", use_container_width=True):
+                st.session_state["nav_state"] = key
+                st.rerun()
+
+    # Row 2: last 4 brands
+    cols2 = st.columns(4)
+    for i, (name, key) in enumerate(brands_list[4:]):
+        with cols2[i]:
+            if st.button(name, key=f"brand_btn_{key}", use_container_width=True):
+                st.session_state["nav_state"] = key
+                st.rerun()
 
 else:
     # === RENDER BRAND PAGE ===
