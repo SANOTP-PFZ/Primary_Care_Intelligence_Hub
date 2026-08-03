@@ -81,7 +81,7 @@ def render_brand_page(brand_key, brand_config):
     col_back, col_title = st.columns([1, 8])
     with col_back:
         if st.button("\u2190 Back"):
-            st.query_params.clear()
+            st.session_state["selected_brand"] = None
             st.rerun()
     with col_title:
         st.markdown(f"### {display_name} \u2014 Quarter on Quarter Report")
