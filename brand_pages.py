@@ -1,17 +1,137 @@
 """
 Brand Deep Dive Pages - Renders brand-specific QoQ analysis views.
-Uses same dataset (SQL_EARNINGS_REPORT_MASTER_DATASET_SF) and same data structure
-as the reference Monthly Report Dashboard.
+Uses same dataset (SQL_EARNINGS_REPORT_MASTER_DATASET_SF) and same glassmorphism
+design system as the landing page.
 """
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 from io import BytesIO
+import base64
 import dataiku
 
 DATASET_NAME = "SQL_EARNINGS_REPORT_MASTER_DATASET_SF"
 CHART_COLORS = ["#1C4FC0", "#41B6E6", "#7C3AED", "#0E7490", "#D946EF", "#047857", "#EF4444", "#64748B"]
 
+# Pfizer logo (same as in DSS_app.py — small inline version)
+PFIZER_LOGO_URL = "https://cdn.pfizer.com/pfizercom/2022-10/Pfizer_Logo_Color_CMYK.png"
+
+# =====================================================
+# BRAND PAGE CSS — matches landing page glassmorphism
+# =====================================================
+
+BRAND_PAGE_CSS = """
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
+    :root {
+        --bg: #EEF3FB;
+        --surface: #FFFFFF;
+        --text-1: #0F172A;
+        --text-2: #1C4FC0;
+        --text-3: #64748B;
+        --border: rgba(15, 23, 42, 0.08);
+        --border-hover: rgba(28, 79, 192, 0.35);
+        --navy-700: #163990;
+        --navy-800: #102A5C;
+        --navy-900: #0A1A3D;
+        --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
+        --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.05), 0 1px 2px rgba(15, 23, 42, 0.04);
+        --shadow-md: 0 6px 16px rgba(15, 23, 42, 0.07), 0 2px 4px rgba(15, 23, 42, 0.04);
+        --shadow-panel: 0 8px 24px rgba(15, 23, 42, 0.07), 0 2px 6px rgba(15, 23, 42, 0.04);
+        --radius: 14px;
+        --radius-lg: 18px;
+        --ease: cubic-bezier(0.4, 0, 0.2, 1);
+        --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * { box-sizing: border-box; }
+
+    #MainMenu {visibility: hidden;}
+    header {visibility: hidden;}
+    footer {visibility: hidden;}
+    [data-testid="stSidebar"] {display: none;}
+    [data-testid="stHeader"], [data-testid="stToolbar"], [data-testid="stDecoration"],
+    [data-testid="collapsedControl"], [data-testid="stSidebarCollapseButton"] { display: none !important; }
+
+    .block-container { padding-top: 1rem !important; max-width: 100% !important; padding-left: 3rem !important; padding-right: 3rem !important; }
+    html, body, [class*="css"] { font-family: 'Inter', system-ui, -apple-system, sans-serif; color: var(--text-1) !important; -webkit-font-smoothing: antialiased; }
+    h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-spacing: -0.015em; }
+
+    .stApp, [data-testid="stAppViewContainer"], [data-testid="stMain"] {
+        background:
+            radial-gradient(ellipse 80% 60% at 0% 0%, rgba(28,79,192,0.06) 0%, transparent 60%),
+            radial-gradient(ellipse 70% 50% at 100% 0%, rgba(65,182,230,0.05) 0%, transparent 55%),
+            radial-gradient(ellipse 60% 50% at 50% 100%, rgba(124,58,237,0.03) 0%, transparent 60%),
+            var(--bg) !important;
+        color: var(--text-1);
+    }
+
+    [data-testid="stMarkdownContainer"] p { color: var(--text-1); }
+
+    /* Expanders — glassmorphism */
+    [data-testid="stExpander"] {
+        background: rgba(255, 255, 255, 0.55) !important;
+        backdrop-filter: saturate(180%) blur(14px) !important;
+        -webkit-backdrop-filter: saturate(180%) blur(14px) !important;
+        border: 1px solid var(--border) !important;
+        border-radius: var(--radius) !important;
+        box-shadow: var(--shadow-xs) !important;
+        transition: box-shadow 0.18s var(--ease), border-color 0.18s var(--ease) !important;
+    }
+    [data-testid="stExpander"]:hover { box-shadow: var(--shadow-sm) !important; border-color: var(--border-hover) !important; }
+    [data-testid="stExpander"] summary { color: var(--text-2) !important; background: transparent !important; font-weight: 600 !important; }
+    [data-testid="stExpander"] summary span { color: var(--text-2) !important; }
+    [data-testid="stExpander"] summary:hover span { color: var(--navy-700) !important; }
+
+    /* Back button — small pill, NOT large brand-card style */
+    div[data-testid="stButton"]:first-of-type button {
+        min-height: auto !important;
+        padding: 8px 20px !important;
+        font-size: 14px !important;
+        border-radius: 10px !important;
+        background: rgba(255,255,255,0.7) !important;
+        backdrop-filter: blur(8px) !important;
+        -webkit-backdrop-filter: blur(8px) !important;
+        border: 1px solid var(--border) !important;
+        color: var(--text-2) !important;
+        font-weight: 600 !important;
+        box-shadow: var(--shadow-xs) !important;
+        transition: all 0.18s var(--ease) !important;
+        transform: none !important;
+    }
+    div[data-testid="stButton"]:first-of-type button:hover {
+        background: #FFFFFF !important;
+        border-color: var(--border-hover) !important;
+        box-shadow: var(--shadow-sm) !important;
+        color: var(--navy-700) !important;
+        transform: none !important;
+    }
+
+    /* Fixed footer */
+    .brand-footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        color: var(--text-3);
+        font-size: 11px;
+        font-weight: 500;
+        padding: 8px 0;
+        background: rgba(238, 243, 251, 0.85);
+        backdrop-filter: saturate(180%) blur(16px);
+        -webkit-backdrop-filter: saturate(180%) blur(16px);
+        border-top: 1px solid var(--border);
+        z-index: 999;
+    }
+</style>
+"""
+
+
+# =====================================================
+# DATA LOADING
+# =====================================================
 
 @st.cache_data(ttl=3600)
 def load_full_data():
@@ -38,8 +158,67 @@ def pivot_metric(df_subset, metric_name):
     return pivoted
 
 
+# =====================================================
+# UI HELPERS
+# =====================================================
+
+def inject_css():
+    """Inject brand page CSS (call once at top of render)."""
+    st.markdown(BRAND_PAGE_CSS, unsafe_allow_html=True)
+
+
+def render_header(title):
+    """Render glassmorphism floating header bar."""
+    st.markdown(f"""
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:14px 24px; border-radius:18px; background:rgba(255,255,255,0.62); backdrop-filter:saturate(180%) blur(22px); -webkit-backdrop-filter:saturate(180%) blur(22px); margin:0.5rem 0 12px 0; box-shadow:0 8px 24px rgba(15,23,42,0.07),0 2px 6px rgba(15,23,42,0.04); border:1px solid rgba(15,23,42,0.08);">
+        <div style="display:flex; align-items:center; gap:12px;">
+            <img src="{PFIZER_LOGO_URL}" style="height:28px; max-width:120px; object-fit:contain;" />
+            <span style="font-family:'Manrope',sans-serif; font-weight:800; font-size:22px; color:#0A1A3D; letter-spacing:-0.025em;">{title}</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+
+def render_back_button():
+    """Render back button (pill style via CSS)."""
+    st.markdown("<div style='height:6px'></div>", unsafe_allow_html=True)
+    if st.button("\u2190 Back to Home", key="back_btn"):
+        st.session_state["nav_state"] = "home"
+        st.rerun()
+
+
+def render_kpi_cards(cards):
+    """Render KPI cards with glassmorphism. cards = list of dicts with label, value, delta_html, period."""
+    html = '<div style="display:flex; gap:18px; padding:12px 0 16px;">'
+    for card in cards:
+        html += f"""
+        <div style="background:rgba(255,255,255,0.55); backdrop-filter:saturate(180%) blur(14px); -webkit-backdrop-filter:saturate(180%) blur(14px); border:1px solid rgba(15,23,42,0.08); border-radius:18px; padding:22px 28px; flex:1; box-shadow:0 2px 8px rgba(15,23,42,0.05),0 1px 2px rgba(15,23,42,0.04); transition:transform 0.28s cubic-bezier(0.16,1,0.3,1), box-shadow 0.28s cubic-bezier(0.4,0,0.2,1); position:relative; overflow:hidden;">
+            <div style="color:#64748B; font-size:12px; font-weight:500; margin-bottom:6px;">{card['label']}</div>
+            <div style="color:#0A1A3D; font-family:'Manrope',sans-serif; font-size:32px; font-weight:700; font-variant-numeric:tabular-nums; line-height:1.1; letter-spacing:-0.02em;">{card['value']} {card.get('delta_html', '')}</div>
+            <div style="color:#64748B; font-size:11px; font-weight:500; margin-top:8px;">{card.get('period', '')}</div>
+        </div>"""
+    html += '</div>'
+    st.markdown(html, unsafe_allow_html=True)
+
+
+def render_section_title(title, source_tag=""):
+    """Render a styled section title."""
+    tag_html = f' <span style="font-size:13px; color:#1C4FC0; font-weight:500;">({source_tag})</span>' if source_tag else ""
+    st.markdown(f'<div style="padding:16px 0 5px; color:#0A1A3D; font-family:\'Manrope\',sans-serif; font-size:18px; font-weight:700; letter-spacing:-0.015em;">{title}{tag_html}</div>', unsafe_allow_html=True)
+
+
+def format_delta_html(val, suffix="pp vs STLY"):
+    """Format a delta value as colored HTML."""
+    if pd.isna(val):
+        return ""
+    sign = "+" if val >= 0 else ""
+    color = "#10B981" if val >= 0 else "#EF4444"
+    arrow = "&#9650;" if val >= 0 else "&#9660;"
+    return f'<span style="font-size:18px; color:{color}; font-weight:600;">{arrow} {sign}{val:.2f}{suffix}</span>'
+
+
 def render_trend_chart(pivoted_df, brands_order=None, is_percentage=True):
-    """Render a Plotly line chart from a pivoted DataFrame."""
+    """Render a Plotly line chart."""
     if pivoted_df.empty:
         st.info("No data available.")
         return
@@ -55,14 +234,54 @@ def render_trend_chart(pivoted_df, brands_order=None, is_percentage=True):
             fig.add_trace(go.Scatter(x=pivoted_df.index.tolist(), y=y_vals, mode="lines+markers+text", name=brand, text=text_vals, textposition="top center", textfont=dict(size=10, color=CHART_COLORS[0]), line=dict(color=CHART_COLORS[0], width=3), marker=dict(size=7), hovertemplate=hover))
         else:
             fig.add_trace(go.Scatter(x=pivoted_df.index.tolist(), y=y_vals, mode="lines+markers", name=brand, line=dict(color=CHART_COLORS[i % len(CHART_COLORS)], width=2), marker=dict(size=5), hovertemplate=hover))
-    fig.update_layout(template="plotly_white", height=400, margin=dict(l=60, r=30, t=20, b=50), plot_bgcolor="#FFFFFF", paper_bgcolor="#FFFFFF", font=dict(family="Inter, system-ui", size=12), legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0), hovermode="x unified")
-    fig.update_xaxes(showgrid=False, tickfont=dict(size=11, color="#64748B"))
-    fig.update_yaxes(showgrid=True, gridcolor="rgba(15,23,42,0.06)", ticksuffix="%" if is_percentage else "", tickfont=dict(size=11, color="#64748B"), separatethousands=True)
+    fig.update_layout(template="plotly_white", height=420, margin=dict(l=60, r=30, t=20, b=50), plot_bgcolor="#FFFFFF", paper_bgcolor="#FFFFFF", font=dict(family="Inter, system-ui, sans-serif", size=13, color="#0F172A"), legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0, font=dict(size=12, color="#64748B")), hovermode="x unified")
+    fig.update_xaxes(showgrid=False, tickfont=dict(size=12, color="#64748B"), linecolor="rgba(15,23,42,0.08)", tickcolor="rgba(15,23,42,0.08)", ticks="outside", title_text="")
+    fig.update_yaxes(showgrid=True, gridcolor="rgba(15,23,42,0.06)", ticksuffix="%" if is_percentage else "", tickfont=dict(size=12, color="#64748B"), linecolor="rgba(15,23,42,0.08)", tickcolor="rgba(15,23,42,0.08)", ticks="outside", title_text="", separatethousands=True)
     try:
         st.plotly_chart(fig, use_container_width=True, theme=None)
     except TypeError:
         st.plotly_chart(fig, use_container_width=True)
 
+
+def render_styled_table(df_to_render, title, expanded=False):
+    """Render a DataFrame as a styled HTML table inside an expander."""
+    if df_to_render.empty:
+        return
+    with st.expander(title, expanded=expanded):
+        html = '<table style="width:100%; border-collapse:collapse; font-family:Inter,system-ui,sans-serif; margin:10px 0;">'
+        html += '<thead><tr>'
+        for col in df_to_render.columns:
+            html += f'<th style="background:#102A5C; color:#FFFFFF; padding:10px 14px; text-align:center; font-size:12px; font-weight:600; letter-spacing:0.03em;">{col}</th>'
+        html += '</tr></thead><tbody>'
+        for idx, row in df_to_render.iterrows():
+            bg = "#F8FAFD" if idx % 2 == 0 else "#FFFFFF"
+            html += f'<tr style="background:{bg};">'
+            for j, val in enumerate(row):
+                align = "center"
+                font_weight = "600" if j == 0 else "400"
+                html += f'<td style="padding:9px 14px; text-align:{align}; font-size:12px; color:#0F172A; font-weight:{font_weight}; border-bottom:1px solid rgba(15,23,42,0.06);">{val}</td>'
+            html += '</tr>'
+        html += '</tbody></table>'
+        st.markdown(html, unsafe_allow_html=True)
+
+
+def render_download_link(data, file_name, label, mime):
+    """Render a base64 HTML download link with pill styling."""
+    if data is None:
+        return
+    b64 = base64.b64encode(data).decode()
+    href = f'<a href="data:{mime};base64,{b64}" download="{file_name}" style="display:inline-flex;align-items:center;gap:0.4rem;padding:8px 20px;border-radius:999px;background:rgba(255,255,255,0.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(15,23,42,0.08);color:#1C4FC0;font-size:0.82rem;font-weight:600;text-decoration:none;font-family:Inter,system-ui,sans-serif;transition:all 0.18s cubic-bezier(0.4,0,0.2,1);box-shadow:0 1px 2px rgba(15,23,42,0.04);" onmouseover="this.style.background=\'#FFFFFF\';this.style.boxShadow=\'0 2px 8px rgba(15,23,42,0.05)\';this.style.borderColor=\'rgba(28,79,192,0.35)\';this.style.transform=\'translateY(-1px)\';" onmouseout="this.style.background=\'rgba(255,255,255,0.7)\';this.style.boxShadow=\'0 1px 2px rgba(15,23,42,0.04)\';this.style.borderColor=\'rgba(15,23,42,0.08)\';this.style.transform=\'none\';">{label}</a>'
+    st.markdown(href, unsafe_allow_html=True)
+
+
+def render_footer():
+    """Render fixed footer."""
+    st.markdown('<div class="brand-footer">Developed by ZS Primary Care Team</div>', unsafe_allow_html=True)
+
+
+# =====================================================
+# MAIN BRAND PAGE RENDERER
+# =====================================================
 
 def render_brand_page(brand_key, brand_config):
     """Main entry point: renders the brand deep dive page."""
@@ -71,11 +290,10 @@ def render_brand_page(brand_key, brand_config):
     market = config["market"]
     display_name = config["display_name"]
 
-    # Header + back button
-    if st.button("\u2190 Back to Deep Dive", key="back_btn"):
-        st.session_state["nav_state"] = "deepdive"
-        st.rerun()
-    st.markdown(f"### {display_name} \u2014 Quarter on Quarter Report")
+    # Inject CSS + Header + Back button
+    inject_css()
+    render_header(f"{display_name} Quarter on Quarter Report")
+    render_back_button()
 
     # Load data
     df = load_full_data()
@@ -85,22 +303,56 @@ def render_brand_page(brand_key, brand_config):
         elaad_data = df[(df["DATASET"] == "ELAAD") & (df["MARKET"] == "BEYFORTUS")]
         if elaad_data.empty:
             st.warning("No LAAD data available for Beyfortus.")
+            render_footer()
             return
         claims = pivot_metric(elaad_data, "CLAIMS")
         patients = pivot_metric(elaad_data, "PATIENTS")
+        claims_growth = pivot_metric(elaad_data, "CLAIMS GROWTH PCT STLY")
+        patients_growth = pivot_metric(elaad_data, "PATIENTS GROWTH PCT STLY")
+
+        latest_qtr = claims.index[-1] if not claims.empty else (patients.index[-1] if not patients.empty else "N/A")
+        claims_val = claims.loc[latest_qtr, brand_name] if (not claims.empty and brand_name in claims.columns) else None
+        patients_val = patients.loc[latest_qtr, brand_name] if (not patients.empty and brand_name in patients.columns) else None
+        cg = claims_growth.loc[latest_qtr, brand_name] if (not claims_growth.empty and brand_name in claims_growth.columns and latest_qtr in claims_growth.index) else None
+        pg = patients_growth.loc[latest_qtr, brand_name] if (not patients_growth.empty and brand_name in patients_growth.columns and latest_qtr in patients_growth.index) else None
+
+        render_kpi_cards([
+            {"label": f"{display_name} Claims (LAAD)", "value": f"{claims_val:,.0f}" if pd.notna(claims_val) else "N/A", "delta_html": format_delta_html(cg, "% vs STLY"), "period": f"Latest: {latest_qtr}"},
+            {"label": f"{display_name} Patients (LAAD)", "value": f"{patients_val:,.0f}" if pd.notna(patients_val) else "N/A", "delta_html": format_delta_html(pg, "% vs STLY"), "period": f"Latest: {latest_qtr}"},
+        ])
+
         if not claims.empty:
-            st.subheader("Claims Trend (LAAD)")
+            render_section_title("Claims Trend", "LAAD")
             render_trend_chart(claims, [brand_name], is_percentage=False)
         if not patients.empty:
-            st.subheader("Patients Trend (LAAD)")
+            render_section_title("Patients Trend", "LAAD")
             render_trend_chart(patients, [brand_name], is_percentage=False)
+
         # Raw tables
+        render_section_title("Raw Data Tables")
         if not claims.empty:
-            with st.expander("Claims Data"):
-                st.dataframe(claims.reset_index().rename(columns={"YR_QTR_TXT": "Quarter"}), use_container_width=True, hide_index=True)
+            display_df = claims.reset_index().rename(columns={"YR_QTR_TXT": "Quarter"})
+            for col in display_df.columns[1:]:
+                display_df[col] = display_df[col].apply(lambda x: f"{x:,.0f}" if pd.notna(x) else "-")
+            render_styled_table(display_df, "Claims (LAAD)")
         if not patients.empty:
-            with st.expander("Patients Data"):
-                st.dataframe(patients.reset_index().rename(columns={"YR_QTR_TXT": "Quarter"}), use_container_width=True, hide_index=True)
+            display_df = patients.reset_index().rename(columns={"YR_QTR_TXT": "Quarter"})
+            for col in display_df.columns[1:]:
+                display_df[col] = display_df[col].apply(lambda x: f"{x:,.0f}" if pd.notna(x) else "-")
+            render_styled_table(display_df, "Patients (LAAD)")
+
+        # Download
+        render_section_title("Download Reports")
+        def gen_excel_bey():
+            output = BytesIO()
+            with pd.ExcelWriter(output, engine="openpyxl") as writer:
+                if not claims.empty:
+                    claims.reset_index().rename(columns={"YR_QTR_TXT": "Quarter"}).to_excel(writer, sheet_name="Claims", index=False)
+                if not patients.empty:
+                    patients.reset_index().rename(columns={"YR_QTR_TXT": "Quarter"}).to_excel(writer, sheet_name="Patients", index=False)
+            return output.getvalue()
+        render_download_link(gen_excel_bey(), "beyfortus_report.xlsx", "\U0001f4e5 Download Excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        render_footer()
         return
 
     # === ZAVZPRET (Claims only, no market share) ===
@@ -109,19 +361,55 @@ def render_brand_page(brand_key, brand_config):
         nbrx_data = get_npa_nbrx_data(df, market)
         trx_claims = pivot_metric(trx_data, "TRX CLAIMS")
         nbrx_claims = pivot_metric(nbrx_data, "NBRX CLAIMS")
+        trx_growth = pivot_metric(trx_data, "TRX CLAIMS GROWTH PCT")
+        nbrx_growth = pivot_metric(nbrx_data, "NBRX CLAIMS GROWTH PCT")
+
+        if trx_claims.empty and nbrx_claims.empty:
+            st.warning("No NPA data available for Zavzpret.")
+            render_footer()
+            return
+
+        latest_qtr = trx_claims.index[-1] if not trx_claims.empty else nbrx_claims.index[-1]
+        tc = trx_claims.loc[latest_qtr, brand_name] if (not trx_claims.empty and brand_name in trx_claims.columns) else None
+        nc = nbrx_claims.loc[latest_qtr, brand_name] if (not nbrx_claims.empty and brand_name in nbrx_claims.columns) else None
+        tg = trx_growth.loc[latest_qtr, brand_name] if (not trx_growth.empty and brand_name in trx_growth.columns and latest_qtr in trx_growth.index) else None
+        ng = nbrx_growth.loc[latest_qtr, brand_name] if (not nbrx_growth.empty and brand_name in nbrx_growth.columns and latest_qtr in nbrx_growth.index) else None
+
+        render_kpi_cards([
+            {"label": f"{display_name} TRX Claims (NPA)", "value": f"{tc:,.0f}" if pd.notna(tc) else "N/A", "delta_html": format_delta_html(tg, "% vs STLY"), "period": f"Latest: {latest_qtr}"},
+            {"label": f"{display_name} NBRX Claims (NPA)", "value": f"{nc:,.0f}" if pd.notna(nc) else "N/A", "delta_html": format_delta_html(ng, "% vs STLY"), "period": f"Latest: {latest_qtr}"},
+        ])
+
         if not trx_claims.empty:
-            st.subheader("TRX Claims Trend (NPA)")
+            render_section_title("TRX Claims Trend", "NPA")
             render_trend_chart(trx_claims, [brand_name], is_percentage=False)
         if not nbrx_claims.empty:
-            st.subheader("NBRX Claims Trend (NPA)")
+            render_section_title("NBRX Claims Trend", "NPA")
             render_trend_chart(nbrx_claims, [brand_name], is_percentage=False)
-        # Raw tables
+
+        render_section_title("Raw Data Tables")
         if not trx_claims.empty:
-            with st.expander("TRX Claims Data"):
-                st.dataframe(trx_claims.reset_index().rename(columns={"YR_QTR_TXT": "Quarter"}), use_container_width=True, hide_index=True)
+            display_df = trx_claims.reset_index().rename(columns={"YR_QTR_TXT": "Quarter"})
+            for col in display_df.columns[1:]:
+                display_df[col] = display_df[col].apply(lambda x: f"{x:,.0f}" if pd.notna(x) else "-")
+            render_styled_table(display_df, "TRX Claims (NPA)")
         if not nbrx_claims.empty:
-            with st.expander("NBRX Claims Data"):
-                st.dataframe(nbrx_claims.reset_index().rename(columns={"YR_QTR_TXT": "Quarter"}), use_container_width=True, hide_index=True)
+            display_df = nbrx_claims.reset_index().rename(columns={"YR_QTR_TXT": "Quarter"})
+            for col in display_df.columns[1:]:
+                display_df[col] = display_df[col].apply(lambda x: f"{x:,.0f}" if pd.notna(x) else "-")
+            render_styled_table(display_df, "NBRX Claims (NPA)")
+
+        render_section_title("Download Reports")
+        def gen_excel_zav():
+            output = BytesIO()
+            with pd.ExcelWriter(output, engine="openpyxl") as writer:
+                if not trx_claims.empty:
+                    trx_claims.reset_index().rename(columns={"YR_QTR_TXT": "Quarter"}).to_excel(writer, sheet_name="TRX Claims", index=False)
+                if not nbrx_claims.empty:
+                    nbrx_claims.reset_index().rename(columns={"YR_QTR_TXT": "Quarter"}).to_excel(writer, sheet_name="NBRX Claims", index=False)
+            return output.getvalue()
+        render_download_link(gen_excel_zav(), "zavzpret_report.xlsx", "\U0001f4e5 Download Excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        render_footer()
         return
 
     # === STANDARD NPA BRANDS (Nurtec, Eliquis, Prevnar, Comirnaty, Abrysvo, Paxlovid) ===
@@ -130,6 +418,7 @@ def render_brand_page(brand_key, brand_config):
 
     if trx_data.empty and nbrx_data.empty:
         st.warning(f"No NPA data for {display_name} in market '{market}'.")
+        render_footer()
         return
 
     trx_ms = pivot_metric(trx_data, "TRX MARKET SHARE")
@@ -146,26 +435,20 @@ def render_brand_page(brand_key, brand_config):
     trx_diff_val = trx_diff.loc[latest_qtr, brand_name] if (not trx_diff.empty and brand_name in trx_diff.columns and latest_qtr in trx_diff.index) else None
     nbrx_diff_val = nbrx_diff.loc[latest_qtr, brand_name] if (not nbrx_diff.empty and brand_name in nbrx_diff.columns and latest_qtr in nbrx_diff.index) else None
 
-    col1, col2 = st.columns(2)
-    with col1:
-        trx_str = f"{trx_val:.2f}%" if pd.notna(trx_val) else "N/A"
-        delta = f"{trx_diff_val:+.2f}pp vs STLY" if pd.notna(trx_diff_val) else ""
-        st.metric(f"{display_name} TRX Market Share (NPA)", trx_str, delta)
-    with col2:
-        nbrx_str = f"{nbrx_val:.2f}%" if pd.notna(nbrx_val) else "N/A"
-        delta = f"{nbrx_diff_val:+.2f}pp vs STLY" if pd.notna(nbrx_diff_val) else ""
-        st.metric(f"{display_name} NBRX Market Share (NPA)", nbrx_str, delta)
-    st.caption(f"Latest quarter: {latest_qtr}")
+    render_kpi_cards([
+        {"label": f"{display_name} TRX Market Share (NPA)", "value": f"{trx_val:.2f}%" if pd.notna(trx_val) else "N/A", "delta_html": format_delta_html(trx_diff_val), "period": f"Latest: {latest_qtr}"},
+        {"label": f"{display_name} NBRX Market Share (NPA)", "value": f"{nbrx_val:.2f}%" if pd.notna(nbrx_val) else "N/A", "delta_html": format_delta_html(nbrx_diff_val), "period": f"Latest: {latest_qtr}"},
+    ])
 
     # --- TRX Market Share Trend ---
     if not trx_ms.empty:
-        st.subheader(f"TRX Market Share \u2014 {config['market_display']} (NPA)")
+        render_section_title(f"TRX Market Share Trend \u2014 {config['market_display']} Market", "NPA")
         order = [brand_name] + [b for b in trx_ms.columns if b != brand_name]
         render_trend_chart(trx_ms, order)
 
     # --- NBRX Market Share Trend ---
     if not nbrx_ms.empty:
-        st.subheader(f"NBRX Market Share \u2014 {config['market_display']} (NPA)")
+        render_section_title(f"NBRX Market Share Trend \u2014 {config['market_display']} Market", "NPA")
         order = [brand_name] + [b for b in nbrx_ms.columns if b != brand_name]
         render_trend_chart(nbrx_ms, order)
 
@@ -174,45 +457,65 @@ def render_brand_page(brand_key, brand_config):
         ddd_market = config["ddd_market"]
         ddd_data = df[(df["DATASET"] == "DDD") & (df["MARKET"] == ddd_market)]
         if not ddd_data.empty:
-            st.markdown("---")
-            st.subheader(f"DDD Shipment Data \u2014 {ddd_market}")
-
             shipment_ms = pivot_metric(ddd_data, "OVERALL_MS")
             if not shipment_ms.empty:
-                st.markdown(f"**Overall Shipment Market Share**")
+                render_section_title(f"Shipment Market Share \u2014 {ddd_market} Market", "DDD")
                 order = [brand_name] + [b for b in shipment_ms.columns if b != brand_name]
                 render_trend_chart(shipment_ms, order)
 
             retail_ms = pivot_metric(ddd_data, "RETAIL_MS")
             if not retail_ms.empty:
-                st.markdown(f"**Retail Market Share**")
+                render_section_title(f"Retail Market Share \u2014 {ddd_market} Market", "DDD")
                 order = [brand_name] + [b for b in retail_ms.columns if b != brand_name]
                 render_trend_chart(retail_ms, order)
 
             non_retail_ms = pivot_metric(ddd_data, "NON_RETAIL_MS")
             if not non_retail_ms.empty:
-                st.markdown(f"**Non-Retail Market Share**")
+                render_section_title(f"Non-Retail Market Share \u2014 {ddd_market} Market", "DDD")
                 order = [brand_name] + [b for b in non_retail_ms.columns if b != brand_name]
                 render_trend_chart(non_retail_ms, order)
 
     # --- Raw Data Tables ---
-    st.markdown("---")
-    st.subheader("Data Tables")
+    render_section_title("Raw Data Tables")
     if not trx_ms.empty:
-        with st.expander("TRX Market Share (%)"):
-            st.dataframe(trx_ms.round(2).reset_index().rename(columns={"YR_QTR_TXT": "Quarter"}), use_container_width=True, hide_index=True)
-    if not nbrx_ms.empty:
-        with st.expander("NBRX Market Share (%)"):
-            st.dataframe(nbrx_ms.round(2).reset_index().rename(columns={"YR_QTR_TXT": "Quarter"}), use_container_width=True, hide_index=True)
-    if not trx_claims.empty:
-        with st.expander("TRX Claims"):
-            st.dataframe(trx_claims.reset_index().rename(columns={"YR_QTR_TXT": "Quarter"}), use_container_width=True, hide_index=True)
-    if not nbrx_claims.empty:
-        with st.expander("NBRX Claims"):
-            st.dataframe(nbrx_claims.reset_index().rename(columns={"YR_QTR_TXT": "Quarter"}), use_container_width=True, hide_index=True)
+        display_df = trx_ms.round(2).reset_index().rename(columns={"YR_QTR_TXT": "Quarter"})
+        for col in display_df.columns[1:]:
+            display_df[col] = display_df[col].apply(lambda x: f"{x:.2f}%" if pd.notna(x) else "-")
+        render_styled_table(display_df, "TRX Market Share (NPA)")
 
-    # --- Excel Download ---
-    st.markdown("---")
+    if not nbrx_ms.empty:
+        display_df = nbrx_ms.round(2).reset_index().rename(columns={"YR_QTR_TXT": "Quarter"})
+        for col in display_df.columns[1:]:
+            display_df[col] = display_df[col].apply(lambda x: f"{x:.2f}%" if pd.notna(x) else "-")
+        render_styled_table(display_df, "NBRX Market Share (NPA)")
+
+    if not trx_claims.empty:
+        display_df = trx_claims.reset_index().rename(columns={"YR_QTR_TXT": "Quarter"})
+        for col in display_df.columns[1:]:
+            display_df[col] = display_df[col].apply(lambda x: f"{x:,.0f}" if pd.notna(x) else "-")
+        render_styled_table(display_df, "TRX Claims (NPA)")
+
+    if not nbrx_claims.empty:
+        display_df = nbrx_claims.reset_index().rename(columns={"YR_QTR_TXT": "Quarter"})
+        for col in display_df.columns[1:]:
+            display_df[col] = display_df[col].apply(lambda x: f"{x:,.0f}" if pd.notna(x) else "-")
+        render_styled_table(display_df, "NBRX Claims (NPA)")
+
+    if not trx_diff.empty:
+        display_df = trx_diff.round(2).reset_index().rename(columns={"YR_QTR_TXT": "Quarter"})
+        for col in display_df.columns[1:]:
+            display_df[col] = display_df[col].apply(lambda x: f"{x:+.2f}" if pd.notna(x) else "-")
+        render_styled_table(display_df, "TRX Market Share Difference vs STLY (NPA)")
+
+    if not nbrx_diff.empty:
+        display_df = nbrx_diff.round(2).reset_index().rename(columns={"YR_QTR_TXT": "Quarter"})
+        for col in display_df.columns[1:]:
+            display_df[col] = display_df[col].apply(lambda x: f"{x:+.2f}" if pd.notna(x) else "-")
+        render_styled_table(display_df, "NBRX Market Share Difference vs STLY (NPA)")
+
+    # --- Download ---
+    render_section_title("Download Reports")
+
     def generate_excel():
         output = BytesIO()
         with pd.ExcelWriter(output, engine="openpyxl") as writer:
@@ -224,11 +527,11 @@ def render_brand_page(brand_key, brand_config):
                 trx_claims.reset_index().rename(columns={"YR_QTR_TXT": "Quarter"}).to_excel(writer, sheet_name="TRX Claims", index=False)
             if not nbrx_claims.empty:
                 nbrx_claims.reset_index().rename(columns={"YR_QTR_TXT": "Quarter"}).to_excel(writer, sheet_name="NBRX Claims", index=False)
+            if not trx_diff.empty:
+                trx_diff.round(2).reset_index().rename(columns={"YR_QTR_TXT": "Quarter"}).to_excel(writer, sheet_name="TRX MS Diff vs STLY", index=False)
+            if not nbrx_diff.empty:
+                nbrx_diff.round(2).reset_index().rename(columns={"YR_QTR_TXT": "Quarter"}).to_excel(writer, sheet_name="NBRX MS Diff vs STLY", index=False)
         return output.getvalue()
 
-    st.download_button(
-        label="\U0001f4e5 Download Excel Report",
-        data=generate_excel(),
-        file_name=f"{display_name.lower()}_qoq_report.xlsx",
-        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    )
+    render_download_link(generate_excel(), f"{display_name.lower()}_report.xlsx", "\U0001f4e5 Download Excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    render_footer()
