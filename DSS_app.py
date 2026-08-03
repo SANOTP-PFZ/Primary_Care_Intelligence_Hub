@@ -272,7 +272,7 @@ if nav in ("home", "deepdive"):
             .section-header {{ font-family:'Manrope',sans-serif; font-weight:700; font-size:17px; color:#0A1A3D; margin-bottom:0.25rem; }}
             .section-subtitle {{ font-size:0.72rem; color:#64748B; font-weight:500; margin-bottom:0.9rem; }}
             .brand-cards {{ display:grid; grid-template-columns:repeat(5,1fr); gap:0.7rem; }}
-            .brand-card {{ background:rgba(255,255,255,0.72); backdrop-filter:saturate(160%) blur(12px); -webkit-backdrop-filter:saturate(160%) blur(12px); border:1px solid rgba(15,23,42,0.08); border-radius:16px; padding:0.7rem 0.75rem 0.5rem; box-shadow:0 2px 8px rgba(15,23,42,0.03); aspect-ratio:1.4/1; display:flex; flex-direction:column; justify-content:space-between; }}
+            .brand-card {{ background:rgba(255,255,255,0.72); backdrop-filter:saturate(160%) blur(12px); -webkit-backdrop-filter:saturate(160%) blur(12px); border:1px solid rgba(15,23,42,0.08); border-radius:16px; padding:0.7rem 0.75rem 0.5rem; box-shadow:0 2px 8px rgba(15,23,42,0.03); min-height:120px; display:flex; flex-direction:column; justify-content:space-between; }}
             .card-top {{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:0.35rem; }}
             .brand-name {{ font-family:'Manrope',sans-serif; font-weight:700; font-size:14px; color:#0A1A3D; }}
             .brand-metric {{ display:flex; align-items:center; gap:0.3rem; }}
