@@ -311,7 +311,7 @@ if nav in ("home", "deepdive"):
         </body>
         </html>
         """
-        st.components.v1.html(summary_html, height=280, scrolling=False)
+        st.components.v1.html(summary_html, height=320, scrolling=False)
 
         # Separator + Deep Dive header
         st.markdown("""
