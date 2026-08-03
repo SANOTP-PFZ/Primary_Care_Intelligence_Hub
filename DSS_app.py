@@ -163,23 +163,27 @@ st.markdown("""
         backdrop-filter: saturate(160%) blur(12px) !important;
         -webkit-backdrop-filter: saturate(160%) blur(12px) !important;
         border: 1px solid rgba(15,23,42,0.08) !important;
-        border-radius: 14px !important;
-        padding: 1.1rem 0.8rem !important;
+        border-radius: 18px !important;
+        padding: 1.6rem 1rem !important;
         color: #0A1A3D !important;
-        font-size: 14px !important;
+        font-size: 16px !important;
         font-weight: 700 !important;
         font-family: 'Manrope', 'Inter', system-ui, sans-serif !important;
         cursor: pointer !important;
         transition: transform 0.22s cubic-bezier(0.4,0,0.2,1), box-shadow 0.22s cubic-bezier(0.4,0,0.2,1), border-color 0.18s cubic-bezier(0.4,0,0.2,1) !important;
-        box-shadow: 0 2px 6px rgba(15,23,42,0.03) !important;
-        min-height: 64px !important;
+        box-shadow: 0 2px 8px rgba(15,23,42,0.04) !important;
+        min-height: 90px !important;
+        aspect-ratio: 1.3 / 1 !important;
         width: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
     }
     [data-testid="stVerticalBlock"] [data-testid="stHorizontalBlock"] .stButton > button:hover {
-        transform: translateY(-3px) !important;
-        box-shadow: 0 8px 20px rgba(15,23,42,0.09) !important;
-        border-color: rgba(28,79,192,0.3) !important;
-        background: rgba(255,255,255,0.92) !important;
+        transform: translateY(-4px) scale(1.02) !important;
+        box-shadow: 0 10px 28px rgba(15,23,42,0.10) !important;
+        border-color: rgba(28,79,192,0.35) !important;
+        background: rgba(255,255,255,0.95) !important;
     }
 
     /* Brand card styles for summary section */
