@@ -476,6 +476,66 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
     color: var(--navy-700);
     font-weight: 600;
 }
+
+/* DEEP DIVE BRAND SELECTION */
+.deep-dive-section {
+    padding: 0.6rem 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.deep-dive-header {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+    font-size: 15.5px;
+    color: var(--navy-900);
+    margin-bottom: 0.25rem;
+    text-align: center;
+    letter-spacing: -0.01em;
+}
+.deep-dive-subtitle {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    text-align: center;
+    margin-bottom: 1rem;
+    font-weight: 400;
+}
+.deep-dive-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.65rem;
+    padding: 0 0.5rem;
+}
+.deep-dive-tile {
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: saturate(160%) blur(12px);
+    -webkit-backdrop-filter: saturate(160%) blur(12px);
+    border: 1px solid var(--hairline);
+    border-radius: 14px;
+    padding: 1rem 0.8rem;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.22s var(--ease), box-shadow 0.22s var(--ease), border-color 0.18s var(--ease);
+    box-shadow: 0 2px 6px rgba(15,23,42,0.03);
+}
+.deep-dive-tile:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(15,23,42,0.09);
+    border-color: rgba(28,79,192,0.3);
+}
+.deep-dive-tile .tile-name {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+    font-size: 14.5px;
+    color: var(--navy-900);
+    margin-bottom: 0.2rem;
+}
+.deep-dive-tile .tile-market {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
 </style>
 </head>
 <body>
@@ -495,11 +555,11 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
 
     <div class="sidebar-section-label">Primary Care Workspace</div>
     <nav class="nav">
-        <button class="nav-item active">
+        <button class="nav-item" id="nav-deepdive" onclick="activateDeepDive()">
             <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
             <span class="nav-label">Deep Dive Dashboards</span>
         </button>
-        <button class="nav-item">
+        <button class="nav-item" id="nav-cowork" onclick="activateCowork()">
             <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="10" rx="2"/><path d="M9 16v3M15 16v3M9 6V3M15 6V3M3 11h3M18 11h3"/></svg></span>
             <span class="nav-label">CoWork Agents</span>
         </button>
@@ -534,17 +594,78 @@ __BRAND_CARDS__
             </div>
         </div>
 
-        <!-- MISSION STATEMENT -->
-        <div class="hub-mission">
+        <!-- MISSION STATEMENT (visible by default) -->
+        <div class="hub-mission" id="mission-section">
             <div class="mission-divider"></div>
             <p class="mission-text">Your single source of truth for Primary Care brand performance analytics across NPA, DDD, and LAAD data sources.</p>
             <p class="mission-sub">Use <strong>Deep Dive Dashboards</strong> in the sidebar for detailed QoQ analysis, competitive trends, and exportable reports.</p>
             <div class="mission-divider"></div>
         </div>
+
+        <!-- DEEP DIVE BRAND SELECTION (hidden by default) -->
+        <div class="deep-dive-section" id="deep-dive-section" style="display:none;">
+            <div class="mission-divider"></div>
+            <div class="deep-dive-header">Deep Dive Dashboards</div>
+            <div class="deep-dive-subtitle">Select a brand to explore detailed QoQ analysis, competitive trends, and exportable reports</div>
+            <div class="deep-dive-grid">
+                <div class="deep-dive-tile">
+                    <div class="tile-name">Nurtec</div>
+                    <div class="tile-market">Oral CGRP</div>
+                </div>
+                <div class="deep-dive-tile">
+                    <div class="tile-name">Eliquis</div>
+                    <div class="tile-market">Oral Anticoagulant</div>
+                </div>
+                <div class="deep-dive-tile">
+                    <div class="tile-name">Prevnar</div>
+                    <div class="tile-market">PCV</div>
+                </div>
+                <div class="deep-dive-tile">
+                    <div class="tile-name">Comirnaty</div>
+                    <div class="tile-market">COVID Vaccines</div>
+                </div>
+                <div class="deep-dive-tile">
+                    <div class="tile-name">Abrysvo</div>
+                    <div class="tile-market">RSV</div>
+                </div>
+                <div class="deep-dive-tile">
+                    <div class="tile-name">Paxlovid</div>
+                    <div class="tile-market">COVID Oral Treatment</div>
+                </div>
+                <div class="deep-dive-tile">
+                    <div class="tile-name">Zavzpret</div>
+                    <div class="tile-market">Acute Migraine</div>
+                </div>
+                <div class="deep-dive-tile">
+                    <div class="tile-name">Beyfortus</div>
+                    <div class="tile-market">RSV Pediatric</div>
+                </div>
+            </div>
+        </div>
     </main>
 </div>
 
 </div>
+
+<script>
+function clearActive() {
+    document.querySelectorAll('.nav-item').forEach(function(item) {
+        item.classList.remove('active');
+    });
+}
+function activateDeepDive() {
+    clearActive();
+    document.getElementById('nav-deepdive').classList.add('active');
+    document.getElementById('mission-section').style.display = 'none';
+    document.getElementById('deep-dive-section').style.display = 'block';
+}
+function activateCowork() {
+    clearActive();
+    document.getElementById('nav-cowork').classList.add('active');
+    document.getElementById('mission-section').style.display = 'flex';
+    document.getElementById('deep-dive-section').style.display = 'none';
+}
+</script>
 </body>
 </html>
 """
