@@ -139,10 +139,7 @@ st.markdown("""
     [data-testid="stSidebarCollapseButton"], #MainMenu, footer,
     .stApp > header { display: none !important; }
 
-    /* Lock viewport — no scrolling on landing page */
-    .stApp { overflow: hidden !important; }
-    [data-testid="stMain"] { overflow: hidden !important; }
-    [data-testid="stMainBlockContainer"] { overflow: hidden !important; max-height: 100vh !important; }
+    /* Overflow is controlled per-page — see routing section below */
 
     /* Layout spacing */
     .block-container { padding: 0 !important; max-width: 100% !important; }
@@ -225,6 +222,15 @@ if nav in ("home", "deepdive"):
     # LANDING PAGE — Two-column layout (sidebar | main content)
     # Everything fits in viewport, no scrolling
     # =========================================================
+
+    # Lock viewport for landing page only
+    st.markdown("""
+    <style>
+        .stApp { overflow: hidden !important; }
+        [data-testid="stMain"] { overflow: hidden !important; }
+        [data-testid="stMainBlockContainer"] { overflow: hidden !important; max-height: 100vh !important; }
+    </style>
+    """, unsafe_allow_html=True)
 
     sidebar_col, main_col = st.columns([232, 900], gap="small")
 
@@ -315,7 +321,7 @@ if nav in ("home", "deepdive"):
 
         # Separator + Deep Dive header
         st.markdown("""
-        <div style="text-align:center; padding:0.7rem 0 0.4rem;">
+        <div style="text-align:center; padding:0.7rem 0 0.8rem;">
             <div style="width:80px; height:1px; background:linear-gradient(90deg,transparent,rgba(28,79,192,0.3),transparent); margin:0 auto 0.6rem;"></div>
             <div style="font-family:'Manrope',sans-serif; font-weight:700; font-size:15px; color:#0A1A3D; letter-spacing:-0.01em;">Deep Dive Dashboards</div>
             <div style="font-size:12px; color:#64748B; font-weight:400; margin-top:0.15rem;">Select a brand to explore detailed QoQ analysis, competitive trends, and exportable reports</div>
