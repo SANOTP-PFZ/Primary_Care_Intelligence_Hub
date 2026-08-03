@@ -507,8 +507,8 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: 1fr 1fr;
-    gap: 0.75rem;
-    padding: 0 0.5rem;
+    gap: 0.9rem;
+    padding: 0 0.3rem;
     flex: 1;
 }
 .deep-dive-tile {
@@ -517,7 +517,7 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
     -webkit-backdrop-filter: saturate(160%) blur(12px);
     border: 1px solid var(--hairline);
     border-radius: 14px;
-    padding: 1.2rem 0.8rem;
+    padding: 1.5rem 1.2rem;
     text-align: center;
     cursor: pointer;
     transition: transform 0.22s var(--ease), box-shadow 0.22s var(--ease), border-color 0.18s var(--ease);
@@ -525,6 +525,7 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
     display: flex;
     align-items: center;
     justify-content: center;
+    min-height: 80px;
 }
 .deep-dive-tile:hover {
     transform: translateY(-3px);
