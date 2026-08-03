@@ -260,24 +260,58 @@ if nav in ("home", "deepdive"):
 
     # --- RIGHT COLUMN: Summary + Brand Tiles ---
     with main_col:
-        # Summary section (sparkline cards + data freshness)
-        st.markdown(f"""
-        <div style="background:rgba(255,255,255,0.55); backdrop-filter:saturate(180%) blur(14px); -webkit-backdrop-filter:saturate(180%) blur(14px); border:1px solid rgba(15,23,42,0.08); border-radius:18px; box-shadow:0 8px 24px rgba(15,23,42,0.07),0 2px 6px rgba(15,23,42,0.04); padding:1.1rem;">
-            <div style="font-family:'Manrope',sans-serif; font-weight:700; font-size:17px; color:#0A1A3D; margin-bottom:0.25rem;">Primary Care Brand Performance Summary</div>
-            <div style="font-size:0.72rem; color:#64748B; font-weight:500; margin-bottom:0.9rem;">QoQ TRx Market Share Trends</div>
-            <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:0.7rem;">
+        # Summary section rendered as a small component (SVGs need an iframe to render)
+        summary_html = f"""
+        <html>
+        <head>
+        <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <style>
+            * {{ margin:0; padding:0; box-sizing:border-box; }}
+            body {{ font-family:'Inter',system-ui,sans-serif; background:transparent; -webkit-font-smoothing:antialiased; }}
+            .summary-panel {{ background:rgba(255,255,255,0.55); backdrop-filter:saturate(180%) blur(14px); -webkit-backdrop-filter:saturate(180%) blur(14px); border:1px solid rgba(15,23,42,0.08); border-radius:18px; box-shadow:0 8px 24px rgba(15,23,42,0.07),0 2px 6px rgba(15,23,42,0.04); padding:1.1rem; }}
+            .section-header {{ font-family:'Manrope',sans-serif; font-weight:700; font-size:17px; color:#0A1A3D; margin-bottom:0.25rem; }}
+            .section-subtitle {{ font-size:0.72rem; color:#64748B; font-weight:500; margin-bottom:0.9rem; }}
+            .brand-cards {{ display:grid; grid-template-columns:repeat(5,1fr); gap:0.7rem; }}
+            .brand-card {{ background:rgba(255,255,255,0.72); backdrop-filter:saturate(160%) blur(12px); -webkit-backdrop-filter:saturate(160%) blur(12px); border:1px solid rgba(15,23,42,0.08); border-radius:16px; padding:0.7rem 0.75rem 0.5rem; box-shadow:0 2px 8px rgba(15,23,42,0.03); aspect-ratio:1.4/1; display:flex; flex-direction:column; justify-content:space-between; }}
+            .card-top {{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:0.35rem; }}
+            .brand-name {{ font-family:'Manrope',sans-serif; font-weight:700; font-size:14px; color:#0A1A3D; }}
+            .brand-metric {{ display:flex; align-items:center; gap:0.3rem; }}
+            .brand-value {{ font-family:'Manrope',sans-serif; font-weight:800; font-size:16px; color:#0F172A; }}
+            .brand-delta {{ font-size:11px; font-weight:600; padding:1px 5px; border-radius:4px; }}
+            .brand-delta.up {{ color:#059669; background:rgba(16,185,129,0.1); }}
+            .brand-delta.down {{ color:#DC2626; background:rgba(239,68,68,0.08); }}
+            .brand-spark {{ width:100%; }}
+            .brand-spark svg {{ width:100%; height:28px; display:block; }}
+            .card-footer {{ font-size:10.5px; color:#64748B; font-weight:500; text-align:center; margin-top:0.25rem; letter-spacing:0.02em; }}
+            .card-source {{ display:inline-block; background:rgba(28,79,192,0.08); color:#163990; font-size:9.5px; font-weight:700; padding:1px 5px; border-radius:3px; letter-spacing:0.05em; margin-right:3px; }}
+            .data-freshness {{ margin-top:0.8rem; padding:0.5rem 0.8rem; border-radius:10px; background:rgba(28,79,192,0.03); border:1px solid rgba(28,79,192,0.08); display:flex; gap:1.5rem; align-items:center; flex-wrap:wrap; font-size:11.5px; }}
+            .data-freshness-label {{ font-family:'Manrope',sans-serif; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:#163990; }}
+            .data-freshness-item {{ color:#475569; font-weight:500; }}
+            .data-freshness-item strong {{ color:#0A1A3D; font-weight:600; }}
+            .data-freshness-divider {{ width:1px; height:12px; background:rgba(28,79,192,0.2); }}
+            .data-refreshed {{ margin-left:auto; color:#64748B; }}
+        </style>
+        </head>
+        <body>
+        <div class="summary-panel">
+            <div class="section-header">Primary Care Brand Performance Summary</div>
+            <div class="section-subtitle">QoQ TRx Market Share Trends</div>
+            <div class="brand-cards">
                 {brand_cards_html}
             </div>
-            <div style="margin-top:0.8rem; padding:0.5rem 0.8rem; border-radius:10px; background:rgba(28,79,192,0.03); border:1px solid rgba(28,79,192,0.08); display:flex; gap:1.5rem; align-items:center; flex-wrap:wrap; font-size:11.5px;">
-                <span style="font-family:'Manrope',sans-serif; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:#163990;">Data Availability</span>
-                <span style="color:#475569; font-weight:500;"><strong style="color:#0A1A3D;font-weight:600;">NPA:</strong> Till {max_date_raw}</span>
-                <span style="color:#475569; font-weight:500;"><strong style="color:#0A1A3D;font-weight:600;">DDD:</strong> Till {max_date_raw}</span>
-                <span style="color:#475569; font-weight:500;"><strong style="color:#0A1A3D;font-weight:600;">LAAD:</strong> Till {max_date_raw}</span>
-                <span style="width:1px;height:12px;background:rgba(28,79,192,0.2);"></span>
-                <span style="color:#64748B; font-weight:500; margin-left:auto;"><strong style="color:#0A1A3D;font-weight:600;">Refreshed:</strong> {refresh_ts}</span>
+            <div class="data-freshness">
+                <span class="data-freshness-label">Data Availability</span>
+                <span class="data-freshness-item"><strong>NPA:</strong> Till {max_date_raw}</span>
+                <span class="data-freshness-item"><strong>DDD:</strong> Till {max_date_raw}</span>
+                <span class="data-freshness-item"><strong>LAAD:</strong> Till {max_date_raw}</span>
+                <span class="data-freshness-divider"></span>
+                <span class="data-freshness-item data-refreshed"><strong>Refreshed:</strong> {refresh_ts}</span>
             </div>
         </div>
-        """, unsafe_allow_html=True)
+        </body>
+        </html>
+        """
+        st.components.v1.html(summary_html, height=280, scrolling=False)
 
         # Separator + Deep Dive header
         st.markdown("""
