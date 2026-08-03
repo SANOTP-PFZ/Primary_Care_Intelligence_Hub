@@ -201,9 +201,9 @@ def render_kpi_cards(cards):
 
 
 def render_section_title(title, source_tag=""):
-    """Render a styled section title."""
+    """Render a styled section title with spacing below."""
     tag_html = f' <span style="font-size:13px; color:#1C4FC0; font-weight:500;">({source_tag})</span>' if source_tag else ""
-    st.markdown(f'<div style="padding:16px 0 5px; color:#0A1A3D; font-family:\'Manrope\',sans-serif; font-size:18px; font-weight:700; letter-spacing:-0.015em;">{title}{tag_html}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div style="padding:20px 0 12px; color:#0A1A3D; font-family:\'Manrope\',sans-serif; font-size:18px; font-weight:700; letter-spacing:-0.015em;">{title}{tag_html}</div>', unsafe_allow_html=True)
 
 
 def format_delta_html(val, suffix="pp vs STLY"):
