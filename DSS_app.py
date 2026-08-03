@@ -324,8 +324,8 @@ if nav in ("home", "deepdive"):
 
         # Separator + Deep Dive header
         st.markdown("""
-        <div style="text-align:center; padding:0.7rem 0 0.8rem;">
-            <div style="width:80px; height:1px; background:linear-gradient(90deg,transparent,rgba(28,79,192,0.3),transparent); margin:0 auto 0.6rem;"></div>
+        <div style="text-align:center; padding:0.15rem 0 0.7rem;">
+            <div style="width:80px; height:1px; background:linear-gradient(90deg,transparent,rgba(28,79,192,0.3),transparent); margin:0 auto 0.55rem;"></div>
             <div style="font-family:'Manrope',sans-serif; font-weight:700; font-size:15px; color:#0A1A3D; letter-spacing:-0.01em;">Deep Dive Dashboards</div>
             <div style="font-size:12px; color:#64748B; font-weight:400; margin-top:0.15rem;">Select a brand to explore detailed QoQ analysis, competitive trends, and exportable reports</div>
         </div>
