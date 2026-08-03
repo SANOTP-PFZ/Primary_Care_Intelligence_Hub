@@ -148,7 +148,7 @@ st.markdown("""
     .block-container { padding: 0 !important; max-width: 100% !important; }
     [data-testid="stAppViewBlockContainer"] { padding: 0 !important; }
     [data-testid="stMainBlockContainer"] { padding: 8px 10px !important; }
-    [data-testid="stVerticalBlock"] { gap: 0 !important; }
+    [data-testid="stVerticalBlock"] { gap: 0.4rem !important; }
     [data-testid="stHorizontalBlock"] { gap: 10px !important; align-items: stretch !important; }
 
     /* Background gradient */
@@ -160,8 +160,8 @@ st.markdown("""
             #EEF3FB !important;
     }
 
-    /* Brand tile button styling */
-    .brand-tiles-area [data-testid="stHorizontalBlock"] .stButton > button {
+    /* Brand tile button styling — target ALL buttons in the right column */
+    [data-testid="stVerticalBlock"] [data-testid="stHorizontalBlock"] .stButton > button {
         background: rgba(255,255,255,0.72) !important;
         backdrop-filter: saturate(160%) blur(12px) !important;
         -webkit-backdrop-filter: saturate(160%) blur(12px) !important;
@@ -178,7 +178,7 @@ st.markdown("""
         min-height: 64px !important;
         width: 100% !important;
     }
-    .brand-tiles-area [data-testid="stHorizontalBlock"] .stButton > button:hover {
+    [data-testid="stVerticalBlock"] [data-testid="stHorizontalBlock"] .stButton > button:hover {
         transform: translateY(-3px) !important;
         box-shadow: 0 8px 20px rgba(15,23,42,0.09) !important;
         border-color: rgba(28,79,192,0.3) !important;
@@ -322,13 +322,12 @@ if nav in ("home", "deepdive"):
         </div>
         """, unsafe_allow_html=True)
 
-        # Brand tile buttons (native Streamlit — these actually work!)
+        # Brand tile buttons (native Streamlit — clickable!)
         brands_list = [
             ("Nurtec", "nurtec"), ("Eliquis", "eliquis"), ("Prevnar", "prevnar"), ("Comirnaty", "comirnaty"),
             ("Abrysvo", "abrysvo"), ("Paxlovid", "paxlovid"), ("Zavzpret", "zavzpret"), ("Beyfortus", "beyfortus"),
         ]
 
-        st.markdown('<div class="brand-tiles-area">', unsafe_allow_html=True)
         cols1 = st.columns(4, gap="small")
         for i, (name, key) in enumerate(brands_list[:4]):
             with cols1[i]:
@@ -342,7 +341,6 @@ if nav in ("home", "deepdive"):
                 if st.button(name, key=f"brand_btn_{key}", use_container_width=True):
                     st.session_state["nav_state"] = key
                     st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
 
 else:
     # === RENDER BRAND PAGE ===
