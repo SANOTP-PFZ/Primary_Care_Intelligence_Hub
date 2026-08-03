@@ -277,11 +277,11 @@ if nav in ("home", "deepdive"):
         <style>
             * {{ margin:0; padding:0; box-sizing:border-box; }}
             body {{ font-family:'Inter',system-ui,sans-serif; background:transparent; -webkit-font-smoothing:antialiased; }}
-            .summary-panel {{ background:rgba(255,255,255,0.55); backdrop-filter:saturate(180%) blur(14px); -webkit-backdrop-filter:saturate(180%) blur(14px); border:1px solid rgba(15,23,42,0.08); border-radius:18px; box-shadow:0 8px 24px rgba(15,23,42,0.07),0 2px 6px rgba(15,23,42,0.04); padding:1.6rem 1.4rem; }}
-            .section-header {{ font-family:'Manrope',sans-serif; font-weight:700; font-size:18px; color:#0A1A3D; margin-bottom:0.3rem; }}
-            .section-subtitle {{ font-size:0.75rem; color:#64748B; font-weight:500; margin-bottom:1rem; }}
-            .brand-cards {{ display:grid; grid-template-columns:repeat(5,1fr); gap:0.75rem; }}
-            .brand-card {{ background:rgba(255,255,255,0.72); backdrop-filter:saturate(160%) blur(12px); -webkit-backdrop-filter:saturate(160%) blur(12px); border:1px solid rgba(15,23,42,0.08); border-radius:16px; padding:0.9rem 0.8rem 0.65rem; box-shadow:0 2px 8px rgba(15,23,42,0.03); min-height:155px; display:flex; flex-direction:column; justify-content:space-between; }}
+            .summary-panel {{ background:rgba(255,255,255,0.55); backdrop-filter:saturate(180%) blur(14px); -webkit-backdrop-filter:saturate(180%) blur(14px); border:1px solid rgba(15,23,42,0.08); border-radius:18px; box-shadow:0 8px 24px rgba(15,23,42,0.07),0 2px 6px rgba(15,23,42,0.04); padding:1.8rem 1.5rem; }}
+            .section-header {{ font-family:'Manrope',sans-serif; font-weight:700; font-size:19px; color:#0A1A3D; margin-bottom:0.35rem; }}
+            .section-subtitle {{ font-size:0.78rem; color:#64748B; font-weight:500; margin-bottom:1.1rem; }}
+            .brand-cards {{ display:grid; grid-template-columns:repeat(5,1fr); gap:0.8rem; }}
+            .brand-card {{ background:rgba(255,255,255,0.72); backdrop-filter:saturate(160%) blur(12px); -webkit-backdrop-filter:saturate(160%) blur(12px); border:1px solid rgba(15,23,42,0.08); border-radius:16px; padding:1rem 0.85rem 0.7rem; box-shadow:0 2px 8px rgba(15,23,42,0.03); min-height:168px; display:flex; flex-direction:column; justify-content:space-between; }}
             .card-top {{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:0.35rem; }}
             .brand-name {{ font-family:'Manrope',sans-serif; font-weight:700; font-size:14px; color:#0A1A3D; }}
             .brand-metric {{ display:flex; align-items:center; gap:0.3rem; }}
@@ -293,7 +293,7 @@ if nav in ("home", "deepdive"):
             .brand-spark svg {{ width:100%; height:28px; display:block; }}
             .card-footer {{ font-size:10.5px; color:#64748B; font-weight:500; text-align:center; margin-top:0.25rem; letter-spacing:0.02em; }}
             .card-source {{ display:inline-block; background:rgba(28,79,192,0.08); color:#163990; font-size:9.5px; font-weight:700; padding:1px 5px; border-radius:3px; letter-spacing:0.05em; margin-right:3px; }}
-            .data-freshness {{ margin-top:1rem; padding:0.55rem 0.85rem; border-radius:10px; background:rgba(28,79,192,0.03); border:1px solid rgba(28,79,192,0.08); display:flex; gap:1.5rem; align-items:center; flex-wrap:wrap; font-size:11.5px; }}
+            .data-freshness {{ margin-top:1.2rem; padding:0.6rem 0.9rem; border-radius:10px; background:rgba(28,79,192,0.03); border:1px solid rgba(28,79,192,0.08); display:flex; gap:1.5rem; align-items:center; flex-wrap:wrap; font-size:11.5px; }}
             .data-freshness-label {{ font-family:'Manrope',sans-serif; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:#163990; }}
             .data-freshness-item {{ color:#475569; font-weight:500; }}
             .data-freshness-item strong {{ color:#0A1A3D; font-weight:600; }}
@@ -320,7 +320,7 @@ if nav in ("home", "deepdive"):
         </body>
         </html>
         """
-        st.components.v1.html(summary_html, height=400, scrolling=False)
+        st.components.v1.html(summary_html, height=430, scrolling=False)
 
         # Separator + Deep Dive header
         st.markdown("""
