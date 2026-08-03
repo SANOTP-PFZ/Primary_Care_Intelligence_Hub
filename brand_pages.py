@@ -84,6 +84,23 @@ BRAND_PAGE_CSS = """
     [data-testid="stExpander"] summary span { color: var(--text-2) !important; }
     [data-testid="stExpander"] summary:hover span { color: var(--navy-700) !important; }
 
+    /* Chart containers — curved edges with glass border */
+    [data-testid="stPlotlyChart"] {
+        border-radius: 16px !important;
+        border: 1px solid rgba(15, 23, 42, 0.08) !important;
+        background: rgba(255, 255, 255, 0.55) !important;
+        backdrop-filter: saturate(180%) blur(14px) !important;
+        -webkit-backdrop-filter: saturate(180%) blur(14px) !important;
+        padding: 12px !important;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05), 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+        overflow: hidden !important;
+        transition: box-shadow 0.18s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.18s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+    [data-testid="stPlotlyChart"]:hover {
+        box-shadow: 0 6px 16px rgba(15, 23, 42, 0.07), 0 2px 4px rgba(15, 23, 42, 0.04) !important;
+        border-color: rgba(28, 79, 192, 0.2) !important;
+    }
+
     /* Back button — small pill, NOT large brand-card style */
     div[data-testid="stButton"]:first-of-type button {
         min-height: auto !important;
@@ -106,24 +123,6 @@ BRAND_PAGE_CSS = """
         box-shadow: var(--shadow-sm) !important;
         color: var(--navy-700) !important;
         transform: none !important;
-    }
-
-    /* Fixed footer */
-    .brand-footer {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        text-align: center;
-        color: var(--text-3);
-        font-size: 11px;
-        font-weight: 500;
-        padding: 8px 0;
-        background: rgba(238, 243, 251, 0.85);
-        backdrop-filter: saturate(180%) blur(16px);
-        -webkit-backdrop-filter: saturate(180%) blur(16px);
-        border-top: 1px solid var(--border);
-        z-index: 999;
     }
 </style>
 """
@@ -275,8 +274,8 @@ def render_download_link(data, file_name, label, mime):
 
 
 def render_footer():
-    """Render fixed footer."""
-    st.markdown('<div class="brand-footer">Developed by ZS Primary Care Team</div>', unsafe_allow_html=True)
+    """No-op — footer removed to avoid hiding download links."""
+    pass
 
 
 # =====================================================
@@ -587,7 +586,72 @@ def render_brand_page(brand_key, brand_config):
                         render_section_title("Adult Market Share Trend \u2014 PCV Market", "DDD")
                         render_trend_chart(adult_ms_filtered, adult_brands)
 
-    # --- Raw Data Tables ---
+    # --- Section 1: QoQ Market Share Differences ---
+    render_section_title("QoQ Market Share Differences")
+
+    # Fetch additional metrics for this section
+    trx_pq_ms = pivot_metric(trx_data, "TRX PQ MARKET SHARE")
+    trx_ms_diff_pq = pivot_metric(trx_data, "TRX MS DIFF VS PQ")
+    nbrx_pq_ms = pivot_metric(nbrx_data, "NBRX PQ MARKET SHARE")
+    nbrx_ms_diff_pq = pivot_metric(nbrx_data, "NBRX MS DIFF VS PQ")
+
+    if not trx_ms.empty and brand_name in trx_ms.columns:
+        ms_trx_table = pd.DataFrame({"Quarter": trx_ms.index})
+        ms_trx_table[f"{display_name} MS"] = trx_ms[brand_name].apply(lambda x: f"{x:.2f}" if pd.notna(x) else "-").values
+        ms_trx_table["PQ MS"] = trx_pq_ms[brand_name].apply(lambda x: f"{x:.2f}" if pd.notna(x) else "-").values if (not trx_pq_ms.empty and brand_name in trx_pq_ms.columns) else "-"
+        ms_trx_table["MS Diff vs STLY"] = trx_diff[brand_name].apply(lambda x: f"{x:+.2f}" if pd.notna(x) else "-").values if (not trx_diff.empty and brand_name in trx_diff.columns) else "-"
+        ms_trx_table["MS Diff vs PQ"] = trx_ms_diff_pq[brand_name].apply(lambda x: f"{x:+.2f}" if pd.notna(x) else "-").values if (not trx_ms_diff_pq.empty and brand_name in trx_ms_diff_pq.columns) else "-"
+        render_styled_table(ms_trx_table, f"TRX Market Share Difference \u2014 {display_name} (NPA)")
+
+    if not nbrx_ms.empty and brand_name in nbrx_ms.columns:
+        ms_nbrx_table = pd.DataFrame({"Quarter": nbrx_ms.index})
+        ms_nbrx_table[f"{display_name} MS"] = nbrx_ms[brand_name].apply(lambda x: f"{x:.2f}" if pd.notna(x) else "-").values
+        ms_nbrx_table["PQ MS"] = nbrx_pq_ms[brand_name].apply(lambda x: f"{x:.2f}" if pd.notna(x) else "-").values if (not nbrx_pq_ms.empty and brand_name in nbrx_pq_ms.columns) else "-"
+        ms_nbrx_table["MS Diff vs STLY"] = nbrx_diff[brand_name].apply(lambda x: f"{x:+.2f}" if pd.notna(x) else "-").values if (not nbrx_diff.empty and brand_name in nbrx_diff.columns) else "-"
+        ms_nbrx_table["MS Diff vs PQ"] = nbrx_ms_diff_pq[brand_name].apply(lambda x: f"{x:+.2f}" if pd.notna(x) else "-").values if (not nbrx_ms_diff_pq.empty and brand_name in nbrx_ms_diff_pq.columns) else "-"
+        render_styled_table(ms_nbrx_table, f"NBRX Market Share Difference \u2014 {display_name} (NPA)")
+
+    # --- Section 2: QoQ Growth Summaries ---
+    render_section_title("QoQ Growth Summaries")
+
+    # Fetch growth metrics (brand + market total)
+    brand_market_data = df[df["BRAND"].isin([brand_name, market])].copy()
+    trx_qoq_growth = pivot_metric(brand_market_data[(brand_market_data["DATASET"] == "NPA_TRX") & (brand_market_data["MARKET"] == market)], "TRX QOQ GROWTH PCT") if not brand_market_data.empty else pd.DataFrame()
+    trx_stly_growth = pivot_metric(brand_market_data[(brand_market_data["DATASET"] == "NPA_TRX") & (brand_market_data["MARKET"] == market)], "TRX STLY GROWTH PCT") if not brand_market_data.empty else pd.DataFrame()
+    nbrx_qoq_growth = pivot_metric(brand_market_data[(brand_market_data["DATASET"] == "NPA_NBRX") & (brand_market_data["MARKET"] == market)], "NBRX QOQ GROWTH PCT") if not brand_market_data.empty else pd.DataFrame()
+    nbrx_stly_growth = pivot_metric(brand_market_data[(brand_market_data["DATASET"] == "NPA_NBRX") & (brand_market_data["MARKET"] == market)], "NBRX STLY GROWTH PCT") if not brand_market_data.empty else pd.DataFrame()
+
+    def fmt_growth(val):
+        if pd.isna(val):
+            return "-"
+        sign = "+" if val >= 0 else ""
+        return f"{sign}{val:.2f}%"
+
+    if not trx_claims.empty:
+        gs_trx = pd.DataFrame({"Quarter": trx_claims.index})
+        if brand_name in trx_claims.columns:
+            gs_trx[f"{display_name} TRX Claims"] = trx_claims[brand_name].apply(lambda x: f"{x:,.0f}" if pd.notna(x) else "-").values
+            gs_trx[f"{display_name} PQ Growth %"] = trx_qoq_growth[brand_name].reindex(trx_claims.index).apply(fmt_growth).values if (not trx_qoq_growth.empty and brand_name in trx_qoq_growth.columns) else "-"
+            gs_trx[f"{display_name} STLY Growth %"] = trx_stly_growth[brand_name].reindex(trx_claims.index).apply(fmt_growth).values if (not trx_stly_growth.empty and brand_name in trx_stly_growth.columns) else "-"
+        if market in trx_claims.columns:
+            gs_trx[f"{market} TRX Claims"] = trx_claims[market].apply(lambda x: f"{x:,.0f}" if pd.notna(x) else "-").values
+            gs_trx[f"{market} PQ Growth %"] = trx_qoq_growth[market].reindex(trx_claims.index).apply(fmt_growth).values if (not trx_qoq_growth.empty and market in trx_qoq_growth.columns) else "-"
+            gs_trx[f"{market} STLY Growth %"] = trx_stly_growth[market].reindex(trx_claims.index).apply(fmt_growth).values if (not trx_stly_growth.empty and market in trx_stly_growth.columns) else "-"
+        render_styled_table(gs_trx, "TRX Growth Summary (NPA)")
+
+    if not nbrx_claims.empty:
+        gs_nbrx = pd.DataFrame({"Quarter": nbrx_claims.index})
+        if brand_name in nbrx_claims.columns:
+            gs_nbrx[f"{display_name} NBRX Claims"] = nbrx_claims[brand_name].apply(lambda x: f"{x:,.0f}" if pd.notna(x) else "-").values
+            gs_nbrx[f"{display_name} PQ Growth %"] = nbrx_qoq_growth[brand_name].reindex(nbrx_claims.index).apply(fmt_growth).values if (not nbrx_qoq_growth.empty and brand_name in nbrx_qoq_growth.columns) else "-"
+            gs_nbrx[f"{display_name} STLY Growth %"] = nbrx_stly_growth[brand_name].reindex(nbrx_claims.index).apply(fmt_growth).values if (not nbrx_stly_growth.empty and brand_name in nbrx_stly_growth.columns) else "-"
+        if market in nbrx_claims.columns:
+            gs_nbrx[f"{market} NBRX Claims"] = nbrx_claims[market].apply(lambda x: f"{x:,.0f}" if pd.notna(x) else "-").values
+            gs_nbrx[f"{market} PQ Growth %"] = nbrx_qoq_growth[market].reindex(nbrx_claims.index).apply(fmt_growth).values if (not nbrx_qoq_growth.empty and market in nbrx_qoq_growth.columns) else "-"
+            gs_nbrx[f"{market} STLY Growth %"] = nbrx_stly_growth[market].reindex(nbrx_claims.index).apply(fmt_growth).values if (not nbrx_stly_growth.empty and market in nbrx_stly_growth.columns) else "-"
+        render_styled_table(gs_nbrx, "NBRX Growth Summary (NPA)")
+
+    # --- Section 3: Raw Data Tables ---
     render_section_title("Raw Data Tables")
     if not trx_ms.empty:
         display_df = trx_ms.round(2).reset_index().rename(columns={"YR_QTR_TXT": "Quarter"})
@@ -612,18 +676,6 @@ def render_brand_page(brand_key, brand_config):
         for col in display_df.columns[1:]:
             display_df[col] = display_df[col].apply(lambda x: f"{x:,.0f}" if pd.notna(x) else "-")
         render_styled_table(display_df, "NBRX Claims (NPA)")
-
-    if not trx_diff.empty:
-        display_df = trx_diff.round(2).reset_index().rename(columns={"YR_QTR_TXT": "Quarter"})
-        for col in display_df.columns[1:]:
-            display_df[col] = display_df[col].apply(lambda x: f"{x:+.2f}" if pd.notna(x) else "-")
-        render_styled_table(display_df, "TRX Market Share Difference vs STLY (NPA)")
-
-    if not nbrx_diff.empty:
-        display_df = nbrx_diff.round(2).reset_index().rename(columns={"YR_QTR_TXT": "Quarter"})
-        for col in display_df.columns[1:]:
-            display_df[col] = display_df[col].apply(lambda x: f"{x:+.2f}" if pd.notna(x) else "-")
-        render_styled_table(display_df, "NBRX Market Share Difference vs STLY (NPA)")
 
     # --- Download ---
     render_section_title("Download Reports")
