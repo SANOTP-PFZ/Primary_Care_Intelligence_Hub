@@ -475,6 +475,118 @@ def render_brand_page(brand_key, brand_config):
                 order = [brand_name] + [b for b in non_retail_ms.columns if b != brand_name]
                 render_trend_chart(non_retail_ms, order)
 
+            # --- Channel Contribution Pie + Trend (all DDD brands) ---
+            retail_contrib = pivot_metric(ddd_data, "RETAIL_CONTRIBUTION")
+            non_retail_contrib = pivot_metric(ddd_data, "NON_RETAIL_CONTRIBUTION")
+
+            if (not retail_contrib.empty and brand_name in retail_contrib.columns) or \
+               (not non_retail_contrib.empty and brand_name in non_retail_contrib.columns):
+                render_section_title(f"{display_name} Channel Contribution", "DDD")
+                latest_c_qtr = retail_contrib.index[-1] if not retail_contrib.empty else non_retail_contrib.index[-1]
+                r_val = retail_contrib.loc[latest_c_qtr, brand_name] if (not retail_contrib.empty and brand_name in retail_contrib.columns) else 0
+                nr_val = non_retail_contrib.loc[latest_c_qtr, brand_name] if (not non_retail_contrib.empty and brand_name in non_retail_contrib.columns) else 0
+
+                col_pie, col_trend = st.columns([1, 2])
+                with col_pie:
+                    fig_pie = go.Figure(data=[go.Pie(
+                        labels=["Retail", "Non-Retail"],
+                        values=[r_val if pd.notna(r_val) else 0, nr_val if pd.notna(nr_val) else 0],
+                        marker=dict(colors=["#1C4FC0", "#F8971D"], line=dict(color="#FFFFFF", width=2)),
+                        textinfo="text",
+                        text=[f"Retail<br>{r_val:.1f}%" if pd.notna(r_val) else "Retail<br>N/A", f"Non-Retail<br>{nr_val:.1f}%" if pd.notna(nr_val) else "Non-Retail<br>N/A"],
+                        textposition="outside", textfont=dict(size=12, color="#0F172A"),
+                        hovertemplate="%{label}: %{value:.1f}%<extra></extra>",
+                        hole=0.4, pull=[0.03, 0.03]
+                    )])
+                    fig_pie.update_layout(template="plotly_white", height=350, margin=dict(l=30, r=30, t=40, b=30), plot_bgcolor="#FFFFFF", paper_bgcolor="#FFFFFF", title=dict(text=f"Latest: {latest_c_qtr}", font=dict(size=13, color="#1C4FC0")), showlegend=False)
+                    try:
+                        st.plotly_chart(fig_pie, use_container_width=True, theme=None)
+                    except TypeError:
+                        st.plotly_chart(fig_pie, use_container_width=True)
+
+                with col_trend:
+                    fig_ct = go.Figure()
+                    if not retail_contrib.empty and brand_name in retail_contrib.columns:
+                        fig_ct.add_trace(go.Scatter(x=retail_contrib.index.tolist(), y=retail_contrib[brand_name].tolist(), mode="lines+markers", name="Retail", line=dict(color="#1C4FC0", width=3), marker=dict(size=7), hovertemplate="<b>Retail</b><br>%{x}<br>%{y:.1f}%<extra></extra>"))
+                    if not non_retail_contrib.empty and brand_name in non_retail_contrib.columns:
+                        fig_ct.add_trace(go.Scatter(x=non_retail_contrib.index.tolist(), y=non_retail_contrib[brand_name].tolist(), mode="lines+markers", name="Non-Retail", line=dict(color="#F8971D", width=3), marker=dict(size=7), hovertemplate="<b>Non-Retail</b><br>%{x}<br>%{y:.1f}%<extra></extra>"))
+                    fig_ct.update_layout(template="plotly_white", height=350, margin=dict(l=60, r=30, t=20, b=50), plot_bgcolor="#FFFFFF", paper_bgcolor="#FFFFFF", font=dict(family="Inter, system-ui, sans-serif", size=13, color="#0F172A"), legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0, font=dict(size=12, color="#64748B")), hovermode="x unified")
+                    fig_ct.update_xaxes(showgrid=False, tickfont=dict(size=12, color="#64748B"), linecolor="rgba(15,23,42,0.08)", ticks="outside")
+                    fig_ct.update_yaxes(showgrid=True, gridcolor="rgba(15,23,42,0.06)", ticksuffix="%", tickfont=dict(size=12, color="#64748B"), linecolor="rgba(15,23,42,0.08)", ticks="outside")
+                    try:
+                        st.plotly_chart(fig_ct, use_container_width=True, theme=None)
+                    except TypeError:
+                        st.plotly_chart(fig_ct, use_container_width=True)
+
+            # --- Abrysvo-specific: OA MS + OA vs MA Contribution ---
+            if brand_key == "abrysvo":
+                oa_ms = pivot_metric(ddd_data, "OA_MS")
+                if not oa_ms.empty:
+                    render_section_title("OA Market Share \u2014 RSV Market", "DDD")
+                    order = [brand_name] + [b for b in oa_ms.columns if b != brand_name]
+                    render_trend_chart(oa_ms, order)
+
+                oa_contrib = pivot_metric(ddd_data, "OA_CONTRIBUTION")
+                ma_contrib = pivot_metric(ddd_data, "MA_CONTRIBUTION")
+                if (not oa_contrib.empty and brand_name in oa_contrib.columns) or \
+                   (not ma_contrib.empty and brand_name in ma_contrib.columns):
+                    render_section_title(f"{display_name} OA vs MA Contribution", "DDD")
+                    latest_oa_qtr = oa_contrib.index[-1] if not oa_contrib.empty else ma_contrib.index[-1]
+                    oa_val = oa_contrib.loc[latest_oa_qtr, brand_name] if (not oa_contrib.empty and brand_name in oa_contrib.columns) else 0
+                    ma_val = ma_contrib.loc[latest_oa_qtr, brand_name] if (not ma_contrib.empty and brand_name in ma_contrib.columns) else 0
+
+                    col_pie2, col_trend2 = st.columns([1, 2])
+                    with col_pie2:
+                        fig_pie2 = go.Figure(data=[go.Pie(
+                            labels=["OA", "MA"],
+                            values=[oa_val if pd.notna(oa_val) else 0, ma_val if pd.notna(ma_val) else 0],
+                            marker=dict(colors=["#1C4FC0", "#10B981"], line=dict(color="#FFFFFF", width=2)),
+                            textinfo="text",
+                            text=[f"OA<br>{oa_val:.1f}%" if pd.notna(oa_val) else "OA<br>N/A", f"MA<br>{ma_val:.1f}%" if pd.notna(ma_val) else "MA<br>N/A"],
+                            textposition="outside", textfont=dict(size=12, color="#0F172A"),
+                            hovertemplate="%{label}: %{value:.1f}%<extra></extra>",
+                            hole=0.4, pull=[0.03, 0.03]
+                        )])
+                        fig_pie2.update_layout(template="plotly_white", height=350, margin=dict(l=30, r=30, t=40, b=30), plot_bgcolor="#FFFFFF", paper_bgcolor="#FFFFFF", title=dict(text=f"Latest: {latest_oa_qtr}", font=dict(size=13, color="#1C4FC0")), showlegend=False)
+                        try:
+                            st.plotly_chart(fig_pie2, use_container_width=True, theme=None)
+                        except TypeError:
+                            st.plotly_chart(fig_pie2, use_container_width=True)
+
+                    with col_trend2:
+                        fig_oa = go.Figure()
+                        if not oa_contrib.empty and brand_name in oa_contrib.columns:
+                            fig_oa.add_trace(go.Scatter(x=oa_contrib.index.tolist(), y=oa_contrib[brand_name].tolist(), mode="lines+markers", name="OA Contribution", line=dict(color="#1C4FC0", width=3), marker=dict(size=7), hovertemplate="<b>OA</b><br>%{x}<br>%{y:.1f}%<extra></extra>"))
+                        if not ma_contrib.empty and brand_name in ma_contrib.columns:
+                            fig_oa.add_trace(go.Scatter(x=ma_contrib.index.tolist(), y=ma_contrib[brand_name].tolist(), mode="lines+markers", name="MA Contribution", line=dict(color="#10B981", width=3), marker=dict(size=7), hovertemplate="<b>MA</b><br>%{x}<br>%{y:.1f}%<extra></extra>"))
+                        fig_oa.update_layout(template="plotly_white", height=350, margin=dict(l=60, r=30, t=20, b=50), plot_bgcolor="#FFFFFF", paper_bgcolor="#FFFFFF", font=dict(family="Inter, system-ui, sans-serif", size=13, color="#0F172A"), legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0, font=dict(size=12, color="#64748B")), hovermode="x unified")
+                        fig_oa.update_xaxes(showgrid=False, tickfont=dict(size=12, color="#64748B"), linecolor="rgba(15,23,42,0.08)", ticks="outside")
+                        fig_oa.update_yaxes(showgrid=True, gridcolor="rgba(15,23,42,0.06)", ticksuffix="%", tickfont=dict(size=12, color="#64748B"), linecolor="rgba(15,23,42,0.08)", ticks="outside")
+                        try:
+                            st.plotly_chart(fig_oa, use_container_width=True, theme=None)
+                        except TypeError:
+                            st.plotly_chart(fig_oa, use_container_width=True)
+
+            # --- Prevnar-specific: Peds + Adult MS ---
+            if brand_key == "prevnar":
+                ped_ms = pivot_metric(ddd_data, "PED_MS")
+                if not ped_ms.empty:
+                    ped_brands = [b for b in ["PREVNAR", "VAXNEUVANCE"] if b in ped_ms.columns]
+                    ped_ms_filtered = ped_ms[ped_brands]
+                    ped_ms_filtered = ped_ms_filtered[ped_ms_filtered.index >= "2024Q1"]
+                    if not ped_ms_filtered.empty:
+                        render_section_title("Peds Market Share Trend \u2014 PCV Market", "DDD")
+                        render_trend_chart(ped_ms_filtered, ped_brands)
+
+                adult_ms = pivot_metric(ddd_data, "ADULT_MS")
+                if not adult_ms.empty:
+                    adult_brands = [b for b in ["PREVNAR", "VAXNEUVANCE", "CAPVAXIVE"] if b in adult_ms.columns]
+                    adult_ms_filtered = adult_ms[adult_brands]
+                    adult_ms_filtered = adult_ms_filtered[adult_ms_filtered.index >= "2024Q1"]
+                    if not adult_ms_filtered.empty:
+                        render_section_title("Adult Market Share Trend \u2014 PCV Market", "DDD")
+                        render_trend_chart(adult_ms_filtered, adult_brands)
+
     # --- Raw Data Tables ---
     render_section_title("Raw Data Tables")
     if not trx_ms.empty:
