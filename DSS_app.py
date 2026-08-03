@@ -456,7 +456,7 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
 }
 .mission-text {
     font-family: 'Manrope', sans-serif;
-    font-size: 15.5px;
+    font-size: 18px;
     font-weight: 600;
     color: var(--navy-900);
     line-height: 1.55;
