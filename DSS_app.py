@@ -479,11 +479,13 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
 
 /* DEEP DIVE BRAND SELECTION */
 .deep-dive-section {
-    padding: 0.6rem 0;
+    padding: 0.8rem 0 0;
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+}
+.deep-dive-section .mission-divider {
+    margin: 0 auto 1rem;
 }
 .deep-dive-header {
     font-family: 'Manrope', sans-serif;
@@ -504,8 +506,10 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
 .deep-dive-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 0.65rem;
+    grid-template-rows: 1fr 1fr;
+    gap: 0.75rem;
     padding: 0 0.5rem;
+    flex: 1;
 }
 .deep-dive-tile {
     background: rgba(255,255,255,0.72);
@@ -513,11 +517,14 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
     -webkit-backdrop-filter: saturate(160%) blur(12px);
     border: 1px solid var(--hairline);
     border-radius: 14px;
-    padding: 1rem 0.8rem;
+    padding: 1.2rem 0.8rem;
     text-align: center;
     cursor: pointer;
     transition: transform 0.22s var(--ease), box-shadow 0.22s var(--ease), border-color 0.18s var(--ease);
     box-shadow: 0 2px 6px rgba(15,23,42,0.03);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .deep-dive-tile:hover {
     transform: translateY(-3px);
@@ -527,14 +534,8 @@ h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-
 .deep-dive-tile .tile-name {
     font-family: 'Manrope', sans-serif;
     font-weight: 700;
-    font-size: 14.5px;
+    font-size: 15px;
     color: var(--navy-900);
-    margin-bottom: 0.2rem;
-}
-.deep-dive-tile .tile-market {
-    font-size: 11px;
-    color: var(--text-muted);
-    font-weight: 500;
 }
 </style>
 </head>
@@ -608,38 +609,14 @@ __BRAND_CARDS__
             <div class="deep-dive-header">Deep Dive Dashboards</div>
             <div class="deep-dive-subtitle">Select a brand to explore detailed QoQ analysis, competitive trends, and exportable reports</div>
             <div class="deep-dive-grid">
-                <div class="deep-dive-tile">
-                    <div class="tile-name">Nurtec</div>
-                    <div class="tile-market">Oral CGRP</div>
-                </div>
-                <div class="deep-dive-tile">
-                    <div class="tile-name">Eliquis</div>
-                    <div class="tile-market">Oral Anticoagulant</div>
-                </div>
-                <div class="deep-dive-tile">
-                    <div class="tile-name">Prevnar</div>
-                    <div class="tile-market">PCV</div>
-                </div>
-                <div class="deep-dive-tile">
-                    <div class="tile-name">Comirnaty</div>
-                    <div class="tile-market">COVID Vaccines</div>
-                </div>
-                <div class="deep-dive-tile">
-                    <div class="tile-name">Abrysvo</div>
-                    <div class="tile-market">RSV</div>
-                </div>
-                <div class="deep-dive-tile">
-                    <div class="tile-name">Paxlovid</div>
-                    <div class="tile-market">COVID Oral Treatment</div>
-                </div>
-                <div class="deep-dive-tile">
-                    <div class="tile-name">Zavzpret</div>
-                    <div class="tile-market">Acute Migraine</div>
-                </div>
-                <div class="deep-dive-tile">
-                    <div class="tile-name">Beyfortus</div>
-                    <div class="tile-market">RSV Pediatric</div>
-                </div>
+                <div class="deep-dive-tile"><div class="tile-name">Nurtec</div></div>
+                <div class="deep-dive-tile"><div class="tile-name">Eliquis</div></div>
+                <div class="deep-dive-tile"><div class="tile-name">Prevnar</div></div>
+                <div class="deep-dive-tile"><div class="tile-name">Comirnaty</div></div>
+                <div class="deep-dive-tile"><div class="tile-name">Abrysvo</div></div>
+                <div class="deep-dive-tile"><div class="tile-name">Paxlovid</div></div>
+                <div class="deep-dive-tile"><div class="tile-name">Zavzpret</div></div>
+                <div class="deep-dive-tile"><div class="tile-name">Beyfortus</div></div>
             </div>
         </div>
     </main>
