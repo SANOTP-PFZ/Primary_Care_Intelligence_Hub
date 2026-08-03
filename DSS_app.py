@@ -136,8 +136,8 @@ st.markdown("""
     .stApp { background: transparent !important; }
     .block-container { padding: 0 !important; max-width: 100% !important; }
     [data-testid="stAppViewBlockContainer"] { padding: 0 !important; }
-    [data-testid="stMainBlockContainer"] { padding: 0 10px !important; }
-    [data-testid="stVerticalBlock"] { gap: 0.5rem !important; }
+    [data-testid="stMainBlockContainer"] { padding: 0 8px !important; }
+    [data-testid="stVerticalBlock"] { gap: 0 !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -603,28 +603,14 @@ __BRAND_CARDS__
             <div class="mission-divider"></div>
         </div>
 
-        <!-- DEEP DIVE BRAND SELECTION (hidden by default) -->
-        <div class="deep-dive-section" id="deep-dive-section" style="display:none;">
-            <div class="mission-divider"></div>
-            <div class="deep-dive-header">Deep Dive Dashboards</div>
-            <div class="deep-dive-subtitle">Select a brand to explore detailed QoQ analysis, competitive trends, and exportable reports</div>
-            <div class="deep-dive-grid">
-                <div class="deep-dive-tile" onclick="selectBrand('nurtec')"><div class="tile-name">Nurtec</div></div>
-                <div class="deep-dive-tile" onclick="selectBrand('eliquis')"><div class="tile-name">Eliquis</div></div>
-                <div class="deep-dive-tile" onclick="selectBrand('prevnar')"><div class="tile-name">Prevnar</div></div>
-                <div class="deep-dive-tile" onclick="selectBrand('comirnaty')"><div class="tile-name">Comirnaty</div></div>
-                <div class="deep-dive-tile" onclick="selectBrand('abrysvo')"><div class="tile-name">Abrysvo</div></div>
-                <div class="deep-dive-tile" onclick="selectBrand('paxlovid')"><div class="tile-name">Paxlovid</div></div>
-                <div class="deep-dive-tile" onclick="selectBrand('zavzpret')"><div class="tile-name">Zavzpret</div></div>
-                <div class="deep-dive-tile" onclick="selectBrand('beyfortus')"><div class="tile-name">Beyfortus</div></div>
-            </div>
-        </div>
+        <!-- Deep dive brand tiles are rendered natively by Streamlit below the iframe -->
     </main>
 </div>
 
 </div>
 
 <script>
+// Sidebar nav interactions (visual only — deep dive tiles rendered natively by Streamlit)
 function clearActive() {
     document.querySelectorAll('.nav-item').forEach(function(item) {
         item.classList.remove('active');
@@ -634,29 +620,11 @@ function activateDeepDive() {
     clearActive();
     document.getElementById('nav-deepdive').classList.add('active');
     document.getElementById('mission-section').style.display = 'none';
-    document.getElementById('deep-dive-section').style.display = 'block';
 }
 function activateCowork() {
     clearActive();
     document.getElementById('nav-cowork').classList.add('active');
     document.getElementById('mission-section').style.display = 'flex';
-    document.getElementById('deep-dive-section').style.display = 'none';
-}
-function selectBrand(brand) {
-    // Find the hidden Streamlit text input in the parent document and set its value
-    try {
-        var inputs = window.parent.document.querySelectorAll('input[aria-label="brand_nav"]');
-        if (inputs.length > 0) {
-            var input = inputs[0];
-            var nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.parent.HTMLInputElement.prototype, 'value').set;
-            nativeInputValueSetter.call(input, brand);
-            input.dispatchEvent(new window.parent.Event('input', { bubbles: true }));
-            input.dispatchEvent(new window.parent.Event('change', { bubbles: true }));
-        }
-    } catch(e) {
-        // Fallback: try URL approach
-        window.parent.location.search = '?brand=' + brand;
-    }
 }
 </script>
 </body>
@@ -687,21 +655,56 @@ BRAND_CONFIG = {
 nav = st.session_state["nav_state"]
 
 if nav in ("home", "deepdive"):
-    # === RENDER ORIGINAL LANDING PAGE ===
-    # Render the iframe (visual landing page with sidebar + summary cards)
-    st.components.v1.html(html_content, height=620, scrolling=False)
+    # === RENDER ORIGINAL LANDING PAGE (iframe: sidebar + summary cards + mission) ===
+    st.components.v1.html(html_content, height=520, scrolling=False)
 
-    # === NATIVE STREAMLIT BRAND BUTTONS (clickable, no iframe limitation) ===
+    # === DEEP DIVE BRAND TILES (native Streamlit buttons, styled to match iframe design) ===
     st.markdown("""
     <style>
-    /* Style brand buttons to match glassmorphism tiles */
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
+    /* Container to visually continue the landing page panel */
+    .deep-dive-container {
+        background: rgba(255,255,255,0.55);
+        backdrop-filter: saturate(180%) blur(14px);
+        -webkit-backdrop-filter: saturate(180%) blur(14px);
+        border: 1px solid rgba(15,23,42,0.08);
+        border-radius: 18px;
+        box-shadow: 0 8px 24px rgba(15,23,42,0.07), 0 2px 6px rgba(15,23,42,0.04);
+        padding: 1.2rem 1.4rem;
+        margin: -8px 10px 20px 10px;
+    }
+    .deep-dive-container .dd-divider {
+        width: 80px;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(28,79,192,0.3), transparent);
+        margin: 0 auto 0.9rem;
+    }
+    .deep-dive-container .dd-header {
+        font-family: 'Manrope', sans-serif;
+        font-weight: 700;
+        font-size: 15.5px;
+        color: #0A1A3D;
+        margin-bottom: 0.25rem;
+        text-align: center;
+        letter-spacing: -0.01em;
+    }
+    .deep-dive-container .dd-subtitle {
+        font-size: 12.5px;
+        color: #64748B;
+        text-align: center;
+        margin-bottom: 1rem;
+        font-weight: 400;
+    }
+
+    /* Style the Streamlit buttons to match the deep-dive tiles exactly */
     div[data-testid="stHorizontalBlock"] .stButton > button {
         background: rgba(255,255,255,0.72) !important;
         backdrop-filter: saturate(160%) blur(12px) !important;
         -webkit-backdrop-filter: saturate(160%) blur(12px) !important;
         border: 1px solid rgba(15,23,42,0.08) !important;
         border-radius: 14px !important;
-        padding: 1.5rem 1.2rem !important;
+        padding: 1.3rem 1rem !important;
         color: #0A1A3D !important;
         font-size: 15px !important;
         font-weight: 700 !important;
@@ -709,19 +712,20 @@ if nav in ("home", "deepdive"):
         cursor: pointer !important;
         transition: transform 0.22s cubic-bezier(0.4,0,0.2,1), box-shadow 0.22s cubic-bezier(0.4,0,0.2,1), border-color 0.18s cubic-bezier(0.4,0,0.2,1) !important;
         box-shadow: 0 2px 6px rgba(15,23,42,0.03) !important;
-        min-height: 80px !important;
+        min-height: 70px !important;
         width: 100% !important;
     }
     div[data-testid="stHorizontalBlock"] .stButton > button:hover {
         transform: translateY(-3px) !important;
         box-shadow: 0 8px 20px rgba(15,23,42,0.09) !important;
         border-color: rgba(28,79,192,0.3) !important;
-        background: rgba(255,255,255,0.9) !important;
+        background: rgba(255,255,255,0.92) !important;
     }
     </style>
-    <div style="padding: 0 10px; margin-top: -10px;">
-        <div style="font-family:'Manrope',sans-serif; font-weight:700; font-size:15px; color:#0A1A3D; margin-bottom:8px;">Deep Dive Dashboards</div>
-        <div style="font-size:12px; color:#64748B; margin-bottom:12px;">Select a brand to explore detailed QoQ analysis</div>
+    <div class="deep-dive-container">
+        <div class="dd-divider"></div>
+        <div class="dd-header">Deep Dive Dashboards</div>
+        <div class="dd-subtitle">Select a brand to explore detailed QoQ analysis, competitive trends, and exportable reports</div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -731,7 +735,7 @@ if nav in ("home", "deepdive"):
     ]
 
     # Row 1: first 4 brands
-    cols1 = st.columns(4)
+    cols1 = st.columns(4, gap="small")
     for i, (name, key) in enumerate(brands_list[:4]):
         with cols1[i]:
             if st.button(name, key=f"brand_btn_{key}", use_container_width=True):
@@ -739,7 +743,7 @@ if nav in ("home", "deepdive"):
                 st.rerun()
 
     # Row 2: last 4 brands
-    cols2 = st.columns(4)
+    cols2 = st.columns(4, gap="small")
     for i, (name, key) in enumerate(brands_list[4:]):
         with cols2[i]:
             if st.button(name, key=f"brand_btn_{key}", use_container_width=True):
