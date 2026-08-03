@@ -205,7 +205,7 @@ st.markdown("""
 # SESSION STATE + ROUTING
 # =====================================================
 if "nav_state" not in st.session_state:
-    st.session_state["nav_state"] = "home"
+    st.session_state["nav_state"] = "deepdive"
 
 BRAND_CONFIG = {
     "nurtec": {"display_name": "Nurtec", "brand_key": "NURTEC", "market": "OCGRP", "market_display": "Oral CGRP"},
@@ -237,13 +237,9 @@ if nav in ("home", "deepdive"):
 
     sidebar_col, main_col = st.columns([232, 900], gap="small")
 
-    # --- LEFT COLUMN: Sidebar with clickable Deep Dive option ---
+    # --- LEFT COLUMN: Decorative sidebar (Deep Dive always active) ---
     with sidebar_col:
-        # Sidebar top (logo, title, workspace label) — no active highlight yet
-        active_style = "background:linear-gradient(90deg,rgba(28,79,192,0.10) 0%,rgba(28,79,192,0.04) 100%); color:#163990; font-weight:600;" if nav == "deepdive" else "color:#475569; font-weight:500;"
-        active_bar = '<div style="position:absolute;left:-0.55rem;top:6px;bottom:6px;width:3px;border-radius:0 3px 3px 0;background:linear-gradient(180deg,#1C4FC0,#41B6E6);box-shadow:0 0 8px rgba(28,79,192,0.3);"></div>' if nav == "deepdive" else ""
-
-        st.markdown(f"""
+        st.markdown("""
         <div style="background:rgba(255,255,255,0.62); backdrop-filter:saturate(180%) blur(22px); -webkit-backdrop-filter:saturate(180%) blur(22px); border:1px solid rgba(15,23,42,0.08); border-radius:18px; box-shadow:0 8px 24px rgba(15,23,42,0.07),0 2px 6px rgba(15,23,42,0.04); display:flex; flex-direction:column; height:calc(100vh - 20px); overflow:hidden;">
             <div style="padding:14px 1.2rem 1rem; display:flex; flex-direction:column; gap:0.5rem;">
                 <img src="https://cdn.pfizer.com/pfizercom/2022-10/Pfizer_Logo_Color_CMYK.png" style="height:28px; align-self:flex-start;" />
@@ -253,10 +249,10 @@ if nav in ("home", "deepdive"):
             <div style="height:1px; background:rgba(15,23,42,0.08); margin:0 0.85rem;"></div>
             <div style="font-family:'Manrope',sans-serif; font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:#64748B; padding:0.95rem 1.15rem 0.4rem;">Primary Care Workspace</div>
             <div style="padding:0 0.55rem;">
-                <div style="position:relative; display:flex; align-items:center; gap:0.7rem; padding:0.55rem 0.7rem; border-radius:8px; {active_style} font-size:0.84rem; font-family:'Inter',sans-serif; cursor:pointer;" onclick="document.querySelector('[data-testid=\\'column\\']:first-child button').click();">
-                    <span style="width:18px;height:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg viewBox="0 0 24 24" width="16" height="16" style="fill:none;stroke:currentColor;stroke-width:1.8;"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
+                <div style="position:relative; display:flex; align-items:center; gap:0.7rem; padding:0.55rem 0.7rem; border-radius:8px; background:linear-gradient(90deg,rgba(28,79,192,0.10) 0%,rgba(28,79,192,0.04) 100%); color:#163990; font-size:0.84rem; font-weight:600; font-family:'Inter',sans-serif;">
+                    <span style="width:18px;height:18px;display:flex;align-items:center;justify-content:center;color:#163990;flex-shrink:0;"><svg viewBox="0 0 24 24" width="16" height="16" style="fill:none;stroke:currentColor;stroke-width:1.8;"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
                     <span>Deep Dive Dashboards</span>
-                    {active_bar}
+                    <div style="position:absolute;left:-0.55rem;top:6px;bottom:6px;width:3px;border-radius:0 3px 3px 0;background:linear-gradient(180deg,#1C4FC0,#41B6E6);box-shadow:0 0 8px rgba(28,79,192,0.3);"></div>
                 </div>
                 <div style="display:flex; align-items:center; gap:0.7rem; padding:0.55rem 0.7rem; margin-top:0.08rem; border-radius:8px; color:#475569; font-size:0.84rem; font-weight:500; font-family:'Inter',sans-serif;">
                     <span style="width:18px;height:18px;display:flex;align-items:center;justify-content:center;color:#64748B;flex-shrink:0;"><svg viewBox="0 0 24 24" width="16" height="16" style="fill:none;stroke:currentColor;stroke-width:1.8;"><rect x="6" y="6" width="12" height="10" rx="2"/><path d="M9 16v3M15 16v3M9 6V3M15 6V3M3 11h3M18 11h3"/></svg></span>
@@ -270,15 +266,6 @@ if nav in ("home", "deepdive"):
             </div>
         </div>
         """, unsafe_allow_html=True)
-
-        # Real clickable button — hidden visually but functional
-        st.markdown("""<style>
-        [data-testid="column"]:first-child .stButton { position:absolute !important; top:168px !important; left:8px !important; width:210px !important; height:38px !important; overflow:hidden !important; }
-        [data-testid="column"]:first-child .stButton > button { opacity:0 !important; width:100% !important; height:100% !important; min-height:auto !important; padding:0 !important; border:none !important; background:transparent !important; box-shadow:none !important; cursor:pointer !important; transform:none !important; aspect-ratio:unset !important; }
-        </style>""", unsafe_allow_html=True)
-        if st.button("dd", key="sidebar_dd_btn"):
-            st.session_state["nav_state"] = "deepdive"
-            st.rerun()
 
     # --- RIGHT COLUMN: Summary + Brand Tiles ---
     with main_col:
@@ -335,51 +322,34 @@ if nav in ("home", "deepdive"):
         """
         st.components.v1.html(summary_html, height=360, scrolling=False)
 
-        # --- Conditional: Mission Text (home) vs Brand Tiles (deepdive) ---
-        if nav == "home":
-            # Mission text — plain text below separator, no container
-            st.markdown("""
-            <div style="text-align:center; padding:0.7rem 0 0.6rem;">
-                <div style="width:80px; height:1px; background:linear-gradient(90deg,transparent,rgba(28,79,192,0.3),transparent); margin:0 auto 0.8rem;"></div>
-                <div style="font-family:'Manrope',sans-serif; font-weight:800; font-size:18px; color:#0A1A3D; letter-spacing:-0.02em; margin-bottom:0.5rem;">Primary Care Intelligence Hub</div>
-                <div style="font-size:13px; color:#475569; line-height:1.7; max-width:580px; margin:0 auto;">
-                    Empowering Pfizer's Primary Care business with real-time market intelligence, competitive analytics, and actionable insights across our key therapeutic brands. This platform consolidates NPA, DDD, and LAAD data sources into unified quarterly performance views.
-                </div>
-                <div style="margin-top:0.8rem; font-size:12px; color:#64748B;">
-                    Click <strong style="color:#1C4FC0;">Deep Dive Dashboards</strong> in the sidebar to explore brand-level QoQ analysis.
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
+        # Separator + Deep Dive header
+        st.markdown("""
+        <div style="text-align:center; padding:0.7rem 0 0.8rem;">
+            <div style="width:80px; height:1px; background:linear-gradient(90deg,transparent,rgba(28,79,192,0.3),transparent); margin:0 auto 0.6rem;"></div>
+            <div style="font-family:'Manrope',sans-serif; font-weight:700; font-size:15px; color:#0A1A3D; letter-spacing:-0.01em;">Deep Dive Dashboards</div>
+            <div style="font-size:12px; color:#64748B; font-weight:400; margin-top:0.15rem;">Select a brand to explore detailed QoQ analysis, competitive trends, and exportable reports</div>
+        </div>
+        """, unsafe_allow_html=True)
 
-        elif nav == "deepdive":
-            # Separator + Deep Dive header + Brand tiles
-            st.markdown("""
-            <div style="text-align:center; padding:0.7rem 0 0.8rem;">
-                <div style="width:80px; height:1px; background:linear-gradient(90deg,transparent,rgba(28,79,192,0.3),transparent); margin:0 auto 0.6rem;"></div>
-                <div style="font-family:'Manrope',sans-serif; font-weight:700; font-size:15px; color:#0A1A3D; letter-spacing:-0.01em;">Deep Dive Dashboards</div>
-                <div style="font-size:12px; color:#64748B; font-weight:400; margin-top:0.15rem;">Select a brand to explore detailed QoQ analysis, competitive trends, and exportable reports</div>
-            </div>
-            """, unsafe_allow_html=True)
+        # Brand tile buttons (native Streamlit — clickable!)
+        brands_list = [
+            ("Nurtec", "nurtec"), ("Eliquis", "eliquis"), ("Prevnar", "prevnar"), ("Comirnaty", "comirnaty"),
+            ("Abrysvo", "abrysvo"), ("Paxlovid", "paxlovid"), ("Zavzpret", "zavzpret"), ("Beyfortus", "beyfortus"),
+        ]
 
-            # Brand tile buttons (native Streamlit — clickable!)
-            brands_list = [
-                ("Nurtec", "nurtec"), ("Eliquis", "eliquis"), ("Prevnar", "prevnar"), ("Comirnaty", "comirnaty"),
-                ("Abrysvo", "abrysvo"), ("Paxlovid", "paxlovid"), ("Zavzpret", "zavzpret"), ("Beyfortus", "beyfortus"),
-            ]
+        cols1 = st.columns(4, gap="small")
+        for i, (name, key) in enumerate(brands_list[:4]):
+            with cols1[i]:
+                if st.button(name, key=f"brand_btn_{key}", use_container_width=True):
+                    st.session_state["nav_state"] = key
+                    st.rerun()
 
-            cols1 = st.columns(4, gap="small")
-            for i, (name, key) in enumerate(brands_list[:4]):
-                with cols1[i]:
-                    if st.button(name, key=f"brand_btn_{key}", use_container_width=True):
-                        st.session_state["nav_state"] = key
-                        st.rerun()
-
-            cols2 = st.columns(4, gap="small")
-            for i, (name, key) in enumerate(brands_list[4:]):
-                with cols2[i]:
-                    if st.button(name, key=f"brand_btn_{key}", use_container_width=True):
-                        st.session_state["nav_state"] = key
-                        st.rerun()
+        cols2 = st.columns(4, gap="small")
+        for i, (name, key) in enumerate(brands_list[4:]):
+            with cols2[i]:
+                if st.button(name, key=f"brand_btn_{key}", use_container_width=True):
+                    st.session_state["nav_state"] = key
+                    st.rerun()
 
 else:
     # === RENDER BRAND PAGE ===
