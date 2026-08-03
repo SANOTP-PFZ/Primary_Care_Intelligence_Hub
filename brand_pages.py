@@ -698,4 +698,114 @@ def render_brand_page(brand_key, brand_config):
         return output.getvalue()
 
     render_download_link(generate_excel(), f"{display_name.lower()}_report.xlsx", "\U0001f4e5 Download Excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+
+    # PDF download
+    def generate_pdf():
+        try:
+            from reportlab.lib.pagesizes import letter, landscape
+            from reportlab.lib.units import inch
+            from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+            from reportlab.lib import colors
+            from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+
+            output = BytesIO()
+            doc = SimpleDocTemplate(output, pagesize=landscape(letter), leftMargin=40, rightMargin=40, topMargin=30, bottomMargin=30)
+            elements = []
+            styles = getSampleStyleSheet()
+
+            title_style = ParagraphStyle("CustomTitle", parent=styles["Title"], fontSize=20, textColor=colors.HexColor("#1C4FC0"), spaceAfter=6)
+            heading_style = ParagraphStyle("CustomHeading", parent=styles["Heading2"], fontSize=14, textColor=colors.HexColor("#1C4FC0"), spaceBefore=16, spaceAfter=8)
+            kpi_style = ParagraphStyle("KPI", parent=styles["Normal"], fontSize=12, textColor=colors.HexColor("#1C4FC0"), spaceAfter=4)
+
+            table_style_rl = TableStyle([
+                ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#1C4FC0")),
+                ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+                ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+                ("FONTSIZE", (0, 0), (-1, 0), 9),
+                ("BOTTOMPADDING", (0, 0), (-1, 0), 8),
+                ("TOPPADDING", (0, 0), (-1, 0), 8),
+                ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#D0D8E0")),
+                ("FONTSIZE", (0, 1), (-1, -1), 8),
+                ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#F0F4F8")]),
+                ("ALIGN", (1, 0), (-1, -1), "RIGHT"),
+                ("TOPPADDING", (0, 1), (-1, -1), 5),
+                ("BOTTOMPADDING", (0, 1), (-1, -1), 5),
+            ])
+
+            # Title & KPIs
+            elements.append(Paragraph(f"{display_name} \u2014 {config['market_display']} Market Report", title_style))
+            elements.append(Spacer(1, 10))
+            elements.append(Paragraph(f"<b>Latest Quarter:</b> {latest_qtr}", kpi_style))
+            trx_d_str = f" ({trx_diff_val:+.2f}pp vs STLY)" if pd.notna(trx_diff_val) else ""
+            nbrx_d_str = f" ({nbrx_diff_val:+.2f}pp vs STLY)" if pd.notna(nbrx_diff_val) else ""
+            trx_v_str = f"{trx_val:.2f}%" if pd.notna(trx_val) else "N/A"
+            nbrx_v_str = f"{nbrx_val:.2f}%" if pd.notna(nbrx_val) else "N/A"
+            elements.append(Paragraph(f"<b>{display_name} TRX Market Share (NPA):</b> {trx_v_str}{trx_d_str}", kpi_style))
+            elements.append(Paragraph(f"<b>{display_name} NBRX Market Share (NPA):</b> {nbrx_v_str}{nbrx_d_str}", kpi_style))
+            elements.append(Spacer(1, 14))
+
+            # TRX Market Share table
+            if not trx_ms.empty:
+                elements.append(Paragraph("TRX Market Share (%)", heading_style))
+                header = ["Quarter"] + list(trx_ms.columns)
+                table_data = [header]
+                for qtr in trx_ms.index:
+                    row = [qtr] + [f"{v:.2f}" if pd.notna(v) else "-" for v in trx_ms.loc[qtr]]
+                    table_data.append(row)
+                col_w = [1.2*inch] + [1.3*inch] * min(len(trx_ms.columns), 6)
+                t = Table(table_data, colWidths=col_w[:len(header)])
+                t.setStyle(table_style_rl)
+                elements.append(t)
+                elements.append(Spacer(1, 10))
+
+            # NBRX Market Share table
+            if not nbrx_ms.empty:
+                elements.append(Paragraph("NBRX Market Share (%)", heading_style))
+                header = ["Quarter"] + list(nbrx_ms.columns)
+                table_data = [header]
+                for qtr in nbrx_ms.index:
+                    row = [qtr] + [f"{v:.2f}" if pd.notna(v) else "-" for v in nbrx_ms.loc[qtr]]
+                    table_data.append(row)
+                col_w = [1.2*inch] + [1.3*inch] * min(len(nbrx_ms.columns), 6)
+                t = Table(table_data, colWidths=col_w[:len(header)])
+                t.setStyle(table_style_rl)
+                elements.append(t)
+                elements.append(Spacer(1, 10))
+
+            # TRX Claims table
+            if not trx_claims.empty:
+                elements.append(Paragraph("TRX Claims", heading_style))
+                header = ["Quarter"] + list(trx_claims.columns)
+                table_data = [header]
+                for qtr in trx_claims.index:
+                    row = [qtr] + [f"{v:,.0f}" if pd.notna(v) else "-" for v in trx_claims.loc[qtr]]
+                    table_data.append(row)
+                col_w = [1.2*inch] + [1.3*inch] * min(len(trx_claims.columns), 6)
+                t = Table(table_data, colWidths=col_w[:len(header)])
+                t.setStyle(table_style_rl)
+                elements.append(t)
+                elements.append(Spacer(1, 10))
+
+            # NBRX Claims table
+            if not nbrx_claims.empty:
+                elements.append(Paragraph("NBRX Claims", heading_style))
+                header = ["Quarter"] + list(nbrx_claims.columns)
+                table_data = [header]
+                for qtr in nbrx_claims.index:
+                    row = [qtr] + [f"{v:,.0f}" if pd.notna(v) else "-" for v in nbrx_claims.loc[qtr]]
+                    table_data.append(row)
+                col_w = [1.2*inch] + [1.3*inch] * min(len(nbrx_claims.columns), 6)
+                t = Table(table_data, colWidths=col_w[:len(header)])
+                t.setStyle(table_style_rl)
+                elements.append(t)
+
+            doc.build(elements)
+            return output.getvalue()
+        except Exception:
+            return None
+
+    pdf_data = generate_pdf()
+    if pdf_data:
+        render_download_link(pdf_data, f"{display_name.lower()}_report.pdf", "\U0001f4c4 Download PDF", "application/pdf")
+
     render_footer()
