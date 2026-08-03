@@ -609,14 +609,14 @@ __BRAND_CARDS__
             <div class="deep-dive-header">Deep Dive Dashboards</div>
             <div class="deep-dive-subtitle">Select a brand to explore detailed QoQ analysis, competitive trends, and exportable reports</div>
             <div class="deep-dive-grid">
-                <div class="deep-dive-tile"><div class="tile-name">Nurtec</div></div>
-                <div class="deep-dive-tile"><div class="tile-name">Eliquis</div></div>
-                <div class="deep-dive-tile"><div class="tile-name">Prevnar</div></div>
-                <div class="deep-dive-tile"><div class="tile-name">Comirnaty</div></div>
-                <div class="deep-dive-tile"><div class="tile-name">Abrysvo</div></div>
-                <div class="deep-dive-tile"><div class="tile-name">Paxlovid</div></div>
-                <div class="deep-dive-tile"><div class="tile-name">Zavzpret</div></div>
-                <div class="deep-dive-tile"><div class="tile-name">Beyfortus</div></div>
+                <div class="deep-dive-tile" onclick="selectBrand('nurtec')"><div class="tile-name">Nurtec</div></div>
+                <div class="deep-dive-tile" onclick="selectBrand('eliquis')"><div class="tile-name">Eliquis</div></div>
+                <div class="deep-dive-tile" onclick="selectBrand('prevnar')"><div class="tile-name">Prevnar</div></div>
+                <div class="deep-dive-tile" onclick="selectBrand('comirnaty')"><div class="tile-name">Comirnaty</div></div>
+                <div class="deep-dive-tile" onclick="selectBrand('abrysvo')"><div class="tile-name">Abrysvo</div></div>
+                <div class="deep-dive-tile" onclick="selectBrand('paxlovid')"><div class="tile-name">Paxlovid</div></div>
+                <div class="deep-dive-tile" onclick="selectBrand('zavzpret')"><div class="tile-name">Zavzpret</div></div>
+                <div class="deep-dive-tile" onclick="selectBrand('beyfortus')"><div class="tile-name">Beyfortus</div></div>
             </div>
         </div>
     </main>
@@ -641,6 +641,22 @@ function activateCowork() {
     document.getElementById('nav-cowork').classList.add('active');
     document.getElementById('mission-section').style.display = 'flex';
     document.getElementById('deep-dive-section').style.display = 'none';
+}
+function selectBrand(brand) {
+    // Find the hidden Streamlit text input in the parent document and set its value
+    try {
+        var inputs = window.parent.document.querySelectorAll('input[aria-label="brand_nav"]');
+        if (inputs.length > 0) {
+            var input = inputs[0];
+            var nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.parent.HTMLInputElement.prototype, 'value').set;
+            nativeInputValueSetter.call(input, brand);
+            input.dispatchEvent(new window.parent.Event('input', { bubbles: true }));
+            input.dispatchEvent(new window.parent.Event('change', { bubbles: true }));
+        }
+    } catch(e) {
+        // Fallback: try URL approach
+        window.parent.location.search = '?brand=' + brand;
+    }
 }
 </script>
 </body>
@@ -672,24 +688,18 @@ nav = st.session_state["nav_state"]
 
 if nav in ("home", "deepdive"):
     # === RENDER ORIGINAL LANDING PAGE (unchanged) ===
-    st.components.v1.html(html_content, height=1000, scrolling=False)
 
-    # Brand selection buttons below the iframe (only visible if user scrolls)
-    # These provide the actual interactivity since iframe JS can't talk to Streamlit
-    st.markdown("#### Select a brand for Deep Dive")
-    brand_keys = list(BRAND_CONFIG.keys())
-    cols = st.columns(4)
-    for i, bk in enumerate(brand_keys[:4]):
-        with cols[i]:
-            if st.button(BRAND_CONFIG[bk]["display_name"], key=f"btn_{bk}"):
-                st.session_state["nav_state"] = bk
-                st.rerun()
-    cols2 = st.columns(4)
-    for i, bk in enumerate(brand_keys[4:]):
-        with cols2[i]:
-            if st.button(BRAND_CONFIG[bk]["display_name"], key=f"btn_{bk}"):
-                st.session_state["nav_state"] = bk
-                st.rerun()
+    # Hidden text input that receives brand selection from iframe JS
+    brand_selection = st.text_input("brand_nav", value="", key="brand_nav_input", label_visibility="collapsed")
+    # Hide it completely
+    st.markdown('<style>div[data-testid="stTextInput"]:has(input[aria-label="brand_nav"]) { position:absolute; top:-9999px; }</style>', unsafe_allow_html=True)
+
+    # If a brand was selected via the hidden input, navigate
+    if brand_selection and brand_selection in BRAND_CONFIG:
+        st.session_state["nav_state"] = brand_selection
+        st.rerun()
+
+    st.components.v1.html(html_content, height=1000, scrolling=False)
 
 else:
     # === RENDER BRAND PAGE ===
