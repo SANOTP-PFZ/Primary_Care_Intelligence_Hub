@@ -71,20 +71,11 @@ def render_brand_page(brand_key, brand_config):
     market = config["market"]
     display_name = config["display_name"]
 
-    # Hide Streamlit chrome
-    st.markdown("""<style>
-    #MainMenu, header, footer, [data-testid="stSidebar"] { display:none !important; }
-    .block-container { padding-top: 1.5rem !important; max-width: 95% !important; }
-    </style>""", unsafe_allow_html=True)
-
     # Header + back button
-    col_back, col_title = st.columns([1, 8])
-    with col_back:
-        if st.button("\u2190 Back"):
-            st.session_state["selected_brand"] = None
-            st.rerun()
-    with col_title:
-        st.markdown(f"### {display_name} \u2014 Quarter on Quarter Report")
+    if st.button("\u2190 Back to Deep Dive", key="back_btn"):
+        st.session_state["nav_state"] = "deepdive"
+        st.rerun()
+    st.markdown(f"### {display_name} \u2014 Quarter on Quarter Report")
 
     # Load data
     df = load_full_data()
