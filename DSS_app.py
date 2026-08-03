@@ -1,4 +1,4 @@
-﻿"""
+"""
 Primary Care Intelligence Hub - Landing Page
 """
 import streamlit as st
@@ -47,7 +47,7 @@ try:
 except Exception:
     max_date_raw = latest_qtr
 
-# Compute refresh timestamp (from dataset build metrics, converted UTC ΓåÆ IST)
+# Compute refresh timestamp (from dataset build metrics, converted UTC → IST)
 from datetime import datetime
 try:
     import pytz
@@ -119,7 +119,7 @@ def render_brand_cards_html(cards):
                         <span class="brand-metric"><span class="brand-value">{c['value']}</span><span class="brand-delta {c['delta_class']}">{c['delta']}</span></span>
                     </div>
                     <div class="brand-spark"><svg viewBox="0 0 120 26" preserveAspectRatio="none"><polyline points="{c['polyline']}" fill="none" stroke="{c['color']}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                    <div class="card-footer"><span class="card-source">NPA</span> {c['first_qtr']} ΓåÆ {c['latest_qtr']}</div>
+                    <div class="card-footer"><span class="card-source">NPA</span> {c['first_qtr']} → {c['latest_qtr']}</div>
                 </div>''')
     return "\n".join(html_cards)
 
