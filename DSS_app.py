@@ -655,100 +655,139 @@ BRAND_CONFIG = {
 nav = st.session_state["nav_state"]
 
 if nav in ("home", "deepdive"):
-    # === RENDER ORIGINAL LANDING PAGE (iframe: sidebar + summary cards + mission) ===
-    st.components.v1.html(html_content, height=520, scrolling=False)
+    # === LANDING PAGE using native Streamlit two-column layout ===
+    # Left column = sidebar (HTML), Right column = summary + brand tiles (HTML + native buttons)
 
-    # === DEEP DIVE BRAND TILES (native Streamlit buttons, styled to match iframe design) ===
     st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
-
-    /* Container to visually continue the landing page panel */
-    .deep-dive-container {
-        background: rgba(255,255,255,0.55);
-        backdrop-filter: saturate(180%) blur(14px);
-        -webkit-backdrop-filter: saturate(180%) blur(14px);
-        border: 1px solid rgba(15,23,42,0.08);
-        border-radius: 18px;
-        box-shadow: 0 8px 24px rgba(15,23,42,0.07), 0 2px 6px rgba(15,23,42,0.04);
-        padding: 1.2rem 1.4rem;
-        margin: -8px 10px 20px 10px;
+    :root {
+        --navy-900: #0A1A3D; --navy-800: #102A5C; --navy-700: #163990; --navy-600: #1C4FC0;
+        --accent: #41B6E6; --bg: #EEF3FB; --text: #0F172A; --text-muted: #64748B; --text-soft: #475569;
+        --hairline: rgba(15,23,42,0.08); --shadow-panel: 0 8px 24px rgba(15,23,42,0.07), 0 2px 6px rgba(15,23,42,0.04);
+        --panel-radius: 18px; --ease: cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .deep-dive-container .dd-divider {
-        width: 80px;
-        height: 1px;
-        background: linear-gradient(90deg, transparent, rgba(28,79,192,0.3), transparent);
-        margin: 0 auto 0.9rem;
+    .stApp, [data-testid="stAppViewContainer"], [data-testid="stMain"] {
+        background: radial-gradient(ellipse 80% 60% at 0% 0%, rgba(28,79,192,0.08) 0%, transparent 60%),
+                    radial-gradient(ellipse 70% 50% at 100% 0%, rgba(65,182,230,0.07) 0%, transparent 55%),
+                    radial-gradient(ellipse 60% 50% at 50% 100%, rgba(124,58,237,0.04) 0%, transparent 60%),
+                    var(--bg) !important;
     }
-    .deep-dive-container .dd-header {
-        font-family: 'Manrope', sans-serif;
-        font-weight: 700;
-        font-size: 15.5px;
-        color: #0A1A3D;
-        margin-bottom: 0.25rem;
-        text-align: center;
-        letter-spacing: -0.01em;
-    }
-    .deep-dive-container .dd-subtitle {
-        font-size: 12.5px;
-        color: #64748B;
-        text-align: center;
-        margin-bottom: 1rem;
-        font-weight: 400;
-    }
-
-    /* Style the Streamlit buttons to match the deep-dive tiles exactly */
-    div[data-testid="stHorizontalBlock"] .stButton > button {
+    /* Remove Streamlit default column gap/padding quirks */
+    [data-testid="stHorizontalBlock"] { gap: 10px !important; align-items: stretch !important; }
+    /* Brand tile buttons */
+    .brand-tiles-section .stButton > button {
         background: rgba(255,255,255,0.72) !important;
         backdrop-filter: saturate(160%) blur(12px) !important;
         -webkit-backdrop-filter: saturate(160%) blur(12px) !important;
         border: 1px solid rgba(15,23,42,0.08) !important;
         border-radius: 14px !important;
-        padding: 1.3rem 1rem !important;
+        padding: 1.2rem 0.8rem !important;
         color: #0A1A3D !important;
-        font-size: 15px !important;
+        font-size: 14px !important;
         font-weight: 700 !important;
         font-family: 'Manrope', 'Inter', system-ui, sans-serif !important;
         cursor: pointer !important;
         transition: transform 0.22s cubic-bezier(0.4,0,0.2,1), box-shadow 0.22s cubic-bezier(0.4,0,0.2,1), border-color 0.18s cubic-bezier(0.4,0,0.2,1) !important;
         box-shadow: 0 2px 6px rgba(15,23,42,0.03) !important;
-        min-height: 70px !important;
+        min-height: 68px !important;
         width: 100% !important;
     }
-    div[data-testid="stHorizontalBlock"] .stButton > button:hover {
+    .brand-tiles-section .stButton > button:hover {
         transform: translateY(-3px) !important;
         box-shadow: 0 8px 20px rgba(15,23,42,0.09) !important;
         border-color: rgba(28,79,192,0.3) !important;
         background: rgba(255,255,255,0.92) !important;
     }
     </style>
-    <div class="deep-dive-container">
-        <div class="dd-divider"></div>
-        <div class="dd-header">Deep Dive Dashboards</div>
-        <div class="dd-subtitle">Select a brand to explore detailed QoQ analysis, competitive trends, and exportable reports</div>
-    </div>
     """, unsafe_allow_html=True)
 
-    brands_list = [
-        ("Nurtec", "nurtec"), ("Eliquis", "eliquis"), ("Prevnar", "prevnar"), ("Comirnaty", "comirnaty"),
-        ("Abrysvo", "abrysvo"), ("Paxlovid", "paxlovid"), ("Zavzpret", "zavzpret"), ("Beyfortus", "beyfortus"),
-    ]
+    # Two-column layout: sidebar (fixed width) | main content
+    sidebar_col, main_col = st.columns([232, 900], gap="small")
 
-    # Row 1: first 4 brands
-    cols1 = st.columns(4, gap="small")
-    for i, (name, key) in enumerate(brands_list[:4]):
-        with cols1[i]:
-            if st.button(name, key=f"brand_btn_{key}", use_container_width=True):
-                st.session_state["nav_state"] = key
-                st.rerun()
+    with sidebar_col:
+        # Render sidebar as HTML block
+        sidebar_html = f"""
+        <div style="background:rgba(255,255,255,0.62); backdrop-filter:saturate(180%) blur(22px); -webkit-backdrop-filter:saturate(180%) blur(22px); border:1px solid rgba(15,23,42,0.08); border-radius:18px; box-shadow:0 8px 24px rgba(15,23,42,0.07),0 2px 6px rgba(15,23,42,0.04); display:flex; flex-direction:column; height:calc(100vh - 20px); overflow:hidden; padding:0;">
+            <div style="padding:10px 1.2rem 1rem; display:flex; flex-direction:column; gap:0.5rem;">
+                <img src="https://cdn.pfizer.com/pfizercom/2022-10/Pfizer_Logo_Color_CMYK.png" style="height:28px; align-self:flex-start;" />
+                <div style="font-family:'Manrope',sans-serif; font-weight:800; font-size:1.22rem; color:#0A1A3D; line-height:1.18; letter-spacing:-0.025em;">Primary Care<br>Intelligence Hub</div>
+                <div style="font-size:0.72rem; color:#64748B; font-weight:500;">Pfizer Analytics</div>
+            </div>
+            <div style="height:1px; background:rgba(15,23,42,0.08); margin:0 0.85rem;"></div>
+            <div style="font-family:'Manrope',sans-serif; font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:#64748B; padding:0.95rem 1.15rem 0.4rem;">Primary Care Workspace</div>
+            <div style="padding:0 0.55rem;">
+                <div style="position:relative; display:flex; align-items:center; gap:0.7rem; padding:0.55rem 0.7rem; border-radius:8px; background:linear-gradient(90deg,rgba(28,79,192,0.10) 0%,rgba(28,79,192,0.04) 100%); color:#163990; font-size:0.84rem; font-weight:600; font-family:'Inter',sans-serif;">
+                    <span style="width:18px;height:18px;display:flex;align-items:center;justify-content:center;color:#163990;flex-shrink:0;"><svg viewBox="0 0 24 24" width="16" height="16" style="fill:none;stroke:currentColor;stroke-width:1.8;"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
+                    <span>Deep Dive Dashboards</span>
+                    <div style="position:absolute;left:-0.55rem;top:6px;bottom:6px;width:3px;border-radius:0 3px 3px 0;background:linear-gradient(180deg,#1C4FC0,#41B6E6);box-shadow:0 0 8px rgba(28,79,192,0.3);"></div>
+                </div>
+                <div style="display:flex; align-items:center; gap:0.7rem; padding:0.55rem 0.7rem; margin-top:0.08rem; border-radius:8px; color:#475569; font-size:0.84rem; font-weight:500; font-family:'Inter',sans-serif;">
+                    <span style="width:18px;height:18px;display:flex;align-items:center;justify-content:center;color:#64748B;flex-shrink:0;"><svg viewBox="0 0 24 24" width="16" height="16" style="fill:none;stroke:currentColor;stroke-width:1.8;"><rect x="6" y="6" width="12" height="10" rx="2"/><path d="M9 16v3M15 16v3M9 6V3M15 6V3M3 11h3M18 11h3"/></svg></span>
+                    <span>CoWork Agents</span>
+                </div>
+            </div>
+            <div style="flex:1;"></div>
+            <div style="padding:0.85rem 1.15rem 1rem; font-size:0.7rem; color:#64748B; line-height:1.55; border-top:1px solid rgba(15,23,42,0.08); background:linear-gradient(180deg,transparent 0%,rgba(28,79,192,0.025) 100%);">
+                <div style="margin-bottom:0.2rem;"><strong style="color:#475569;font-weight:600;">Primary Care Analytics</strong></div>
+                <div>Team_ZS_PC_Analytics@zs.com</div>
+            </div>
+        </div>
+        """
+        st.markdown(sidebar_html, unsafe_allow_html=True)
 
-    # Row 2: last 4 brands
-    cols2 = st.columns(4, gap="small")
-    for i, (name, key) in enumerate(brands_list[4:]):
-        with cols2[i]:
-            if st.button(name, key=f"brand_btn_{key}", use_container_width=True):
-                st.session_state["nav_state"] = key
-                st.rerun()
+    with main_col:
+        # Render summary section as HTML
+        summary_html = f"""
+        <div style="background:rgba(255,255,255,0.55); backdrop-filter:saturate(180%) blur(14px); -webkit-backdrop-filter:saturate(180%) blur(14px); border:1px solid rgba(15,23,42,0.08); border-radius:18px; box-shadow:0 8px 24px rgba(15,23,42,0.07),0 2px 6px rgba(15,23,42,0.04); padding:1.1rem; margin-bottom:0.6rem;">
+            <div style="font-family:'Manrope',sans-serif; font-weight:700; font-size:17.5px; color:#0A1A3D; margin-bottom:0.25rem;">Primary Care Brand Performance Summary</div>
+            <div style="font-size:0.72rem; color:#64748B; font-weight:500; margin-bottom:1rem;">QoQ TRx Market Share Trends</div>
+            <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:0.75rem;">
+                {brand_cards_html}
+            </div>
+            <div style="margin-top:0.85rem; padding:0.6rem 0.9rem; border-radius:10px; background:rgba(28,79,192,0.03); border:1px solid rgba(28,79,192,0.08); display:flex; gap:1.8rem; align-items:center; flex-wrap:wrap;">
+                <span style="font-family:'Manrope',sans-serif; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:#163990;">Data Availability</span>
+                <span style="font-size:12px; color:#475569; font-weight:500;"><strong style="color:#0A1A3D;font-weight:600;">NPA:</strong> Till {max_date_raw}</span>
+                <span style="font-size:12px; color:#475569; font-weight:500;"><strong style="color:#0A1A3D;font-weight:600;">DDD:</strong> Till {max_date_raw}</span>
+                <span style="font-size:12px; color:#475569; font-weight:500;"><strong style="color:#0A1A3D;font-weight:600;">LAAD:</strong> Till {max_date_raw}</span>
+                <span style="width:1px;height:14px;background:rgba(28,79,192,0.2);"></span>
+                <span style="font-size:12px; color:#64748B; font-weight:500; margin-left:auto;"><strong style="color:#0A1A3D;font-weight:600;">Refreshed:</strong> {refresh_ts}</span>
+            </div>
+        </div>
+        """
+        st.markdown(summary_html, unsafe_allow_html=True)
+
+        # Deep Dive header
+        st.markdown("""
+        <div style="text-align:center; padding:0.5rem 0 0.3rem;">
+            <div style="width:80px; height:1px; background:linear-gradient(90deg,transparent,rgba(28,79,192,0.3),transparent); margin:0 auto 0.7rem;"></div>
+            <div style="font-family:'Manrope',sans-serif; font-weight:700; font-size:15.5px; color:#0A1A3D; letter-spacing:-0.01em;">Deep Dive Dashboards</div>
+            <div style="font-size:12.5px; color:#64748B; font-weight:400; margin-top:0.2rem;">Select a brand to explore detailed QoQ analysis</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        # Brand tile buttons (native Streamlit — clickable!)
+        brands_list = [
+            ("Nurtec", "nurtec"), ("Eliquis", "eliquis"), ("Prevnar", "prevnar"), ("Comirnaty", "comirnaty"),
+            ("Abrysvo", "abrysvo"), ("Paxlovid", "paxlovid"), ("Zavzpret", "zavzpret"), ("Beyfortus", "beyfortus"),
+        ]
+
+        with st.container():
+            st.markdown('<div class="brand-tiles-section">', unsafe_allow_html=True)
+            cols1 = st.columns(4, gap="small")
+            for i, (name, key) in enumerate(brands_list[:4]):
+                with cols1[i]:
+                    if st.button(name, key=f"brand_btn_{key}", use_container_width=True):
+                        st.session_state["nav_state"] = key
+                        st.rerun()
+
+            cols2 = st.columns(4, gap="small")
+            for i, (name, key) in enumerate(brands_list[4:]):
+                with cols2[i]:
+                    if st.button(name, key=f"brand_btn_{key}", use_container_width=True):
+                        st.session_state["nav_state"] = key
+                        st.rerun()
+            st.markdown('</div>', unsafe_allow_html=True)
 
 else:
     # === RENDER BRAND PAGE ===
