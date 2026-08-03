@@ -1,655 +1,387 @@
 """
-Primary Care Intelligence Hub - Landing Page
+Primary Care Monthly Report Dashboard - Dataiku DSS Streamlit Webapp
+All data loaded dynamically from Dataiku dataset via pandas.
 """
+
 import streamlit as st
-import dataiku
 import pandas as pd
+import plotly.graph_objects as go
+from io import BytesIO
+import dataiku
 
-st.set_page_config(
-    page_title="Primary Care Intelligence Hub",
-    page_icon="P",
-    layout="wide",
-    initial_sidebar_state="collapsed",
-)
+st.set_page_config(page_title="Primary Care Monthly Report Dashboard", layout="wide", initial_sidebar_state="collapsed")
 
-# --- DATA LOADING ---
-BRANDS = ['NURTEC', 'ELIQUIS', 'PREVNAR', 'COMIRNATY', 'ABRYSVO']
-BRAND_COLORS = {
-    'NURTEC': '#1C4FC0',
-    'ELIQUIS': '#41B6E6',
-    'PREVNAR': '#7C3AED',
-    'COMIRNATY': '#10B981',
-    'ABRYSVO': '#F59E0B',
+# =====================================================
+# CONFIGURATION
+# =====================================================
+
+DATASET_NAME = "SQL_EARNINGS_REPORT_MASTER_DATASET_SF"
+
+BRAND_CONFIG = {
+    "nurtec": {"display_name": "Nurtec", "brand_key": "NURTEC", "market": "OCGRP", "market_display": "Oral CGRP", "source": "NPA"},
+    "eliquis": {"display_name": "Eliquis", "brand_key": "ELIQUIS", "market": "OAC", "market_display": "Oral Anticoagulant", "source": "NPA"},
+    "prevnar": {"display_name": "Prevnar", "brand_key": "PREVNAR", "market": "PCV", "market_display": "PCV", "source": "NPA", "ddd_market": "PCV", "ddd_brand": "PREVNAR"},
+    "comirnaty": {"display_name": "Comirnaty", "brand_key": "COMIRNATY", "market": "COVID_VACCINES", "market_display": "COVID Vaccines", "source": "NPA", "ddd_market": "COVID", "ddd_brand": "COMIRNATY"},
+    "abrysvo": {"display_name": "Abrysvo", "brand_key": "ABRYSVO", "market": "RSV", "market_display": "RSV", "source": "NPA", "ddd_market": "RSV", "ddd_brand": "ABRYSVO"},
+    "paxlovid": {"display_name": "Paxlovid", "brand_key": "PAXLOVID", "market": "COVID_ORAL", "market_display": "COVID Oral Treatment", "source": "NPA"},
+    "zavzpret": {"display_name": "Zavzpret", "brand_key": "ZAVZPRET", "market": "ZAVZPRET", "market_display": "Zavzpret", "source": "NPA"},
+    "beyfortus": {"display_name": "Beyfortus", "brand_key": "BEYFORTUS", "market": "BEYFORTUS", "market_display": "Beyfortus", "source": "ELAAD"},
 }
+
+CHART_COLORS = ["#1C4FC0", "#41B6E6", "#7C3AED", "#0E7490", "#D946EF", "#047857", "#EF4444", "#64748B"]
+
+# =====================================================
+# DATA LOADING
+# =====================================================
 
 @st.cache_data(ttl=3600)
-def load_brand_data():
-    df = dataiku.Dataset("SQL_EARNINGS_REPORT_MASTER_DATASET_SF").get_dataframe()
-    df = df[
-        (df['DATASET'] == 'NPA_TRX') &
-        (df['METRICS'] == 'TRX MARKET SHARE') &
-        (df['BRAND'].isin(BRANDS)) &
-        (df['YR_QTR_TXT'] >= '2024')
-    ].sort_values(['BRAND', 'YR_QTR_TXT'])
-    return df
-
-df = load_brand_data()
-
-# Compute date range for display
-all_quarters = sorted(df['YR_QTR_TXT'].unique())
-first_qtr = all_quarters[0] if all_quarters else '2024Q1'
-latest_qtr = all_quarters[-1] if all_quarters else 'N/A'
-
-# Load max date for data freshness
-try:
-    max_date_df = dataiku.Dataset("SQL_NPA_MAX_DATE_SF").get_dataframe()
-    max_date_raw = str(max_date_df.iloc[0, 0]).split(" ")[0]
-except Exception:
-    max_date_raw = latest_qtr
-
-# Compute refresh timestamp (from dataset build metrics, converted UTC → IST)
-from datetime import datetime
-try:
-    import pytz
-    client = dataiku.api_client()
-    project = client.get_default_project()
-    ds = project.get_dataset("SQL_EARNINGS_REPORT_MASTER_DATASET_SF")
-    last_metrics = ds.get_last_metric_values()
-    build_date_metric = last_metrics.get_metric_by_id("reporting:BUILD_START_DATE")
-    build_date_val = build_date_metric.get("lastValues", [{}])[0].get("value", None) if build_date_metric else None
-
-    if build_date_val:
-        utc_time = datetime.strptime(build_date_val, "%Y-%m-%dT%H:%M:%S.%fZ")
-        ist = pytz.timezone("Asia/Kolkata")
-        ist_time = pytz.utc.localize(utc_time).astimezone(ist)
-        refresh_ts = ist_time.strftime("%B %d, %Y at %I:%M %p IST")
-    else:
-        refresh_ts = max_date_raw if max_date_raw != "N/A" else "N/A"
-except Exception:
-    refresh_ts = max_date_raw if max_date_raw != "N/A" else "N/A"
+def load_data():
+    dataset = dataiku.Dataset(DATASET_NAME)
+    return dataset.get_dataframe()
 
 
-def build_brand_card_data(df):
-    """For each brand: latest value, QoQ delta, SVG sparkline points, and date range."""
-    cards = []
-    for brand in BRANDS:
-        bdf = df[df['BRAND'] == brand].sort_values('YR_QTR_TXT')
-        if bdf.empty:
-            continue
-        values = bdf['VALUE'].tolist()
-        quarters = bdf['YR_QTR_TXT'].tolist()
-        latest = values[-1]
-        delta = latest - values[-2] if len(values) >= 2 else 0.0
-
-        # Generate SVG polyline points (normalize values to 2-24 y-range, 26px height)
-        v_min, v_max = min(values), max(values)
-        v_range = v_max - v_min if v_max != v_min else 1
-        n = len(values)
-        points = []
-        for i, v in enumerate(values):
-            x = round((i / (n - 1)) * 120, 1) if n > 1 else 60
-            y = round(24 - ((v - v_min) / v_range) * 22, 1)
-            points.append(f"{x},{y}")
-        polyline = " ".join(points)
-
-        cards.append({
-            'brand': brand,
-            'value': f"{latest:.1f}%",
-            'delta': f"{delta:+.1f}",
-            'delta_class': 'up' if delta >= 0 else 'down',
-            'color': BRAND_COLORS[brand],
-            'polyline': polyline,
-            'first_qtr': quarters[0] if quarters else '',
-            'latest_qtr': quarters[-1] if quarters else '',
-        })
-    return cards
+def get_npa_trx_data(df, market):
+    return df[(df["DATASET"] == "NPA_TRX") & (df["MARKET"] == market)].copy()
 
 
-brand_cards = build_brand_card_data(df)
+def get_npa_nbrx_data(df, market):
+    return df[(df["DATASET"] == "NPA_NBRX") & (df["MARKET"] == market)].copy()
 
 
-def render_brand_cards_html(cards):
-    """Generate HTML for brand cards."""
-    html_cards = []
-    for c in cards:
-        html_cards.append(f'''
-                <div class="brand-card">
-                    <div class="card-top">
-                        <span class="brand-name">{c['brand'].title()}</span>
-                        <span class="brand-metric"><span class="brand-value">{c['value']}</span><span class="brand-delta {c['delta_class']}">{c['delta']}</span></span>
-                    </div>
-                    <div class="brand-spark"><svg viewBox="0 0 120 26" preserveAspectRatio="none"><polyline points="{c['polyline']}" fill="none" stroke="{c['color']}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                    <div class="card-footer"><span class="card-source">NPA</span> {c['first_qtr']} → {c['latest_qtr']}</div>
-                </div>''')
-    return "\n".join(html_cards)
+def pivot_market_share(df_subset, metric_name):
+    filtered = df_subset[df_subset["METRICS"] == metric_name]
+    if filtered.empty:
+        return pd.DataFrame()
+    pivoted = filtered.pivot_table(index="YR_QTR_TXT", columns="BRAND", values="VALUE")
+    pivoted = pivoted.sort_index()
+    if len(pivoted) > 10:
+        pivoted = pivoted.iloc[-10:]
+    return pivoted
 
+# =====================================================
+# CSS STYLES
+# =====================================================
 
-brand_cards_html = render_brand_cards_html(brand_cards)
-
-# Hide all Streamlit chrome
-st.markdown("""
+COMMON_CSS = """
 <style>
-    [data-testid="stHeader"], [data-testid="stToolbar"], [data-testid="stDecoration"],
-    [data-testid="stSidebar"], [data-testid="collapsedControl"],
-    [data-testid="stSidebarCollapseButton"], #MainMenu, footer,
-    .stApp > header { display: none !important; }
-    .stApp { background: transparent !important; overflow: hidden !important; }
-    .block-container { padding: 0 !important; max-width: 100% !important; }
-    [data-testid="stAppViewBlockContainer"] { padding: 0 !important; }
-    [data-testid="stMainBlockContainer"] { padding: 0 !important; }
-    [data-testid="stMain"] { overflow: hidden !important; }
-    [data-testid="stVerticalBlock"] { gap: 0 !important; }
-</style>
-""", unsafe_allow_html=True)
-
-html_content = """
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
 :root {
-    --navy-900: #0A1A3D;
-    --navy-800: #102A5C;
-    --navy-700: #163990;
-    --navy-600: #1C4FC0;
-    --navy-500: #3B6FD9;
-    --accent: #41B6E6;
-    --bg: #EEF3FB;
-    --surface: #FFFFFF;
-    --text: #0F172A;
-    --text-muted: #64748B;
-    --text-soft: #475569;
-    --hairline: rgba(15,23,42,0.08);
+    --bg: #EEF3FB; --surface: #FFFFFF; --text-1: #0F172A; --text-2: #1C4FC0;
+    --text-3: #64748B; --border: rgba(15,23,42,0.08); --border-hover: rgba(28,79,192,0.35);
+    --navy-700: #163990; --navy-800: #102A5C; --navy-900: #0A1A3D;
+    --shadow-sm: 0 2px 8px rgba(15,23,42,0.05), 0 1px 2px rgba(15,23,42,0.04);
+    --shadow-md: 0 6px 16px rgba(15,23,42,0.07), 0 2px 4px rgba(15,23,42,0.04);
     --shadow-panel: 0 8px 24px rgba(15,23,42,0.07), 0 2px 6px rgba(15,23,42,0.04);
-    --ease: cubic-bezier(0.4, 0, 0.2, 1);
-    --sidebar-w: 232px;
-    --shell-pad: 10px;
-    --panel-radius: 18px;
+    --radius: 14px; --radius-lg: 18px;
+    --ease: cubic-bezier(0.4,0,0.2,1); --ease-out: cubic-bezier(0.16,1,0.3,1);
 }
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { height: 100%; }
-body {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    background:
-        radial-gradient(ellipse 80% 60% at 0% 0%, rgba(28,79,192,0.08) 0%, transparent 60%),
-        radial-gradient(ellipse 70% 50% at 100% 0%, rgba(65,182,230,0.07) 0%, transparent 55%),
-        radial-gradient(ellipse 60% 50% at 50% 100%, rgba(124,58,237,0.04) 0%, transparent 60%),
-        var(--bg);
-    color: var(--text);
-    line-height: 1.5;
-    font-size: 14px;
-    -webkit-font-smoothing: antialiased;
-    overflow: hidden;
+* { box-sizing: border-box; }
+#MainMenu, header, footer, [data-testid="stSidebar"] { display: none !important; visibility: hidden !important; }
+.block-container { padding-top: 1rem !important; max-width: 100% !important; }
+.stApp, [data-testid="stAppViewContainer"], [data-testid="stMain"] {
+    background: radial-gradient(ellipse 80% 60% at 0% 0%, rgba(28,79,192,0.06) 0%, transparent 60%),
+                radial-gradient(ellipse 70% 50% at 100% 0%, rgba(65,182,230,0.05) 0%, transparent 55%),
+                var(--bg) !important;
 }
-h1, h2, h3, h4 { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-spacing: -0.015em; }
-
-/* APP SHELL */
-.app { height: 100vh; display: grid; grid-template-columns: var(--sidebar-w) 1fr; gap: var(--shell-pad); padding: var(--shell-pad); overflow: hidden; }
-
-/* SIDEBAR */
-.sidebar {
-    background: rgba(255,255,255,0.62);
-    backdrop-filter: saturate(180%) blur(22px);
-    -webkit-backdrop-filter: saturate(180%) blur(22px);
-    border: 1px solid var(--hairline);
-    border-radius: var(--panel-radius);
-    box-shadow: var(--shadow-panel);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+h1, h2, h3 { font-family: 'Manrope', sans-serif; letter-spacing: -0.015em; color: var(--navy-900); }
+.hub-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 24px; border-radius: var(--radius-lg);
+    background: rgba(255,255,255,0.62); backdrop-filter: saturate(180%) blur(22px);
+    margin-bottom: 16px; box-shadow: var(--shadow-panel); border: 1px solid var(--border);
 }
-
-/* Brand section (top) */
-.sidebar-brand {
-    padding: 10px 1.2rem 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-.sidebar-brand img { height: 28px; align-self: flex-start; }
-.sidebar-brand .title {
-    font-family: 'Manrope', sans-serif;
-    font-weight: 800;
-    font-size: 1.22rem;
-    color: var(--navy-900);
-    line-height: 1.18;
-    letter-spacing: -0.025em;
-}
-.sidebar-brand .subtitle { font-size: 0.72rem; color: var(--text-muted); font-weight: 500; }
-
-/* Divider */
-.sidebar-divider { height: 1px; background: var(--hairline); margin: 0 0.85rem; }
-
-/* Section label */
-.sidebar-section-label {
-    font-family: 'Manrope', sans-serif;
-    font-size: 0.62rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--text-muted);
-    padding: 0.95rem 1.15rem 0.4rem;
-}
-
-/* Nav items */
-.nav { padding: 0 0.55rem; }
-.nav-item {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 0.7rem;
-    padding: 0.55rem 0.7rem;
-    margin: 0.08rem 0;
-    border-radius: 8px;
-    font-size: 0.84rem;
-    font-weight: 500;
-    color: var(--text-soft);
-    cursor: pointer;
-    transition: background 0.18s var(--ease), color 0.18s var(--ease);
-    background: transparent;
-    border: none;
-    width: 100%;
-    text-align: left;
-    font-family: inherit;
-}
-.nav-item .nav-icon { width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); transition: color 0.18s var(--ease); flex-shrink: 0; }
-.nav-item .nav-icon svg { width: 16px; height: 16px; stroke-width: 1.8; fill: none; stroke: currentColor; }
-.nav-item .nav-label { flex: 1; min-width: 0; }
-.nav-item:hover { background: rgba(15,23,42,0.04); color: var(--text); }
-.nav-item:hover .nav-icon { color: var(--navy-700); }
-.nav-item.active { background: linear-gradient(90deg, rgba(28,79,192,0.10) 0%, rgba(28,79,192,0.04) 100%); color: var(--navy-700); font-weight: 600; }
-.nav-item.active .nav-icon { color: var(--navy-700); }
-.nav-item.active::before { content: ''; position: absolute; left: -0.55rem; top: 6px; bottom: 6px; width: 3px; border-radius: 0 3px 3px 0; background: linear-gradient(180deg, var(--navy-600), var(--accent)); box-shadow: 0 0 8px rgba(28,79,192,0.3); }
-
-/* Spacer pushes footer to bottom */
-.sidebar-spacer { flex: 1; }
-
-/* Footer (bottom) */
-.sidebar-meta {
-    padding: 0.85rem 1.15rem 1rem;
-    font-size: 0.7rem;
-    color: var(--text-muted);
-    line-height: 1.55;
-    border-top: 1px solid var(--hairline);
-    background: linear-gradient(180deg, transparent 0%, rgba(28,79,192,0.025) 100%);
-}
-.sidebar-meta strong { color: var(--text-soft); font-weight: 600; }
-.sidebar-meta .meta-row { margin-bottom: 0.2rem; }
-
-/* MAIN PANEL */
-.main {
-    background: rgba(255,255,255,0.55);
-    backdrop-filter: saturate(180%) blur(14px);
-    -webkit-backdrop-filter: saturate(180%) blur(14px);
-    border: 1px solid var(--hairline);
-    border-radius: var(--panel-radius);
-    box-shadow: var(--shadow-panel);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    min-width: 0;
-}
-.content { flex: 1; min-height: 0; overflow: hidden; padding: 1.2rem; display: flex; flex-direction: column; }
-
-/* SECTION HEADER */
-.section-header {
-    font-family: 'Manrope', sans-serif;
-    font-weight: 700;
-    font-size: 17.5px;
-    color: var(--navy-900);
-    margin-bottom: 0.25rem;
-}
-.section-subtitle {
-    font-size: 0.72rem;
-    color: var(--text-muted);
-    font-weight: 500;
-    margin-bottom: 1rem;
-}
-
-/* BRAND SUMMARY CONTAINER */
-.brand-summary {
-    background: rgba(255,255,255,0.62);
-    backdrop-filter: saturate(180%) blur(22px);
-    -webkit-backdrop-filter: saturate(180%) blur(22px);
-    border: 1px solid var(--hairline);
-    border-radius: var(--panel-radius);
-    box-shadow: var(--shadow-panel);
-    padding: 1.1rem;
-}
-
-/* BRAND CARDS GRID - single row */
-.brand-cards {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 0.75rem;
-}
-
-/* INDIVIDUAL BRAND CARD - compact squarish */
-.brand-card {
-    background: rgba(255,255,255,0.72);
-    backdrop-filter: saturate(160%) blur(12px);
-    -webkit-backdrop-filter: saturate(160%) blur(12px);
-    border: 1px solid var(--hairline);
-    border-radius: 16px;
-    padding: 0.7rem 0.75rem 0.5rem;
-    box-shadow: 0 2px 8px rgba(15,23,42,0.03);
-    transition: box-shadow 0.2s var(--ease), transform 0.2s var(--ease);
-    aspect-ratio: 1.4 / 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-.brand-card:hover {
-    box-shadow: 0 6px 16px rgba(15,23,42,0.08);
-    transform: translateY(-1px);
-}
-.card-top {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    margin-bottom: 0.35rem;
-}
-.brand-name {
-    font-family: 'Manrope', sans-serif;
-    font-weight: 700;
-    font-size: 14px;
-    color: var(--navy-900);
-}
-.brand-metric {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-}
-.brand-value {
-    font-family: 'Manrope', sans-serif;
-    font-weight: 800;
-    font-size: 16px;
-    color: var(--text);
-}
-.brand-delta {
-    font-size: 11px;
-    font-weight: 600;
-    padding: 1px 5px;
-    border-radius: 4px;
-}
-.brand-delta.up { color: #059669; background: rgba(16,185,129,0.1); }
-.brand-delta.down { color: #DC2626; background: rgba(239,68,68,0.08); }
-.brand-spark { width: 100%; }
-.brand-spark svg { width: 100%; height: 28px; display: block; }
-.card-footer {
-    font-size: 10.5px;
-    color: var(--text-muted);
-    font-weight: 500;
-    text-align: center;
-    margin-top: 0.25rem;
-    letter-spacing: 0.02em;
-}
-.card-source {
-    display: inline-block;
-    background: rgba(28,79,192,0.08);
-    color: var(--navy-700);
-    font-size: 9.5px;
-    font-weight: 700;
-    padding: 1px 5px;
-    border-radius: 3px;
-    letter-spacing: 0.05em;
-    margin-right: 3px;
-}
-
-/* DATA FRESHNESS STRIP */
-.data-freshness {
-    margin-top: 0.85rem;
-    padding: 0.6rem 0.9rem;
-    border-radius: 10px;
-    background: rgba(28,79,192,0.03);
-    border: 1px solid rgba(28,79,192,0.08);
-    display: flex;
-    gap: 1.8rem;
-    align-items: center;
-    flex-wrap: wrap;
-}
-.data-freshness-label {
-    font-family: 'Manrope', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--navy-700);
-}
-.data-freshness-item {
-    font-size: 12px;
-    color: var(--text-soft);
-    font-weight: 500;
-}
-.data-freshness-item strong {
-    color: var(--navy-900);
-    font-weight: 600;
-}
-.data-freshness-divider {
-    width: 1px;
-    height: 14px;
-    background: rgba(28,79,192,0.2);
-}
-.data-refreshed {
-    margin-left: auto;
-    color: var(--text-muted);
-}
-
-/* MISSION STATEMENT */
-.hub-mission {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 0.6rem 3rem;
-}
-.mission-divider {
-    width: 80px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(28,79,192,0.3), transparent);
-    margin: 0 auto 0.8rem;
-}
-.mission-text {
-    font-family: 'Manrope', sans-serif;
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--navy-900);
-    line-height: 1.55;
-    margin-bottom: 0.6rem;
-    letter-spacing: -0.01em;
-    max-width: 520px;
-}
-.mission-sub {
-    font-size: 13px;
-    color: var(--text-muted);
-    font-weight: 400;
-    line-height: 1.55;
-    margin-bottom: 1.2rem;
-    max-width: 480px;
-}
-.mission-sub strong {
-    color: var(--navy-700);
-    font-weight: 600;
-}
-
-/* DEEP DIVE BRAND SELECTION */
-.deep-dive-section {
-    padding: 0.8rem 0 0;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-.deep-dive-section .mission-divider {
-    margin: 0 auto 1rem;
-}
-.deep-dive-header {
-    font-family: 'Manrope', sans-serif;
-    font-weight: 700;
-    font-size: 15.5px;
-    color: var(--navy-900);
-    margin-bottom: 0.25rem;
-    text-align: center;
-    letter-spacing: -0.01em;
-}
-.deep-dive-subtitle {
-    font-size: 12.5px;
-    color: var(--text-muted);
-    text-align: center;
-    margin-bottom: 1rem;
-    font-weight: 400;
-}
-.deep-dive-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: 1fr 1fr;
-    gap: 0.9rem;
-    padding: 0 0.3rem;
-    flex: 1;
-}
-.deep-dive-tile {
-    background: rgba(255,255,255,0.72);
-    backdrop-filter: saturate(160%) blur(12px);
-    -webkit-backdrop-filter: saturate(160%) blur(12px);
-    border: 1px solid var(--hairline);
-    border-radius: 14px;
-    padding: 1.5rem 1.2rem;
-    text-align: center;
-    cursor: pointer;
-    transition: transform 0.22s var(--ease), box-shadow 0.22s var(--ease), border-color 0.18s var(--ease);
-    box-shadow: 0 2px 6px rgba(15,23,42,0.03);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 80px;
-}
-.deep-dive-tile:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(15,23,42,0.09);
-    border-color: rgba(28,79,192,0.3);
-}
-.deep-dive-tile .tile-name {
-    font-family: 'Manrope', sans-serif;
-    font-weight: 700;
-    font-size: 15px;
-    color: var(--navy-900);
-}
+.hub-title { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 22px; color: var(--navy-900); letter-spacing: -0.025em; }
 </style>
-</head>
-<body>
-<div class="app">
-
-<!-- SIDEBAR -->
-<aside class="sidebar">
-    <div class="sidebar-brand">
-        <img src="https://cdn.pfizer.com/pfizercom/2022-10/Pfizer_Logo_Color_CMYK.png" alt="Pfizer">
-        <div>
-            <div class="title">Primary Care<br>Intelligence Hub</div>
-            <div class="subtitle">Pfizer Analytics</div>
-        </div>
-    </div>
-
-    <div class="sidebar-divider"></div>
-
-    <div class="sidebar-section-label">Primary Care Workspace</div>
-    <nav class="nav">
-        <button class="nav-item" id="nav-deepdive" onclick="activateDeepDive()">
-            <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
-            <span class="nav-label">Deep Dive Dashboards</span>
-        </button>
-        <button class="nav-item" id="nav-cowork" onclick="activateCowork()">
-            <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="10" rx="2"/><path d="M9 16v3M15 16v3M9 6V3M15 6V3M3 11h3M18 11h3"/></svg></span>
-            <span class="nav-label">CoWork Agents</span>
-        </button>
-    </nav>
-
-    <div class="sidebar-spacer"></div>
-
-    <div class="sidebar-meta">
-        <div class="meta-row"><strong>Primary Care Analytics</strong></div>
-        <div class="meta-row">Team_ZS_PC_Analytics@zs.com</div>
-    </div>
-</aside>
-
-<!-- MAIN PANEL -->
-<div class="main">
-    <main class="content">
-        <div class="brand-summary">
-            <div class="section-header">Primary Care Brand Performance Summary</div>
-            <div class="section-subtitle">QoQ TRx Market Share Trends</div>
-
-            <div class="brand-cards">
-__BRAND_CARDS__
-            </div>
-
-            <div class="data-freshness">
-                <span class="data-freshness-label">Data Availability</span>
-                <span class="data-freshness-item"><strong>NPA:</strong> Till __MAX_DATE__</span>
-                <span class="data-freshness-item"><strong>DDD:</strong> Till __MAX_DATE__</span>
-                <span class="data-freshness-item"><strong>LAAD:</strong> Till __MAX_DATE__</span>
-                <span class="data-freshness-divider"></span>
-                <span class="data-freshness-item data-refreshed"><strong>Refreshed:</strong> __REFRESH_TS__</span>
-            </div>
-        </div>
-
-        <!-- MISSION STATEMENT (visible by default) -->
-        <div class="hub-mission" id="mission-section">
-            <div class="mission-divider"></div>
-            <p class="mission-text">Your single source of truth for Primary Care brand performance analytics across NPA, DDD, and LAAD data sources.</p>
-            <p class="mission-sub">Use <strong>Deep Dive Dashboards</strong> in the sidebar for detailed QoQ analysis, competitive trends, and exportable reports.</p>
-            <div class="mission-divider"></div>
-        </div>
-
-        <!-- DEEP DIVE BRAND SELECTION (hidden by default) -->
-        <div class="deep-dive-section" id="deep-dive-section" style="display:none;">
-            <div class="mission-divider"></div>
-            <div class="deep-dive-header">Deep Dive Dashboards</div>
-            <div class="deep-dive-subtitle">Select a brand to explore detailed QoQ analysis, competitive trends, and exportable reports</div>
-            <div class="deep-dive-grid">
-                <div class="deep-dive-tile"><div class="tile-name">Nurtec</div></div>
-                <div class="deep-dive-tile"><div class="tile-name">Eliquis</div></div>
-                <div class="deep-dive-tile"><div class="tile-name">Prevnar</div></div>
-                <div class="deep-dive-tile"><div class="tile-name">Comirnaty</div></div>
-                <div class="deep-dive-tile"><div class="tile-name">Abrysvo</div></div>
-                <div class="deep-dive-tile"><div class="tile-name">Paxlovid</div></div>
-                <div class="deep-dive-tile"><div class="tile-name">Zavzpret</div></div>
-                <div class="deep-dive-tile"><div class="tile-name">Beyfortus</div></div>
-            </div>
-        </div>
-    </main>
-</div>
-
-</div>
-
-<script>
-function clearActive() {
-    document.querySelectorAll('.nav-item').forEach(function(item) {
-        item.classList.remove('active');
-    });
-}
-function activateDeepDive() {
-    clearActive();
-    document.getElementById('nav-deepdive').classList.add('active');
-    document.getElementById('mission-section').style.display = 'none';
-    document.getElementById('deep-dive-section').style.display = 'block';
-}
-function activateCowork() {
-    clearActive();
-    document.getElementById('nav-cowork').classList.add('active');
-    document.getElementById('mission-section').style.display = 'flex';
-    document.getElementById('deep-dive-section').style.display = 'none';
-}
-</script>
-</body>
-</html>
 """
 
-html_content = html_content.replace("__BRAND_CARDS__", brand_cards_html)
-html_content = html_content.replace("__MAX_DATE__", max_date_raw)
-html_content = html_content.replace("__REFRESH_TS__", refresh_ts)
+HOME_BUTTON_CSS = """
+<style>
+.stButton > button {
+    background: rgba(255,255,255,0.55) !important; backdrop-filter: saturate(180%) blur(14px) !important;
+    border: 1px solid rgba(15,23,42,0.08) !important; border-radius: 18px !important;
+    padding: 28px 28px !important; color: #0A1A3D !important; font-size: 18px !important;
+    font-weight: 700 !important; font-family: 'Manrope', sans-serif !important;
+    cursor: pointer !important; box-shadow: 0 2px 8px rgba(15,23,42,0.05) !important;
+    min-height: 100px !important; transition: all 0.28s cubic-bezier(0.16,1,0.3,1) !important;
+}
+.stButton > button:hover {
+    transform: translateY(-4px) scale(1.02) !important;
+    box-shadow: 0 18px 40px rgba(15,23,42,0.10) !important;
+    background: rgba(255,255,255,0.85) !important; border-color: rgba(28,79,192,0.35) !important;
+}
+.stButton > button > div, .stButton > button > div > p, .stButton > button p, .stButton > button span {
+    font-size: 18px !important; font-weight: 700 !important;
+}
+</style>
+"""
 
-st.components.v1.html(html_content, height=1000, scrolling=False)
+# =====================================================
+# HELPERS
+# =====================================================
+
+def render_ribbon(title):
+    st.markdown(COMMON_CSS, unsafe_allow_html=True)
+    st.markdown(f'<div class="hub-header"><span class="hub-title">{title}</span></div>', unsafe_allow_html=True)
+
+
+def render_trend_chart(pivoted_df, title, brands_order=None, is_percentage=True):
+    if pivoted_df.empty:
+        st.info(f"No data available for: {title}")
+        return
+    fig = go.Figure()
+    brands = brands_order if brands_order else list(pivoted_df.columns)
+    for i, brand in enumerate(brands):
+        if brand not in pivoted_df.columns:
+            continue
+        y_vals = pivoted_df[brand].tolist()
+        fmt = f"<b>{brand}</b><br>%{{x}}<br>%{{y:.2f}}%<extra></extra>" if is_percentage else f"<b>{brand}</b><br>%{{x}}<br>%{{y:,.0f}}<extra></extra>"
+        if i == 0:
+            text_vals = [f"{v:.2f}" if pd.notna(v) else "" for v in y_vals] if is_percentage else [f"{v:,.0f}" if pd.notna(v) else "" for v in y_vals]
+            fig.add_trace(go.Scatter(x=pivoted_df.index.tolist(), y=y_vals, mode="lines+markers+text", name=brand, text=text_vals, textposition="top center", textfont=dict(size=10, color=CHART_COLORS[0]), line=dict(color=CHART_COLORS[0], width=3), marker=dict(size=7), hovertemplate=fmt))
+        else:
+            fig.add_trace(go.Scatter(x=pivoted_df.index.tolist(), y=y_vals, mode="lines+markers", name=brand, line=dict(color=CHART_COLORS[i % len(CHART_COLORS)], width=2), marker=dict(size=5), hovertemplate=fmt))
+    fig.update_layout(template="plotly_white", height=420, margin=dict(l=60, r=30, t=20, b=50), plot_bgcolor="#FFFFFF", paper_bgcolor="#FFFFFF", font=dict(family="Inter, system-ui", size=13, color="#0F172A"), legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0), hovermode="x unified")
+    fig.update_xaxes(showgrid=False, tickfont=dict(size=12, color="#64748B"))
+    fig.update_yaxes(showgrid=True, gridcolor="rgba(15,23,42,0.06)", ticksuffix="%" if is_percentage else "", tickfont=dict(size=12, color="#64748B"), separatethousands=True)
+    try:
+        st.plotly_chart(fig, use_container_width=True, theme=None)
+    except TypeError:
+        st.plotly_chart(fig, use_container_width=True)
+
+
+def render_styled_table(df_to_render, title):
+    if df_to_render.empty:
+        return
+    with st.expander(title, expanded=False):
+        st.dataframe(df_to_render, use_container_width=True, hide_index=True)
+
+
+# =====================================================
+# BRAND PAGE RENDERER
+# =====================================================
+
+def render_brand_page(brand_key_page):
+    config = BRAND_CONFIG[brand_key_page]
+    brand_name = config["brand_key"]
+    market = config["market"]
+    display_name = config["display_name"]
+
+    render_ribbon(f"{display_name} \u2014 Quarter on Quarter Report")
+
+    # Back button
+    if st.button("\u2190 Back to Home"):
+        st.session_state["current_page"] = "home"
+        st.rerun()
+
+    df = load_data()
+
+    # --- Get data based on source ---
+    if brand_key_page == "beyfortus":
+        elaad_data = df[(df["DATASET"] == "ELAAD") & (df["MARKET"] == "BEYFORTUS")]
+        claims = pivot_market_share(elaad_data, "CLAIMS")
+        patients = pivot_market_share(elaad_data, "PATIENTS")
+        if claims.empty and patients.empty:
+            st.warning(f"No data available for {display_name}.")
+            return
+        st.subheader("Claims Trend (LAAD)")
+        render_trend_chart(claims, "Claims", [brand_name], is_percentage=False)
+        st.subheader("Patients Trend (LAAD)")
+        render_trend_chart(patients, "Patients", [brand_name], is_percentage=False)
+        if not claims.empty:
+            render_styled_table(claims.reset_index().rename(columns={"YR_QTR_TXT": "Quarter"}), "Claims (Raw)")
+        if not patients.empty:
+            render_styled_table(patients.reset_index().rename(columns={"YR_QTR_TXT": "Quarter"}), "Patients (Raw)")
+        return
+
+    trx_data = get_npa_trx_data(df, market)
+    nbrx_data = get_npa_nbrx_data(df, market)
+
+    if trx_data.empty and nbrx_data.empty:
+        st.warning(f"No NPA data for {display_name} in market '{market}'.")
+        return
+
+    # --- Zavzpret special handler ---
+    if brand_key_page == "zavzpret":
+        trx_claims = pivot_market_share(trx_data, "TRX CLAIMS")
+        nbrx_claims = pivot_market_share(nbrx_data, "NBRX CLAIMS")
+        st.subheader("TRX Claims Trend (NPA)")
+        render_trend_chart(trx_claims, "TRX Claims", [brand_name], is_percentage=False)
+        st.subheader("NBRX Claims Trend (NPA)")
+        render_trend_chart(nbrx_claims, "NBRX Claims", [brand_name], is_percentage=False)
+        if not trx_claims.empty:
+            render_styled_table(trx_claims.reset_index().rename(columns={"YR_QTR_TXT": "Quarter"}), "TRX Claims (Raw)")
+        if not nbrx_claims.empty:
+            render_styled_table(nbrx_claims.reset_index().rename(columns={"YR_QTR_TXT": "Quarter"}), "NBRX Claims (Raw)")
+        return
+
+    # --- Standard NPA brands ---
+    trx_ms = pivot_market_share(trx_data, "TRX MARKET SHARE")
+    nbrx_ms = pivot_market_share(nbrx_data, "NBRX MARKET SHARE")
+    trx_diff = pivot_market_share(trx_data, "TRX MS DIFF VS STLY")
+    nbrx_diff = pivot_market_share(nbrx_data, "NBRX MS DIFF VS STLY")
+    trx_claims = pivot_market_share(trx_data, "TRX CLAIMS")
+    nbrx_claims = pivot_market_share(nbrx_data, "NBRX CLAIMS")
+
+    # KPIs
+    latest_qtr = trx_ms.index[-1] if not trx_ms.empty else "N/A"
+    trx_val = trx_ms.loc[latest_qtr, brand_name] if (not trx_ms.empty and brand_name in trx_ms.columns and latest_qtr in trx_ms.index) else None
+    nbrx_val = nbrx_ms.loc[latest_qtr, brand_name] if (not nbrx_ms.empty and brand_name in nbrx_ms.columns and latest_qtr in nbrx_ms.index) else None
+    trx_diff_val = trx_diff.loc[latest_qtr, brand_name] if (not trx_diff.empty and brand_name in trx_diff.columns and latest_qtr in trx_diff.index) else None
+    nbrx_diff_val = nbrx_diff.loc[latest_qtr, brand_name] if (not nbrx_diff.empty and brand_name in nbrx_diff.columns and latest_qtr in nbrx_diff.index) else None
+
+    col1, col2 = st.columns(2)
+    with col1:
+        trx_str = f"{trx_val:.2f}%" if pd.notna(trx_val) else "N/A"
+        delta_str = f"{trx_diff_val:+.2f}pp vs STLY" if pd.notna(trx_diff_val) else ""
+        st.metric(f"{display_name} TRX Market Share (NPA)", trx_str, delta_str)
+    with col2:
+        nbrx_str = f"{nbrx_val:.2f}%" if pd.notna(nbrx_val) else "N/A"
+        delta_str = f"{nbrx_diff_val:+.2f}pp vs STLY" if pd.notna(nbrx_diff_val) else ""
+        st.metric(f"{display_name} NBRX Market Share (NPA)", nbrx_str, delta_str)
+
+    st.caption(f"Latest quarter: {latest_qtr}")
+
+    # TRX Market Share Trend
+    if not trx_ms.empty:
+        st.subheader(f"TRX Market Share Trend \u2014 {config['market_display']} (NPA)")
+        brands_order = [brand_name] + [b for b in trx_ms.columns if b != brand_name]
+        render_trend_chart(trx_ms, "TRX Market Share", brands_order)
+
+    # NBRX Market Share Trend
+    if not nbrx_ms.empty:
+        st.subheader(f"NBRX Market Share Trend \u2014 {config['market_display']} (NPA)")
+        brands_order_nbrx = [brand_name] + [b for b in nbrx_ms.columns if b != brand_name]
+        render_trend_chart(nbrx_ms, "NBRX Market Share", brands_order_nbrx)
+
+    # DDD metrics for vaccine brands
+    ddd_brands = {"abrysvo": "ABRYSVO", "comirnaty": "COMIRNATY", "prevnar": "PREVNAR"}
+    ddd_market_map = {"abrysvo": "RSV", "comirnaty": "COVID", "prevnar": "PCV"}
+    if brand_key_page in ddd_brands:
+        ddd_brand = ddd_brands[brand_key_page]
+        ddd_market = ddd_market_map[brand_key_page]
+        ddd_data = df[(df["DATASET"] == "DDD") & (df["MARKET"] == ddd_market)]
+        if not ddd_data.empty:
+            shipment_ms = pivot_market_share(ddd_data, "OVERALL_MS")
+            if not shipment_ms.empty:
+                st.subheader(f"Shipment Market Share \u2014 {ddd_market} (DDD)")
+                ddd_order = [ddd_brand] + [b for b in shipment_ms.columns if b != ddd_brand]
+                render_trend_chart(shipment_ms, "Shipment MS", ddd_order)
+
+            retail_ms = pivot_market_share(ddd_data, "RETAIL_MS")
+            if not retail_ms.empty:
+                st.subheader(f"Retail Market Share \u2014 {ddd_market} (DDD)")
+                retail_order = [ddd_brand] + [b for b in retail_ms.columns if b != ddd_brand]
+                render_trend_chart(retail_ms, "Retail MS", retail_order)
+
+            non_retail_ms = pivot_market_share(ddd_data, "NON_RETAIL_MS")
+            if not non_retail_ms.empty:
+                st.subheader(f"Non-Retail Market Share \u2014 {ddd_market} (DDD)")
+                nr_order = [ddd_brand] + [b for b in non_retail_ms.columns if b != ddd_brand]
+                render_trend_chart(non_retail_ms, "Non-Retail MS", nr_order)
+
+    # Raw data tables
+    st.subheader("Raw Data Tables")
+    if not trx_ms.empty:
+        display_df = trx_ms.round(2).reset_index().rename(columns={"YR_QTR_TXT": "Quarter"})
+        render_styled_table(display_df, "TRX Market Share (NPA)")
+    if not nbrx_ms.empty:
+        display_df = nbrx_ms.round(2).reset_index().rename(columns={"YR_QTR_TXT": "Quarter"})
+        render_styled_table(display_df, "NBRX Market Share (NPA)")
+    if not trx_claims.empty:
+        display_df = trx_claims.reset_index().rename(columns={"YR_QTR_TXT": "Quarter"})
+        render_styled_table(display_df, "TRX Claims (NPA)")
+    if not nbrx_claims.empty:
+        display_df = nbrx_claims.reset_index().rename(columns={"YR_QTR_TXT": "Quarter"})
+        render_styled_table(display_df, "NBRX Claims (NPA)")
+
+    # Download
+    st.subheader("Download")
+    def generate_excel():
+        output = BytesIO()
+        with pd.ExcelWriter(output, engine="openpyxl") as writer:
+            if not trx_ms.empty:
+                trx_ms.round(2).reset_index().rename(columns={"YR_QTR_TXT": "Quarter"}).to_excel(writer, sheet_name="TRX Market Share", index=False)
+            if not nbrx_ms.empty:
+                nbrx_ms.round(2).reset_index().rename(columns={"YR_QTR_TXT": "Quarter"}).to_excel(writer, sheet_name="NBRX Market Share", index=False)
+            if not trx_claims.empty:
+                trx_claims.reset_index().rename(columns={"YR_QTR_TXT": "Quarter"}).to_excel(writer, sheet_name="TRX Claims", index=False)
+            if not nbrx_claims.empty:
+                nbrx_claims.reset_index().rename(columns={"YR_QTR_TXT": "Quarter"}).to_excel(writer, sheet_name="NBRX Claims", index=False)
+        return output.getvalue()
+
+    excel_data = generate_excel()
+    st.download_button(
+        label="\U0001f4e5 Download Excel Report",
+        data=excel_data,
+        file_name=f"{display_name.lower()}_report.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+
+
+# =====================================================
+# HOME PAGE
+# =====================================================
+
+def render_home():
+    render_ribbon("Primary Care Monthly Report Dashboard")
+    st.markdown(HOME_BUTTON_CSS, unsafe_allow_html=True)
+
+    # Refresh timestamp
+    from datetime import datetime
+    try:
+        max_date_df = dataiku.Dataset("SQL_NPA_MAX_DATE_SF").get_dataframe()
+        max_date_raw = str(max_date_df.iloc[0, 0]).split(" ")[0]
+    except Exception:
+        max_date_raw = "N/A"
+
+    try:
+        import pytz
+        client = dataiku.api_client()
+        project = client.get_default_project()
+        ds = project.get_dataset(DATASET_NAME)
+        last_metrics = ds.get_last_metric_values()
+        build_date_metric = last_metrics.get_metric_by_id("reporting:BUILD_START_DATE")
+        build_date_val = build_date_metric.get("lastValues", [{}])[0].get("value", None) if build_date_metric else None
+        if build_date_val:
+            utc_time = datetime.strptime(build_date_val, "%Y-%m-%dT%H:%M:%S.%fZ")
+            ist = pytz.timezone("Asia/Kolkata")
+            ist_time = pytz.utc.localize(utc_time).astimezone(ist)
+            refresh_ts = ist_time.strftime("%B %d, %Y at %I:%M %p IST")
+        else:
+            refresh_ts = max_date_raw
+    except Exception:
+        refresh_ts = max_date_raw
+
+    st.markdown(f"""
+    <div style="background: rgba(255,255,255,0.55); backdrop-filter: saturate(180%) blur(14px); border-radius: 14px; padding: 16px 24px; box-shadow: 0 2px 8px rgba(15,23,42,0.05); border: 1px solid rgba(15,23,42,0.08); border-left: 4px solid #1C4FC0; margin-bottom: 20px;">
+        <div style="font-size: 14px; font-weight: 700; color: #0A1A3D; margin-bottom: 8px; font-family: 'Manrope', sans-serif;">Data Summary</div>
+        <span style="font-size: 13px; color: #0F172A;"><strong>NPA:</strong> Till {max_date_raw} &nbsp;|&nbsp; <strong>DDD:</strong> Till {max_date_raw} &nbsp;|&nbsp; <strong>LAAD:</strong> Till {max_date_raw} &nbsp;|&nbsp; <strong>Refreshed:</strong> {refresh_ts}</span>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("### Select a brand for Deep Dive QoQ Analysis")
+
+    brands = list(BRAND_CONFIG.keys())
+    for row_start in range(0, len(brands), 4):
+        row_brands = brands[row_start:row_start + 4]
+        cols = st.columns(4)
+        for i, brand_key in enumerate(row_brands):
+            with cols[i]:
+                if st.button(BRAND_CONFIG[brand_key]["display_name"], key=f'{brand_key}_btn', use_container_width=True):
+                    st.session_state["current_page"] = brand_key
+                    st.rerun()
+
+
+# =====================================================
+# ROUTING
+# =====================================================
+
+if "current_page" not in st.session_state:
+    st.session_state["current_page"] = "home"
+
+page = st.session_state["current_page"]
+
+if page == "home":
+    render_home()
+elif page in BRAND_CONFIG:
+    render_brand_page(page)
