@@ -227,6 +227,15 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
 .card-title{{font-family:'Manrope',sans-serif;font-size:1.02rem;font-weight:700;color:var(--navy-900);line-height:1.25;margin-bottom:0.3rem}}
 .card-sources{{display:flex;gap:0.35rem;flex-wrap:wrap;margin-top:auto}}
 .source-chip{{font-size:0.62rem;font-weight:600;color:var(--navy-700);background:rgba(28,79,192,0.08);padding:0.15rem 0.45rem;border-radius:4px;letter-spacing:0.03em}}
+.agent-categories{{display:grid;grid-template-columns:repeat(2,1fr);gap:1.2rem;margin-top:0.5rem}}
+.agent-cat-card{{position:relative;background:var(--surface);border:1px solid var(--hairline);border-radius:14px;padding:1.5rem 1.4rem;cursor:pointer;transition:transform 0.28s var(--ease-out),box-shadow 0.28s var(--ease),border-color 0.18s var(--ease);box-shadow:var(--shadow-sm)}}
+.agent-cat-card:hover{{transform:translateY(-3px);box-shadow:var(--shadow-lg);border-color:rgba(28,79,192,0.2)}}
+.agent-cat-card.selected{{border-color:var(--navy-600);box-shadow:0 0 0 2px rgba(28,79,192,0.12),var(--shadow-md)}}
+.agent-cat-card.selected::before{{content:'';position:absolute;top:-1px;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--navy-600),var(--accent));border-radius:14px 14px 0 0}}
+.agent-cat-icon{{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#EDE9FE,#DDD6FE);margin-bottom:0.9rem}}
+.agent-cat-icon svg{{width:20px;height:20px;stroke:#6D28D9}}
+.agent-cat-title{{font-family:'Manrope',sans-serif;font-size:1.05rem;font-weight:700;color:var(--navy-900);margin-bottom:0.35rem}}
+.agent-cat-desc{{font-size:0.8rem;color:var(--text-muted);line-height:1.55}}
 .card-desc{{font-size:0.8rem;color:var(--text-muted);line-height:1.5;flex:1;margin-bottom:0.85rem}}
 .dest-pill{{display:inline-flex;align-items:center;gap:0.35rem;font-size:0.7rem;font-weight:600;color:var(--text-soft);padding:0.22rem 0.55rem;border-radius:6px;background:rgba(15,23,42,0.05);align-self:flex-start}}
 .hero{{position:relative;background:radial-gradient(ellipse 90% 80% at 20% 20%,rgba(28,79,192,0.06) 0%,transparent 50%),radial-gradient(ellipse 60% 70% at 80% 80%,rgba(65,182,230,0.05) 0%,transparent 50%),linear-gradient(135deg,rgba(255,255,255,0.9) 0%,rgba(248,250,253,0.95) 100%);border-radius:16px;padding:2rem 2rem 1.6rem;border:1px solid var(--hairline-2);box-shadow:var(--shadow-sm);overflow:hidden}}
@@ -343,16 +352,29 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
 
     <!-- AGENTS SECTION -->
     <section class="section" id="agents">
-        <div class="section-head"><h2>CoWork Agents</h2><p>AI-powered analytical agents for automated insights and conversational data exploration.</p></div>
-        <div style="text-align:center;padding:3rem 0;">
-            <div style="display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:16px;background:rgba(28,79,192,0.06);margin-bottom:1rem;">
-                <span style="font-size:28px;">&#129302;</span>
+        <div class="section-head"><h2>CoWork Agents</h2><p>AI-powered analytical agents for conversational data exploration and automated insights.</p></div>
+        <div class="agent-categories">
+            <div class="agent-cat-card" onclick="document.getElementById('agents-ta').style.display='block';document.getElementById('agents-tad').style.display='none';document.getElementById('agents-home').style.display='none';this.classList.add('selected');this.nextElementSibling.classList.remove('selected');">
+                <div class="agent-cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l2.5 2.5"/></svg></div>
+                <div class="agent-cat-title">Therapy Area Agents</div>
+                <div class="agent-cat-desc">Agents focused on specific therapeutic areas — query market performance, trends, and competitive dynamics by brand.</div>
             </div>
-            <div style="font-family:'Manrope',sans-serif;font-weight:800;font-size:18px;color:var(--navy-900);margin-bottom:0.5rem;">CoWork Agents</div>
-            <div style="font-size:13px;color:var(--text-muted);line-height:1.7;max-width:480px;margin:0 auto;">AI-powered analytical agents are being developed to assist with market insights, competitive intelligence, and automated reporting.</div>
-            <div style="margin-top:1.2rem;display:inline-block;padding:6px 16px;border-radius:8px;background:rgba(28,79,192,0.06);border:1px solid rgba(28,79,192,0.12);">
-                <span style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;color:var(--navy-600);letter-spacing:0.02em;">Coming Soon</span>
+            <div class="agent-cat-card" onclick="document.getElementById('agents-tad').style.display='block';document.getElementById('agents-ta').style.display='none';document.getElementById('agents-home').style.display='none';this.classList.add('selected');this.previousElementSibling.classList.remove('selected');">
+                <div class="agent-cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></div>
+                <div class="agent-cat-title">Therapy Area + Data Source Agents</div>
+                <div class="agent-cat-desc">Agents combining therapeutic area context with specific data sources — NPA, DDD, LAAD — for deep analytical queries.</div>
             </div>
+        </div>
+        <div id="agents-home"></div>
+        <div id="agents-ta" style="display:none;padding-top:1.2rem;">
+            <div class="sub-panel-title">Therapy Area Agents</div>
+            <div class="sub-panel-desc">Select an agent below to explore therapy-area-specific insights.</div>
+            <div style="font-size:0.84rem;color:var(--text-muted);padding:2rem 0;text-align:center;border:2px dashed var(--hairline);border-radius:12px;background:var(--surface);">Agent cards will appear here</div>
+        </div>
+        <div id="agents-tad" style="display:none;padding-top:1.2rem;">
+            <div class="sub-panel-title">Therapy Area + Data Source Agents</div>
+            <div class="sub-panel-desc">Select an agent below for data-source-specific analytical queries.</div>
+            <div style="font-size:0.84rem;color:var(--text-muted);padding:2rem 0;text-align:center;border:2px dashed var(--hairline);border-radius:12px;background:var(--surface);">Agent cards will appear here</div>
         </div>
     </section>
 </main>
