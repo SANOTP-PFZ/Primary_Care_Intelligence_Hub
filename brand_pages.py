@@ -182,7 +182,7 @@ def render_back_button():
     """Render back button (pill style via CSS)."""
     st.markdown("<div style='height:6px'></div>", unsafe_allow_html=True)
     if st.button("\u2190 Back to Home", key="back_btn"):
-        st.session_state["nav_state"] = "home"
+        st.query_params.clear()
         st.rerun()
 
 
