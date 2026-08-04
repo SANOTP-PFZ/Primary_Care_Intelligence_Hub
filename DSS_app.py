@@ -108,14 +108,14 @@ BRAND_CONFIG = {
 }
 
 BRANDS_LIST = [
-    ("Nurtec", "nurtec", "Oral CGRP market analytics"),
-    ("Eliquis", "eliquis", "Oral Anticoagulant market analytics"),
-    ("Prevnar", "prevnar", "PCV market analytics"),
-    ("Comirnaty", "comirnaty", "COVID Vaccines market analytics"),
-    ("Abrysvo", "abrysvo", "RSV market analytics"),
-    ("Paxlovid", "paxlovid", "COVID Oral Treatment analytics"),
-    ("Zavzpret", "zavzpret", "Zavzpret market analytics"),
-    ("Beyfortus", "beyfortus", "Beyfortus market analytics"),
+    ("Nurtec", "nurtec", ["NPA"]),
+    ("Eliquis", "eliquis", ["NPA"]),
+    ("Prevnar", "prevnar", ["NPA", "DDD"]),
+    ("Comirnaty", "comirnaty", ["NPA", "DDD"]),
+    ("Abrysvo", "abrysvo", ["NPA", "DDD"]),
+    ("Paxlovid", "paxlovid", ["NPA"]),
+    ("Zavzpret", "zavzpret", ["NPA"]),
+    ("Beyfortus", "beyfortus", ["LAAD"]),
 ]
 
 # =====================================================
@@ -151,8 +151,9 @@ else:
 
     # Build brand cards HTML for dashboard section
     brand_cards_grid = ""
-    for name, key, desc in BRANDS_LIST:
-        brand_cards_grid += f'''<div class="card" onclick="window.open(window.parent.location.origin + window.parent.location.pathname + '?brand={key}', '_blank')"><div class="card-top"><span class="icon-chip chip-s1"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-9 4 18 3-9h4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span></div><div class="card-title">{name}</div></div>'''
+    for name, key, sources in BRANDS_LIST:
+        chips_html = ''.join(f'<span class="source-chip">{s}</span>' for s in sources)
+        brand_cards_grid += f'''<div class="card" onclick="window.open(window.parent.location.origin + window.parent.location.pathname + '?brand={key}', '_blank')"><div class="card-top"><span class="icon-chip chip-s1"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-9 4 18 3-9h4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span></div><div class="card-title">{name}</div><div class="card-sources">{chips_html}</div></div>'''
 
     landing_html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -224,6 +225,8 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
 .chip-s3{{background:linear-gradient(135deg,#EDE9FE,#DDD6FE)}}
 .chip-s3 svg{{stroke:#6D28D9}}
 .card-title{{font-family:'Manrope',sans-serif;font-size:1.02rem;font-weight:700;color:var(--navy-900);line-height:1.25;margin-bottom:0.3rem}}
+.card-sources{{display:flex;gap:0.35rem;flex-wrap:wrap;margin-top:auto}}
+.source-chip{{font-size:0.62rem;font-weight:600;color:var(--navy-700);background:rgba(28,79,192,0.08);padding:0.15rem 0.45rem;border-radius:4px;letter-spacing:0.03em}}
 .card-desc{{font-size:0.8rem;color:var(--text-muted);line-height:1.5;flex:1;margin-bottom:0.85rem}}
 .dest-pill{{display:inline-flex;align-items:center;gap:0.35rem;font-size:0.7rem;font-weight:600;color:var(--text-soft);padding:0.22rem 0.55rem;border-radius:6px;background:rgba(15,23,42,0.05);align-self:flex-start}}
 .hero{{position:relative;background:radial-gradient(ellipse 90% 80% at 20% 20%,rgba(28,79,192,0.06) 0%,transparent 50%),radial-gradient(ellipse 60% 70% at 80% 80%,rgba(65,182,230,0.05) 0%,transparent 50%),linear-gradient(135deg,rgba(255,255,255,0.9) 0%,rgba(248,250,253,0.95) 100%);border-radius:16px;padding:2rem 2rem 1.6rem;border:1px solid var(--hairline-2);box-shadow:var(--shadow-sm);overflow:hidden}}
