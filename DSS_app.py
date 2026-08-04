@@ -237,18 +237,31 @@ if nav in ("home", "deepdive"):
 
     sidebar_col, main_col = st.columns([232, 900], gap="small")
 
-    # --- LEFT COLUMN: Sidebar with real nav buttons ---
+    # --- LEFT COLUMN: Stitched sidebar (header + real buttons + footer) ---
     with sidebar_col:
-        # CSS to style sidebar buttons as nav items (override the brand-tile button styles)
-        deepdive_active = "background: linear-gradient(90deg,rgba(28,79,192,0.10) 0%,rgba(28,79,192,0.04) 100%) !important; color: #163990 !important; font-weight: 600 !important; border-left: 3px solid #1C4FC0 !important; border-radius: 0 8px 8px 0 !important;" if nav == "deepdive" else ""
+        # CSS: zero-gap in sidebar column + style buttons as nav items
+        deepdive_active_css = """
+            [data-testid="column"]:first-child .stButton:first-of-type > button {
+                background: linear-gradient(90deg,rgba(28,79,192,0.10) 0%,rgba(28,79,192,0.04) 100%) !important;
+                color: #163990 !important;
+                font-weight: 600 !important;
+                border-left: 3px solid #1C4FC0 !important;
+            }
+        """ if nav == "deepdive" else ""
+
         st.markdown(f"""
         <style>
-            /* Sidebar nav buttons — override brand tile styles for first column */
+            /* Remove gap between elements in sidebar column so pieces stitch together */
+            [data-testid="column"]:first-child [data-testid="stVerticalBlock"] {{
+                gap: 0 !important;
+            }}
+            /* Make sidebar buttons look like nav items */
             [data-testid="column"]:first-child .stButton > button {{
-                background: transparent !important;
+                background: rgba(255,255,255,0.0) !important;
                 border: none !important;
-                border-radius: 8px !important;
-                padding: 0.5rem 0.7rem !important;
+                border-left: 3px solid transparent !important;
+                border-radius: 0 !important;
+                padding: 0.55rem 0.7rem 0.55rem 1.25rem !important;
                 color: #475569 !important;
                 font-size: 0.84rem !important;
                 font-weight: 500 !important;
@@ -262,44 +275,47 @@ if nav in ("home", "deepdive"):
                 transform: none !important;
                 aspect-ratio: unset !important;
                 cursor: pointer !important;
+                margin: 0 !important;
             }}
             [data-testid="column"]:first-child .stButton > button:hover {{
-                background: rgba(28,79,192,0.06) !important;
+                background: rgba(28,79,192,0.05) !important;
                 color: #163990 !important;
                 transform: none !important;
                 box-shadow: none !important;
             }}
-            /* Active state for Deep Dive button */
-            [data-testid="column"]:first-child .stButton:first-of-type > button {{
-                {deepdive_active}
+            [data-testid="column"]:first-child .stButton {{
+                margin: 0 !important;
+                padding: 0 !important;
             }}
+            /* Active state for Deep Dive button */
+            {deepdive_active_css}
         </style>
         """, unsafe_allow_html=True)
 
-        # Sidebar top: Logo + Title + Divider + Label
+        # --- Part 1: Header (top-rounded glass container) ---
         st.markdown("""
-        <div style="background:rgba(255,255,255,0.62); backdrop-filter:saturate(180%) blur(22px); -webkit-backdrop-filter:saturate(180%) blur(22px); border:1px solid rgba(15,23,42,0.08); border-radius:18px; box-shadow:0 8px 24px rgba(15,23,42,0.07),0 2px 6px rgba(15,23,42,0.04); padding:14px 1.2rem 0.6rem; margin-bottom:0;">
+        <div style="background:rgba(255,255,255,0.62); backdrop-filter:saturate(180%) blur(22px); -webkit-backdrop-filter:saturate(180%) blur(22px); border:1px solid rgba(15,23,42,0.08); border-bottom:none; border-radius:18px 18px 0 0; box-shadow:0 8px 24px rgba(15,23,42,0.07),0 2px 6px rgba(15,23,42,0.04); padding:14px 1.2rem 0.6rem;">
             <div style="display:flex; flex-direction:column; gap:0.5rem; margin-bottom:0.8rem;">
                 <img src="https://cdn.pfizer.com/pfizercom/2022-10/Pfizer_Logo_Color_CMYK.png" style="height:28px; align-self:flex-start;" />
                 <div style="font-family:'Manrope',sans-serif; font-weight:800; font-size:1.2rem; color:#0A1A3D; line-height:1.18; letter-spacing:-0.025em;">Primary Care<br>Intelligence Hub</div>
                 <div style="font-size:0.72rem; color:#64748B; font-weight:500;">Pfizer Analytics</div>
             </div>
             <div style="height:1px; background:rgba(15,23,42,0.08); margin:0 -0.3rem 0.6rem;"></div>
-            <div style="font-family:'Manrope',sans-serif; font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:#64748B; margin-bottom:0.3rem;">Primary Care Workspace</div>
+            <div style="font-family:'Manrope',sans-serif; font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:#64748B; margin-bottom:0;">Primary Care Workspace</div>
         </div>
         """, unsafe_allow_html=True)
 
-        # Real navigation buttons
+        # --- Part 2: Real navigation buttons ---
         if st.button("📊  Deep Dive Dashboards", key="nav_deepdive"):
             st.session_state["nav_state"] = "deepdive"
             st.rerun()
 
         if st.button("🤖  CoWork Agents", key="nav_cowork"):
-            pass  # Placeholder for future feature
+            pass  # Placeholder
 
-        # Sidebar footer
+        # --- Part 3: Footer (bottom-rounded glass container) ---
         st.markdown("""
-        <div style="margin-top:auto; padding:0.85rem 1.15rem 1rem; font-size:0.7rem; color:#64748B; line-height:1.55; border-top:1px solid rgba(15,23,42,0.08); background:linear-gradient(180deg,transparent 0%,rgba(28,79,192,0.025) 100%); border-radius:0 0 18px 18px;">
+        <div style="background:rgba(255,255,255,0.62); backdrop-filter:saturate(180%) blur(22px); -webkit-backdrop-filter:saturate(180%) blur(22px); border:1px solid rgba(15,23,42,0.08); border-top:1px solid rgba(15,23,42,0.06); border-radius:0 0 18px 18px; padding:0.85rem 1.15rem 1rem; font-size:0.7rem; color:#64748B; line-height:1.55; margin-top:auto;">
             <div style="margin-bottom:0.2rem;"><strong style="color:#475569;font-weight:600;">Primary Care Analytics</strong></div>
             <div>Team_ZS_PC_Analytics@zs.com</div>
         </div>
@@ -360,17 +376,17 @@ if nav in ("home", "deepdive"):
         """
         st.components.v1.html(summary_html, height=430, scrolling=False)
 
-        # Separator line
+        # Separator
         st.markdown("""
         <div style="text-align:center; padding:0.15rem 0 0.5rem;">
             <div style="width:80px; height:1px; background:linear-gradient(90deg,transparent,rgba(28,79,192,0.3),transparent); margin:0 auto;"></div>
         </div>
         """, unsafe_allow_html=True)
 
-        # --- Conditional: Mission Text (home) vs Brand Tiles (deepdive) ---
+        # Conditional: Mission text (home) vs Brand tiles (deepdive)
         if nav == "home":
             st.markdown("""
-            <div style="text-align:center; padding:0.5rem 0 0;">
+            <div style="text-align:center; padding:0.6rem 0 0;">
                 <div style="font-family:'Manrope',sans-serif; font-weight:800; font-size:18px; color:#0A1A3D; letter-spacing:-0.02em; margin-bottom:0.5rem;">Welcome to the Primary Care Intelligence Hub</div>
                 <div style="font-size:13px; color:#475569; line-height:1.7; max-width:580px; margin:0 auto;">
                     Empowering Pfizer's Primary Care business with real-time market intelligence, competitive analytics, and actionable insights across our key therapeutic brands. This platform consolidates NPA, DDD, and LAAD data sources into unified quarterly performance views.
@@ -381,15 +397,15 @@ if nav in ("home", "deepdive"):
             </div>
             """, unsafe_allow_html=True)
 
-        elif nav == "deepdive":
+        else:
+            # Deep Dive header + brand tiles
             st.markdown("""
-            <div style="text-align:center; padding:0.3rem 0 0.6rem;">
+            <div style="text-align:center; padding:0.1rem 0 0.6rem;">
                 <div style="font-family:'Manrope',sans-serif; font-weight:700; font-size:15px; color:#0A1A3D; letter-spacing:-0.01em;">Deep Dive Dashboards</div>
                 <div style="font-size:12px; color:#64748B; font-weight:400; margin-top:0.15rem;">Select a brand to explore detailed QoQ analysis, competitive trends, and exportable reports</div>
             </div>
             """, unsafe_allow_html=True)
 
-            # Brand tile buttons
             brands_list = [
                 ("Nurtec", "nurtec"), ("Eliquis", "eliquis"), ("Prevnar", "prevnar"), ("Comirnaty", "comirnaty"),
                 ("Abrysvo", "abrysvo"), ("Paxlovid", "paxlovid"), ("Zavzpret", "zavzpret"), ("Beyfortus", "beyfortus"),
