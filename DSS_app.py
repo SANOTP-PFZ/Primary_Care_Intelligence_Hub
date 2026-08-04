@@ -237,87 +237,45 @@ if nav in ("home", "deepdive"):
 
     sidebar_col, main_col = st.columns([232, 900], gap="small")
 
-    # --- LEFT COLUMN: Stitched sidebar (header + real buttons + footer) ---
+    # --- LEFT COLUMN: Decorative sidebar (state-aware highlighting) ---
     with sidebar_col:
-        # CSS: zero-gap in sidebar column + style buttons as nav items
-        deepdive_active_css = """
-            [data-testid="column"]:first-child .stButton:first-of-type > button {
-                background: linear-gradient(90deg,rgba(28,79,192,0.10) 0%,rgba(28,79,192,0.04) 100%) !important;
-                color: #163990 !important;
-                font-weight: 600 !important;
-                border-left: 3px solid #1C4FC0 !important;
-            }
-        """ if nav == "deepdive" else ""
+        # Dynamic styles based on nav state
+        if nav == "deepdive":
+            dd_bg = "background:linear-gradient(90deg,rgba(28,79,192,0.10) 0%,rgba(28,79,192,0.04) 100%);"
+            dd_color = "color:#163990;"
+            dd_weight = "font-weight:600;"
+            dd_bar = '<div style="position:absolute;left:-0.55rem;top:6px;bottom:6px;width:3px;border-radius:0 3px 3px 0;background:linear-gradient(180deg,#1C4FC0,#41B6E6);box-shadow:0 0 8px rgba(28,79,192,0.3);"></div>'
+        else:
+            dd_bg = ""
+            dd_color = "color:#475569;"
+            dd_weight = "font-weight:500;"
+            dd_bar = ""
 
         st.markdown(f"""
-        <style>
-            /* Remove gap between elements in sidebar column so pieces stitch together */
-            [data-testid="column"]:first-child [data-testid="stVerticalBlock"] {{
-                gap: 0 !important;
-            }}
-            /* Make sidebar buttons look like nav items */
-            [data-testid="column"]:first-child .stButton > button {{
-                background: rgba(255,255,255,0.0) !important;
-                border: none !important;
-                border-left: 3px solid transparent !important;
-                border-radius: 0 !important;
-                padding: 0.55rem 0.7rem 0.55rem 1.25rem !important;
-                color: #475569 !important;
-                font-size: 0.84rem !important;
-                font-weight: 500 !important;
-                font-family: 'Inter', sans-serif !important;
-                min-height: auto !important;
-                height: auto !important;
-                width: 100% !important;
-                text-align: left !important;
-                justify-content: flex-start !important;
-                box-shadow: none !important;
-                transform: none !important;
-                aspect-ratio: unset !important;
-                cursor: pointer !important;
-                margin: 0 !important;
-            }}
-            [data-testid="column"]:first-child .stButton > button:hover {{
-                background: rgba(28,79,192,0.05) !important;
-                color: #163990 !important;
-                transform: none !important;
-                box-shadow: none !important;
-            }}
-            [data-testid="column"]:first-child .stButton {{
-                margin: 0 !important;
-                padding: 0 !important;
-            }}
-            /* Active state for Deep Dive button */
-            {deepdive_active_css}
-        </style>
-        """, unsafe_allow_html=True)
-
-        # --- Part 1: Header (top-rounded glass container) ---
-        st.markdown("""
-        <div style="background:rgba(255,255,255,0.62); backdrop-filter:saturate(180%) blur(22px); -webkit-backdrop-filter:saturate(180%) blur(22px); border:1px solid rgba(15,23,42,0.08); border-bottom:none; border-radius:18px 18px 0 0; box-shadow:0 8px 24px rgba(15,23,42,0.07),0 2px 6px rgba(15,23,42,0.04); padding:14px 1.2rem 0.6rem;">
-            <div style="display:flex; flex-direction:column; gap:0.5rem; margin-bottom:0.8rem;">
+        <div style="background:rgba(255,255,255,0.62); backdrop-filter:saturate(180%) blur(22px); -webkit-backdrop-filter:saturate(180%) blur(22px); border:1px solid rgba(15,23,42,0.08); border-radius:18px; box-shadow:0 8px 24px rgba(15,23,42,0.07),0 2px 6px rgba(15,23,42,0.04); display:flex; flex-direction:column; height:calc(100vh - 20px); overflow:hidden;">
+            <div style="padding:14px 1.2rem 1rem; display:flex; flex-direction:column; gap:0.5rem;">
                 <img src="https://cdn.pfizer.com/pfizercom/2022-10/Pfizer_Logo_Color_CMYK.png" style="height:28px; align-self:flex-start;" />
                 <div style="font-family:'Manrope',sans-serif; font-weight:800; font-size:1.2rem; color:#0A1A3D; line-height:1.18; letter-spacing:-0.025em;">Primary Care<br>Intelligence Hub</div>
                 <div style="font-size:0.72rem; color:#64748B; font-weight:500;">Pfizer Analytics</div>
             </div>
-            <div style="height:1px; background:rgba(15,23,42,0.08); margin:0 -0.3rem 0.6rem;"></div>
-            <div style="font-family:'Manrope',sans-serif; font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:#64748B; margin-bottom:0;">Primary Care Workspace</div>
-        </div>
-        """, unsafe_allow_html=True)
-
-        # --- Part 2: Real navigation buttons ---
-        if st.button("📊  Deep Dive Dashboards", key="nav_deepdive"):
-            st.session_state["nav_state"] = "deepdive"
-            st.rerun()
-
-        if st.button("🤖  CoWork Agents", key="nav_cowork"):
-            pass  # Placeholder
-
-        # --- Part 3: Footer (bottom-rounded glass container) ---
-        st.markdown("""
-        <div style="background:rgba(255,255,255,0.62); backdrop-filter:saturate(180%) blur(22px); -webkit-backdrop-filter:saturate(180%) blur(22px); border:1px solid rgba(15,23,42,0.08); border-top:1px solid rgba(15,23,42,0.06); border-radius:0 0 18px 18px; padding:0.85rem 1.15rem 1rem; font-size:0.7rem; color:#64748B; line-height:1.55; margin-top:auto;">
-            <div style="margin-bottom:0.2rem;"><strong style="color:#475569;font-weight:600;">Primary Care Analytics</strong></div>
-            <div>Team_ZS_PC_Analytics@zs.com</div>
+            <div style="height:1px; background:rgba(15,23,42,0.08); margin:0 0.85rem;"></div>
+            <div style="font-family:'Manrope',sans-serif; font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:#64748B; padding:0.95rem 1.15rem 0.4rem;">Primary Care Workspace</div>
+            <div style="padding:0 0.55rem;">
+                <div style="position:relative; display:flex; align-items:center; gap:0.7rem; padding:0.55rem 0.7rem; border-radius:8px; {dd_bg} {dd_color} font-size:0.84rem; {dd_weight} font-family:'Inter',sans-serif;">
+                    <span style="width:18px;height:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg viewBox="0 0 24 24" width="16" height="16" style="fill:none;stroke:currentColor;stroke-width:1.8;"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
+                    <span>Deep Dive Dashboards</span>
+                    {dd_bar}
+                </div>
+                <div style="display:flex; align-items:center; gap:0.7rem; padding:0.55rem 0.7rem; margin-top:0.08rem; border-radius:8px; color:#475569; font-size:0.84rem; font-weight:500; font-family:'Inter',sans-serif;">
+                    <span style="width:18px;height:18px;display:flex;align-items:center;justify-content:center;color:#64748B;flex-shrink:0;"><svg viewBox="0 0 24 24" width="16" height="16" style="fill:none;stroke:currentColor;stroke-width:1.8;"><rect x="6" y="6" width="12" height="10" rx="2"/><path d="M9 16v3M15 16v3M9 6V3M15 6V3M3 11h3M18 11h3"/></svg></span>
+                    <span>CoWork Agents</span>
+                </div>
+            </div>
+            <div style="flex:1;"></div>
+            <div style="padding:0.85rem 1.15rem 1rem; font-size:0.7rem; color:#64748B; line-height:1.55; border-top:1px solid rgba(15,23,42,0.08); background:linear-gradient(180deg,transparent 0%,rgba(28,79,192,0.025) 100%);">
+                <div style="margin-bottom:0.2rem;"><strong style="color:#475569;font-weight:600;">Primary Care Analytics</strong></div>
+                <div>Team_ZS_PC_Analytics@zs.com</div>
+            </div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -386,16 +344,20 @@ if nav in ("home", "deepdive"):
         # Conditional: Mission text (home) vs Brand tiles (deepdive)
         if nav == "home":
             st.markdown("""
-            <div style="text-align:center; padding:0.6rem 0 0;">
+            <div style="text-align:center; padding:0.6rem 0 0.3rem;">
                 <div style="font-family:'Manrope',sans-serif; font-weight:800; font-size:18px; color:#0A1A3D; letter-spacing:-0.02em; margin-bottom:0.5rem;">Welcome to the Primary Care Intelligence Hub</div>
                 <div style="font-size:13px; color:#475569; line-height:1.7; max-width:580px; margin:0 auto;">
                     Empowering Pfizer's Primary Care business with real-time market intelligence, competitive analytics, and actionable insights across our key therapeutic brands. This platform consolidates NPA, DDD, and LAAD data sources into unified quarterly performance views.
                 </div>
-                <div style="margin-top:0.8rem; font-size:12px; color:#64748B;">
-                    Select <strong style="color:#1C4FC0;">Deep Dive Dashboards</strong> in the sidebar to explore brand-level QoQ analysis.
-                </div>
             </div>
             """, unsafe_allow_html=True)
+
+            # CTA button to switch to Deep Dive view
+            cta_col1, cta_col2, cta_col3 = st.columns([2, 1.5, 2])
+            with cta_col2:
+                if st.button("Explore Deep Dive Dashboards →", key="cta_deepdive", use_container_width=True):
+                    st.session_state["nav_state"] = "deepdive"
+                    st.rerun()
 
         else:
             # Deep Dive header + brand tiles
