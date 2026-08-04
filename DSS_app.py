@@ -271,7 +271,7 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
     <div class="sidebar-divider"></div>
     <div class="sidebar-section-label">Primary Care Workspace</div>
     <nav class="nav" id="sidebarNav">
-        <button class="nav-item active" data-target="dashboards">
+        <button class="nav-item" data-target="dashboards">
             <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
             <span class="nav-label">Deep-Dive Dashboards</span>
             <span class="nav-count">8</span>
@@ -314,8 +314,21 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
     </div>
     <div class="workspace-divider"></div>
 
+    <!-- HOME SECTION (default) -->
+    <section class="section is-active is-visible" id="home">
+        <div style="text-align:center;padding:2.5rem 0 0;">
+            <div style="font-family:'Manrope',sans-serif;font-weight:800;font-size:1.4rem;color:var(--navy-900);letter-spacing:-0.02em;margin-bottom:0.6rem;">Welcome to the Primary Care Intelligence Hub</div>
+            <div style="font-size:0.88rem;color:var(--text-muted);line-height:1.8;max-width:600px;margin:0 auto;">
+                Empowering Pfizer's Primary Care business with real-time market intelligence, competitive analytics, and actionable insights across our key therapeutic brands. This platform consolidates NPA, DDD, and LAAD data sources into unified quarterly performance views.
+            </div>
+            <div style="margin-top:1.2rem;font-size:0.8rem;color:var(--text-muted);">
+                Select <strong style="color:var(--navy-600);">Deep-Dive Dashboards</strong> or <strong style="color:var(--navy-600);">CoWork Agents</strong> from the sidebar to get started.
+            </div>
+        </div>
+    </section>
+
     <!-- DASHBOARDS SECTION -->
-    <section class="section is-active is-visible" id="dashboards">
+    <section class="section" id="dashboards">
         <div class="section-head">
             <div class="section-head-row"><h2>Deep-Dive Dashboards</h2></div>
             <p>Select a brand to explore detailed QoQ analysis, competitive trends, and exportable reports.</p>
@@ -354,7 +367,7 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
     }});
     var nav = document.getElementById('sidebarNav');
     var items = nav.querySelectorAll('.nav-item');
-    var sections = {{}};
+    var sections = {{'home': document.getElementById('home')}};
     items.forEach(function(it){{ sections[it.dataset.target] = document.getElementById(it.dataset.target); }});
     var switching = false;
     function showSection(id) {{
