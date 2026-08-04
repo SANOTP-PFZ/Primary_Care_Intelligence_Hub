@@ -152,7 +152,7 @@ else:
     # Build brand cards HTML for dashboard section
     brand_cards_grid = ""
     for name, key, desc in BRANDS_LIST:
-        brand_cards_grid += f'''<div class="card" onclick="window.open(window.parent.location.origin + window.parent.location.pathname + '?brand={key}', '_blank')"><div class="card-top"><span class="icon-chip chip-s1"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-9 4 18 3-9h4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span></div><div class="card-title">{name}</div><div class="card-desc">{desc}</div></div>'''
+        brand_cards_grid += f'''<div class="card" onclick="window.open(window.parent.location.origin + window.parent.location.pathname + '?brand={key}', '_blank')"><div class="card-top"><span class="icon-chip chip-s1"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-9 4 18 3-9h4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span></div><div class="card-title">{name}</div></div>'''
 
     landing_html = f"""<!DOCTYPE html>
 <html lang="en">
