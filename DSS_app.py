@@ -239,9 +239,14 @@ if nav in ("home", "deepdive", "cowork"):
 
     # --- LEFT COLUMN: Sidebar with clickable nav ---
     with sidebar_col:
+        # Determine which nav item is active
+        active_nav = nav  # "home", "deepdive", or "cowork"
+
+        # CSS: hide the real Streamlit buttons visually but keep them clickable,
+        # and style the sidebar column as the glassmorphism card
         st.markdown("""
         <style>
-            /* ─── SIDEBAR CARD ─── */
+            /* ─── SIDEBAR COLUMN → single glassmorphism card ─── */
             [data-testid="column"]:first-child {
                 min-height: calc(100vh - 16px) !important;
                 height: calc(100vh - 16px) !important;
@@ -261,106 +266,122 @@ if nav in ("home", "deepdive", "cowork"):
             [data-testid="column"]:first-child [data-testid="stVerticalBlock"] {
                 gap: 0 !important;
             }
-
-            /* ─── NAV BUTTONS — match reference styling ─── */
+            /* ─── HIDE real Streamlit buttons (invisible but clickable) ─── */
             [data-testid="column"]:first-child .stButton {
-                margin: 1px 0.55rem !important;
+                position: absolute !important;
+                opacity: 0 !important;
+                pointer-events: none !important;
+                height: 0 !important;
+                overflow: hidden !important;
+                margin: 0 !important;
                 padding: 0 !important;
             }
-            [data-testid="column"]:first-child .stButton > button {
-                position: relative !important;
-                background: transparent !important;
-                border: none !important;
-                border-radius: 8px !important;
-                padding: 0.55rem 0.7rem !important;
-                color: #475569 !important;
-                font-size: 0.84rem !important;
-                font-weight: 500 !important;
-                font-family: 'Inter', system-ui, sans-serif !important;
-                min-height: 36px !important;
-                height: auto !important;
-                width: 100% !important;
-                text-align: left !important;
-                justify-content: flex-start !important;
-                box-shadow: none !important;
-                transform: none !important;
-                aspect-ratio: unset !important;
-                cursor: pointer !important;
-                letter-spacing: -0.005em !important;
-                transition: background 0.18s cubic-bezier(0.4,0,0.2,1), color 0.18s cubic-bezier(0.4,0,0.2,1) !important;
-            }
-            [data-testid="column"]:first-child .stButton > button:hover {
-                background: rgba(15,23,42,0.04) !important;
-                color: #0F172A !important;
-                transform: none !important;
-                box-shadow: none !important;
-            }
-
-            /* ─── ACTIVE STATE — gradient bar with glow (reference match) ─── */
-            [data-testid="column"]:first-child .stButton > button.nav-active,
-            [data-testid="column"]:first-child .stButton > button[kind="secondary"].nav-active {
-                background: linear-gradient(90deg, rgba(28,79,192,0.10) 0%, rgba(28,79,192,0.04) 100%) !important;
-                color: #163990 !important;
-                font-weight: 600 !important;
-            }
-            /* CSS-only fallback for active state (in case JS doesn't run) */
-            """ + ("""
-            [data-testid="column"]:first-child .stButton:nth-of-type(1) > button {
-                background: linear-gradient(90deg, rgba(28,79,192,0.10) 0%, rgba(28,79,192,0.04) 100%) !important;
-                color: #163990 !important; font-weight: 600 !important;
-            }""" if nav == "deepdive" else """
-            [data-testid="column"]:first-child .stButton:nth-of-type(2) > button {
-                background: linear-gradient(90deg, rgba(28,79,192,0.10) 0%, rgba(28,79,192,0.04) 100%) !important;
-                color: #163990 !important; font-weight: 600 !important;
-            }""" if nav == "cowork" else "") + """
         </style>
         """, unsafe_allow_html=True)
 
-        # Sidebar header — brand + divider + section label
-        st.markdown("""
-        <div style="padding:1.4rem 1.2rem 1.2rem; display:flex; flex-direction:column; gap:0.7rem;">
-            <img src="https://cdn.pfizer.com/pfizercom/2022-10/Pfizer_Logo_Color_CMYK.png" style="height:28px; align-self:flex-start;" />
-            <div>
-                <div style="font-family:'Manrope',sans-serif; font-weight:800; font-size:1.22rem; color:#0A1A3D; line-height:1.18; letter-spacing:-0.025em;">Primary Care<br>Intelligence Hub</div>
-                <div style="font-size:0.72rem; color:#64748B; font-weight:500; margin-top:0.3rem;">Pfizer Analytics</div>
+        # Render entire sidebar as a single HTML component (matches reference exactly)
+        deepdive_active = "active" if active_nav == "deepdive" else ""
+        cowork_active = "active" if active_nav == "cowork" else ""
+
+        sidebar_html = f"""
+        <style>
+            .sb-root {{ display:flex; flex-direction:column; height:100%; font-family:'Inter',system-ui,-apple-system,sans-serif; -webkit-font-smoothing:antialiased; }}
+            .sb-brand {{ padding:1.4rem 1.2rem 1.2rem; display:flex; flex-direction:column; gap:0.7rem; }}
+            .sb-brand img {{ height:28px; align-self:flex-start; }}
+            .sb-brand .sb-title {{ font-family:'Manrope',sans-serif; font-weight:800; font-size:1.22rem; color:#0A1A3D; line-height:1.18; letter-spacing:-0.025em; }}
+            .sb-brand .sb-subtitle {{ font-size:0.72rem; color:#64748B; font-weight:500; margin-top:0.15rem; }}
+            .sb-divider {{ height:1px; background:rgba(15,23,42,0.08); margin:0 0.85rem; }}
+            .sb-section-label {{ font-family:'Manrope',sans-serif; font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:#64748B; padding:0.95rem 1.15rem 0.4rem; }}
+            .sb-nav {{ padding:0 0.55rem; }}
+            .sb-nav-item {{
+                position:relative; display:flex; align-items:center; gap:0.7rem;
+                padding:0.55rem 0.7rem; margin:0.08rem 0; border-radius:8px;
+                font-size:0.84rem; font-weight:500; color:#475569;
+                cursor:pointer; transition:background 0.18s cubic-bezier(0.4,0,0.2,1), color 0.18s cubic-bezier(0.4,0,0.2,1);
+                background:transparent; border:none; width:100%; text-align:left; font-family:inherit;
+            }}
+            .sb-nav-item:hover {{ background:rgba(15,23,42,0.04); color:#0F172A; }}
+            .sb-nav-item:hover .sb-nav-icon {{ color:#163990; }}
+            .sb-nav-item:hover .sb-nav-count {{ background:rgba(15,23,42,0.09); color:#475569; }}
+            .sb-nav-item .sb-nav-icon {{ width:18px; height:18px; display:flex; align-items:center; justify-content:center; color:#64748B; transition:color 0.18s cubic-bezier(0.4,0,0.2,1); flex-shrink:0; }}
+            .sb-nav-item .sb-nav-icon svg {{ width:16px; height:16px; stroke-width:1.8; fill:none; stroke:currentColor; }}
+            .sb-nav-item .sb-nav-label {{ flex:1; min-width:0; }}
+            .sb-nav-item .sb-nav-count {{ font-size:0.66rem; font-weight:600; color:#64748B; background:rgba(15,23,42,0.06); padding:0.12rem 0.42rem; border-radius:5px; font-variant-numeric:tabular-nums; transition:background 0.18s, color 0.18s; flex-shrink:0; line-height:1.3; }}
+            .sb-nav-item.active {{ background:linear-gradient(90deg, rgba(28,79,192,0.10) 0%, rgba(28,79,192,0.04) 100%); color:#163990; font-weight:600; }}
+            .sb-nav-item.active .sb-nav-icon {{ color:#163990; }}
+            .sb-nav-item.active .sb-nav-count {{ background:rgba(28,79,192,0.14); color:#163990; }}
+            .sb-nav-item.active::before {{ content:''; position:absolute; left:-0.55rem; top:6px; bottom:6px; width:3px; border-radius:0 3px 3px 0; background:linear-gradient(180deg, #1C4FC0, #41B6E6); box-shadow:0 0 8px rgba(28,79,192,0.3); }}
+            .sb-spacer {{ flex:1; }}
+            .sb-meta {{ padding:0.85rem 1.15rem 1rem; font-size:0.7rem; color:#64748B; line-height:1.55; border-top:1px solid rgba(15,23,42,0.06); background:linear-gradient(180deg, transparent 0%, rgba(28,79,192,0.025) 100%); }}
+            .sb-meta strong {{ color:#475569; font-weight:600; }}
+            .sb-meta .sb-meta-row {{ margin-bottom:0.2rem; }}
+        </style>
+        <div class="sb-root">
+            <div class="sb-brand">
+                <img src="https://cdn.pfizer.com/pfizercom/2022-10/Pfizer_Logo_Color_CMYK.png" alt="Pfizer">
+                <div>
+                    <div class="sb-title">Primary Care<br>Intelligence Hub</div>
+                    <div class="sb-subtitle">Pfizer Analytics</div>
+                </div>
+            </div>
+            <div class="sb-divider"></div>
+            <div class="sb-section-label">Primary Care Workspace</div>
+            <nav class="sb-nav">
+                <button class="sb-nav-item {deepdive_active}" id="sb-nav-deepdive">
+                    <span class="sb-nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
+                    <span class="sb-nav-label">Deep-Dive Dashboards</span>
+                    <span class="sb-nav-count">8</span>
+                </button>
+                <button class="sb-nav-item {cowork_active}" id="sb-nav-cowork">
+                    <span class="sb-nav-icon"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="10" rx="2"/><path d="M9 16v3M15 16v3M9 6V3M15 6V3M3 11h3M18 11h3"/></svg></span>
+                    <span class="sb-nav-label">CoWork Agents</span>
+                    <span class="sb-nav-count">3</span>
+                </button>
+            </nav>
+            <div class="sb-spacer"></div>
+            <div class="sb-meta">
+                <div class="sb-meta-row"><strong>Primary Care Analytics</strong></div>
+                <div class="sb-meta-row">Team_ZS_PC_Analytics@zs.com</div>
             </div>
         </div>
-        <div style="height:1px; background:rgba(15,23,42,0.08); margin:0 0.85rem;"></div>
-        <div style="font-family:'Manrope',sans-serif; font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:#64748B; padding:0.95rem 1.15rem 0.4rem;">Primary Care Workspace</div>
-        """, unsafe_allow_html=True)
+        <script>
+        (function() {{
+            // Wire HTML nav buttons to hidden Streamlit buttons
+            var col = document.currentScript.closest('[data-testid="column"]') ||
+                      document.querySelector('[data-testid="column"]:first-child');
+            if (!col) return;
 
-        # Nav buttons
-        if st.button("📊  Deep Dive Dashboards", key="nav_deepdive"):
+            function clickStreamlitButton(idx) {{
+                // Re-enable pointer events momentarily and click
+                var stButtons = col.querySelectorAll('.stButton');
+                if (stButtons[idx]) {{
+                    stButtons[idx].style.pointerEvents = 'auto';
+                    stButtons[idx].style.opacity = '0';
+                    stButtons[idx].style.height = 'auto';
+                    stButtons[idx].style.overflow = 'visible';
+                    stButtons[idx].style.position = 'relative';
+                    var btn = stButtons[idx].querySelector('button');
+                    if (btn) btn.click();
+                }}
+            }}
+
+            var navDD = document.getElementById('sb-nav-deepdive');
+            var navCW = document.getElementById('sb-nav-cowork');
+            if (navDD) navDD.addEventListener('click', function() {{ clickStreamlitButton(0); }});
+            if (navCW) navCW.addEventListener('click', function() {{ clickStreamlitButton(1); }});
+        }})();
+        </script>
+        """
+        st.markdown(sidebar_html, unsafe_allow_html=True)
+
+        # Hidden Streamlit buttons (invisible but functional for session state updates)
+        if st.button("Deep Dive Dashboards", key="nav_deepdive"):
             st.session_state["nav_state"] = "deepdive"
             st.rerun()
 
-        if st.button("🤖  CoWork Agents", key="nav_cowork"):
+        if st.button("CoWork Agents", key="nav_cowork"):
             st.session_state["nav_state"] = "cowork"
             st.rerun()
-
-        # Inject JS to apply active class to correct button (Streamlit buttons can't have custom classes natively)
-        st.markdown(f"""
-        <script>
-        (function() {{
-            var col = document.querySelector('[data-testid="column"]:first-child');
-            if (!col) return;
-            var buttons = col.querySelectorAll('.stButton > button');
-            buttons.forEach(function(b) {{ b.classList.remove('nav-active'); }});
-            var activeIdx = {'0' if nav == 'deepdive' else '1' if nav == 'cowork' else '-1'};
-            if (activeIdx >= 0 && buttons[activeIdx]) {{
-                buttons[activeIdx].classList.add('nav-active');
-            }}
-        }})();
-        </script>
-        """, unsafe_allow_html=True)
-
-        # Footer anchored at bottom of sidebar card
-        st.markdown("""
-        <div style="position:absolute; bottom:0; left:0; right:0; padding:0.85rem 1.15rem 1rem; font-size:0.7rem; color:#64748B; line-height:1.55; border-top:1px solid rgba(15,23,42,0.06); background:linear-gradient(180deg, transparent 0%, rgba(28,79,192,0.025) 100%);">
-            <div style="margin-bottom:0.2rem;"><strong style="color:#475569;font-weight:600;">Primary Care Analytics</strong></div>
-            <div>Team_ZS_PC_Analytics@zs.com</div>
-        </div>
-        """, unsafe_allow_html=True)
 
     # --- RIGHT COLUMN: Summary + Brand Tiles ---
     with main_col:
