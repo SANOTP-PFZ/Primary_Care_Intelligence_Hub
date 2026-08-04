@@ -147,7 +147,7 @@ else:
     for c in brand_cards:
         delta_class = "up" if c['delta_class'] == 'up' else "down"
         tri = "&#9650;" if delta_class == "up" else "&#9660;"
-        hero_kpis_html += f'''<div class="hero-kpi"><div class="kpi-label">{c['brand'].title()} TRx Mkt Share</div><div class="kpi-period">{c['latest_qtr']}</div><div class="kpi-value">{c['value']}</div><div class="kpi-delta {delta_class}"><span class="tri">{tri}</span>{c['delta']}pp <span class="vs">vs {c['prior_qtr']}</span></div></div>'''
+        hero_kpis_html += f'''<div class="hero-kpi"><div class="kpi-label">{c['brand'].title()} TRx Mkt Share</div><div class="kpi-value">{c['value']}</div><div class="kpi-delta {delta_class}"><span class="tri">{tri}</span>{c['delta']}pp <span class="vs">vs {c['prior_qtr']}</span></div></div>'''
 
     # Build brand cards HTML for dashboard section
     brand_cards_grid = ""
