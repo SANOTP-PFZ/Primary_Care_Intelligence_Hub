@@ -179,11 +179,8 @@ def render_header(title):
 
 
 def render_back_button():
-    """Render back button (pill style via CSS)."""
-    st.markdown("<div style='height:6px'></div>", unsafe_allow_html=True)
-    if st.button("\u2190 Back to Home", key="back_btn"):
-        st.query_params.clear()
-        st.rerun()
+    """Back button removed — brand pages open in new tabs."""
+    pass
 
 
 def render_kpi_cards(cards):
