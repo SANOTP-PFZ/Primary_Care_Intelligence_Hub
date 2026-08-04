@@ -295,7 +295,7 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
         <div class="hero-header">
             <div>
                 <h1 class="hero-title">Primary Care Performance Summary</h1>
-                <div class="hero-subtitle"><span>QoQ TRx Market Share</span><span class="dot"></span><span>NPA Data</span></div>
+                <div class="hero-subtitle"><span>QoQ TRx Market Share</span><span class="dot"></span><span>{latest_qtr}</span></div>
             </div>
             <div class="dropdown-wrap">
                 <button class="icon-btn" onclick="toggleDropdown(event)"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg>Data Availability<svg viewBox="0 0 24 24" style="width:11px;height:11px;"><path d="M6 9l6 6 6-6"/></svg></button>
