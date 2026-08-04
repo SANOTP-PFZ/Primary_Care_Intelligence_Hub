@@ -239,39 +239,54 @@ if nav in ("home", "deepdive"):
 
     # --- LEFT COLUMN: Sidebar with clickable nav ---
     with sidebar_col:
-        # CSS to stitch sidebar pieces into one seamless card + style nav buttons
+        # CSS to stitch sidebar pieces into one seamless full-height card + style nav buttons
         nav_active_css = ""
         if nav == "deepdive":
-            nav_active_css = "[data-testid='column']:first-child .stButton:first-of-type > button { background: linear-gradient(90deg, rgba(28,79,192,0.08) 0%, rgba(28,79,192,0.02) 100%) !important; color: #163990 !important; font-weight: 600 !important; border-left: 2.5px solid #1C4FC0 !important; border-radius: 0 6px 6px 0 !important; }"
+            nav_active_css = "[data-testid='column']:first-child .stButton:first-of-type > button { background: linear-gradient(90deg, rgba(28,79,192,0.08) 0%, rgba(28,79,192,0.02) 100%) !important; color: #163990 !important; font-weight: 600 !important; border-left: 2.5px solid #1C4FC0 !important; }"
 
         st.markdown("""
         <style>
-            /* Make sidebar column stretch full height */
+            /* Force sidebar column to fill full viewport height */
             [data-testid="column"]:first-child {
-                height: calc(100vh - 20px) !important;
+                min-height: calc(100vh - 16px) !important;
+                height: calc(100vh - 16px) !important;
+                display: flex !important;
+                flex-direction: column !important;
+            }
+            [data-testid="column"]:first-child > [data-testid="stVerticalBlockBorderWrapper"] {
+                flex: 1 !important;
+                display: flex !important;
+                flex-direction: column !important;
+            }
+            [data-testid="column"]:first-child > [data-testid="stVerticalBlockBorderWrapper"] > div {
+                flex: 1 !important;
+                display: flex !important;
+                flex-direction: column !important;
             }
             [data-testid="column"]:first-child [data-testid="stVerticalBlock"] {
                 gap: 0 !important;
-                height: 100% !important;
+                flex: 1 !important;
+                display: flex !important;
+                flex-direction: column !important;
             }
-            /* Button wrapper — remove extra spacing */
+            /* Button wrapper — compact, inset from edges */
             [data-testid="column"]:first-child .stButton {
-                margin: 0 !important;
-                padding: 0 2px !important;
+                margin: 2px 12px !important;
+                padding: 0 !important;
             }
-            /* Nav buttons — sleek, compact, contained */
+            /* Nav buttons — sleek, compact, inset within sidebar */
             [data-testid="column"]:first-child .stButton > button {
                 background: transparent !important;
                 border: none !important;
                 border-left: 2.5px solid transparent !important;
                 border-radius: 0 6px 6px 0 !important;
-                padding: 0.45rem 0.65rem !important;
+                padding: 0.4rem 0.6rem !important;
                 color: #475569 !important;
                 font-size: 0.78rem !important;
                 font-weight: 500 !important;
                 font-family: 'Inter', sans-serif !important;
-                min-height: 34px !important;
-                height: 34px !important;
+                min-height: 32px !important;
+                height: 32px !important;
                 width: 100% !important;
                 text-align: left !important;
                 justify-content: flex-start !important;
@@ -293,7 +308,7 @@ if nav in ("home", "deepdive"):
         </style>
         """, unsafe_allow_html=True)
 
-        # --- PART 1: Sidebar header (top section of full-height card) ---
+        # --- PART 1: Sidebar header ---
         st.markdown("""
         <div style="background:rgba(255,255,255,0.62); backdrop-filter:saturate(180%) blur(22px); -webkit-backdrop-filter:saturate(180%) blur(22px); border:1px solid rgba(15,23,42,0.08); border-bottom:none; border-radius:18px 18px 0 0; box-shadow:0 8px 24px rgba(15,23,42,0.07),0 2px 6px rgba(15,23,42,0.04); padding:14px 1.2rem 0.6rem;">
             <div style="display:flex; flex-direction:column; gap:0.5rem; margin-bottom:0.8rem;">
@@ -306,30 +321,21 @@ if nav in ("home", "deepdive"):
         </div>
         """, unsafe_allow_html=True)
 
-        # --- PART 2: Nav buttons (contained within sidebar borders) ---
-        st.markdown("""
-        <div style="background:rgba(255,255,255,0.62); border-left:1px solid rgba(15,23,42,0.08); border-right:1px solid rgba(15,23,42,0.08); padding:0.35rem 0.5rem 0.25rem;">
-        """, unsafe_allow_html=True)
-
-        if st.button("📊  Deep Dive Dashboards", key="nav_deepdive", use_container_width=True):
+        # --- PART 2: Nav buttons (inset within sidebar via margin on .stButton) ---
+        if st.button("📊  Deep Dive Dashboards", key="nav_deepdive"):
             st.session_state["nav_state"] = "deepdive"
             st.rerun()
 
-        if st.button("🤖  CoWork Agents", key="nav_cowork", use_container_width=True):
+        if st.button("🤖  CoWork Agents", key="nav_cowork"):
             pass  # Placeholder for future
 
-        st.markdown("</div>", unsafe_allow_html=True)
-
-        # --- PART 3: Spacer (fills remaining height) ---
+        # --- PART 3: Flexible spacer + footer (stretches sidebar to bottom) ---
         st.markdown("""
-        <div style="background:rgba(255,255,255,0.62); border-left:1px solid rgba(15,23,42,0.08); border-right:1px solid rgba(15,23,42,0.08); flex:1; min-height:100px;"></div>
-        """, unsafe_allow_html=True)
-
-        # --- PART 4: Sidebar footer (bottom-rounded, anchored to bottom) ---
-        st.markdown("""
-        <div style="background:rgba(255,255,255,0.62); backdrop-filter:saturate(180%) blur(22px); -webkit-backdrop-filter:saturate(180%) blur(22px); border:1px solid rgba(15,23,42,0.08); border-top:1px solid rgba(15,23,42,0.06); border-radius:0 0 18px 18px; padding:0.85rem 1.15rem 1rem; font-size:0.7rem; color:#64748B; line-height:1.55;">
-            <div style="margin-bottom:0.2rem;"><strong style="color:#475569;font-weight:600;">Primary Care Analytics</strong></div>
-            <div>Team_ZS_PC_Analytics@zs.com</div>
+        <div style="background:rgba(255,255,255,0.62); backdrop-filter:saturate(180%) blur(22px); -webkit-backdrop-filter:saturate(180%) blur(22px); border-left:1px solid rgba(15,23,42,0.08); border-right:1px solid rgba(15,23,42,0.08); border-bottom:1px solid rgba(15,23,42,0.08); border-radius:0 0 18px 18px; flex:1; display:flex; flex-direction:column; justify-content:flex-end;">
+            <div style="padding:0.85rem 1.15rem 1rem; font-size:0.7rem; color:#64748B; line-height:1.55; border-top:1px solid rgba(15,23,42,0.06);">
+                <div style="margin-bottom:0.2rem;"><strong style="color:#475569;font-weight:600;">Primary Care Analytics</strong></div>
+                <div>Team_ZS_PC_Analytics@zs.com</div>
+            </div>
         </div>
         """, unsafe_allow_html=True)
 
