@@ -250,7 +250,7 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
 .tad-group-label{{font-family:'Manrope',sans-serif;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);padding:1.2rem 0 0.5rem;border-bottom:1px solid var(--hairline);margin-bottom:0.8rem}}
 .back-to-cats{{display:inline-flex;align-items:center;gap:0.3rem;padding:0.4rem 0.8rem;border-radius:8px;background:rgba(255,255,255,0.7);border:1px solid var(--hairline);color:var(--text-soft);font-size:0.75rem;font-weight:500;cursor:pointer;font-family:inherit;transition:all 0.18s var(--ease);flex-shrink:0}}
 .back-to-cats:hover{{background:#fff;color:var(--navy-700);border-color:rgba(28,79,192,0.25)}}
-.filter-bar{{display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap;padding:0.7rem 0.9rem;background:rgba(255,255,255,0.6);border:1px solid var(--hairline);border-radius:10px;margin-bottom:1rem}}
+.filter-bar{{display:flex;flex-direction:column;gap:0.6rem;padding:0.7rem 0.9rem;background:rgba(255,255,255,0.6);border:1px solid var(--hairline);border-radius:10px;margin-bottom:1rem}}
 .filter-label{{font-size:0.7rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em}}
 .filter-group{{display:flex;align-items:center;gap:0.35rem;flex-wrap:wrap}}
 .filter-group-label{{font-size:0.62rem;font-weight:600;color:var(--text-muted);margin-right:0.2rem}}
@@ -444,9 +444,8 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
                 <button class="back-to-cats" onclick="hideAgentPanels()">&#8592; Back</button>
             </div>
             <div class="filter-bar">
-                <span class="filter-label">Filter:</span>
                 <div class="filter-group">
-                    <span class="filter-group-label">Source</span>
+                    <span class="filter-group-label">Source:</span>
                     <button class="filter-chip active" onclick="filterTAD(this,'source','all')">All</button>
                     <button class="filter-chip" onclick="filterTAD(this,'source','cdc')">CDC</button>
                     <button class="filter-chip" onclick="filterTAD(this,'source','ddd')">DDD</button>
@@ -459,7 +458,7 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
                     <button class="filter-chip" onclick="filterTAD(this,'source','copay')">CoPay</button>
                 </div>
                 <div class="filter-group">
-                    <span class="filter-group-label">Market</span>
+                    <span class="filter-group-label">Market:</span>
                     <button class="filter-chip active" onclick="filterTAD(this,'market','all')">All</button>
                     <button class="filter-chip" onclick="filterTAD(this,'market','covid')">COVID</button>
                     <button class="filter-chip" onclick="filterTAD(this,'market','rsv')">RSV</button>
