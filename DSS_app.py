@@ -239,33 +239,17 @@ if nav in ("home", "deepdive", "cowork"):
 
     # --- LEFT COLUMN: Sidebar with clickable nav ---
     with sidebar_col:
-        # Build active-state CSS based on current nav
-        nav_active_css = ""
-        if nav == "deepdive":
-            nav_active_css = """
-            [data-testid='column']:first-child [data-testid='stBaseButton-secondary'][key='nav_deepdive'],
-            [data-testid='column']:first-child .stButton:nth-of-type(1) > button {
-                background: linear-gradient(90deg, rgba(28,79,192,0.08) 0%, rgba(28,79,192,0.02) 100%) !important;
-                color: #163990 !important; font-weight: 600 !important;
-                border-left: 2.5px solid #1C4FC0 !important;
-            }"""
-        elif nav == "cowork":
-            nav_active_css = """
-            [data-testid='column']:first-child .stButton:nth-of-type(2) > button {
-                background: linear-gradient(90deg, rgba(28,79,192,0.08) 0%, rgba(28,79,192,0.02) 100%) !important;
-                color: #163990 !important; font-weight: 600 !important;
-                border-left: 2.5px solid #1C4FC0 !important;
-            }"""
-
         st.markdown("""
         <style>
-            /* Sidebar column — single glassmorphism card */
+            /* ─── SIDEBAR CARD ─── */
             [data-testid="column"]:first-child {
                 min-height: calc(100vh - 16px) !important;
                 height: calc(100vh - 16px) !important;
+                position: relative !important;
             }
             [data-testid="column"]:first-child > [data-testid="stVerticalBlockBorderWrapper"] {
                 height: 100% !important;
+                position: relative !important;
                 background: rgba(255,255,255,0.62) !important;
                 backdrop-filter: saturate(180%) blur(22px) !important;
                 -webkit-backdrop-filter: saturate(180%) blur(22px) !important;
@@ -277,23 +261,24 @@ if nav in ("home", "deepdive", "cowork"):
             [data-testid="column"]:first-child [data-testid="stVerticalBlock"] {
                 gap: 0 !important;
             }
-            /* Nav buttons — compact, inset */
+
+            /* ─── NAV BUTTONS — match reference styling ─── */
             [data-testid="column"]:first-child .stButton {
-                margin: 2px 12px !important;
+                margin: 1px 0.55rem !important;
                 padding: 0 !important;
             }
             [data-testid="column"]:first-child .stButton > button {
+                position: relative !important;
                 background: transparent !important;
                 border: none !important;
-                border-left: 2.5px solid transparent !important;
-                border-radius: 0 6px 6px 0 !important;
-                padding: 0.4rem 0.6rem !important;
+                border-radius: 8px !important;
+                padding: 0.55rem 0.7rem !important;
                 color: #475569 !important;
-                font-size: 0.78rem !important;
+                font-size: 0.84rem !important;
                 font-weight: 500 !important;
-                font-family: 'Inter', sans-serif !important;
-                min-height: 32px !important;
-                height: 32px !important;
+                font-family: 'Inter', system-ui, sans-serif !important;
+                min-height: 36px !important;
+                height: auto !important;
                 width: 100% !important;
                 text-align: left !important;
                 justify-content: flex-start !important;
@@ -301,31 +286,47 @@ if nav in ("home", "deepdive", "cowork"):
                 transform: none !important;
                 aspect-ratio: unset !important;
                 cursor: pointer !important;
-                letter-spacing: -0.01em !important;
-                transition: background 0.15s, color 0.15s !important;
+                letter-spacing: -0.005em !important;
+                transition: background 0.18s cubic-bezier(0.4,0,0.2,1), color 0.18s cubic-bezier(0.4,0,0.2,1) !important;
             }
             [data-testid="column"]:first-child .stButton > button:hover {
-                background: rgba(28,79,192,0.05) !important;
-                color: #163990 !important;
+                background: rgba(15,23,42,0.04) !important;
+                color: #0F172A !important;
                 transform: none !important;
                 box-shadow: none !important;
             }
-            /* Active nav highlight */
-            """ + nav_active_css + """
+
+            /* ─── ACTIVE STATE — gradient bar with glow (reference match) ─── */
+            [data-testid="column"]:first-child .stButton > button.nav-active,
+            [data-testid="column"]:first-child .stButton > button[kind="secondary"].nav-active {
+                background: linear-gradient(90deg, rgba(28,79,192,0.10) 0%, rgba(28,79,192,0.04) 100%) !important;
+                color: #163990 !important;
+                font-weight: 600 !important;
+            }
+            /* CSS-only fallback for active state (in case JS doesn't run) */
+            """ + ("""
+            [data-testid="column"]:first-child .stButton:nth-of-type(1) > button {
+                background: linear-gradient(90deg, rgba(28,79,192,0.10) 0%, rgba(28,79,192,0.04) 100%) !important;
+                color: #163990 !important; font-weight: 600 !important;
+            }""" if nav == "deepdive" else """
+            [data-testid="column"]:first-child .stButton:nth-of-type(2) > button {
+                background: linear-gradient(90deg, rgba(28,79,192,0.10) 0%, rgba(28,79,192,0.04) 100%) !important;
+                color: #163990 !important; font-weight: 600 !important;
+            }""" if nav == "cowork" else "") + """
         </style>
         """, unsafe_allow_html=True)
 
-        # Sidebar header (inside the card)
+        # Sidebar header — brand + divider + section label
         st.markdown("""
-        <div style="padding:14px 1.2rem 0.6rem;">
-            <div style="display:flex; flex-direction:column; gap:0.5rem; margin-bottom:0.8rem;">
-                <img src="https://cdn.pfizer.com/pfizercom/2022-10/Pfizer_Logo_Color_CMYK.png" style="height:28px; align-self:flex-start;" />
-                <div style="font-family:'Manrope',sans-serif; font-weight:800; font-size:1.2rem; color:#0A1A3D; line-height:1.18; letter-spacing:-0.025em;">Primary Care<br>Intelligence Hub</div>
-                <div style="font-size:0.72rem; color:#64748B; font-weight:500;">Pfizer Analytics</div>
+        <div style="padding:1.4rem 1.2rem 1.2rem; display:flex; flex-direction:column; gap:0.7rem;">
+            <img src="https://cdn.pfizer.com/pfizercom/2022-10/Pfizer_Logo_Color_CMYK.png" style="height:28px; align-self:flex-start;" />
+            <div>
+                <div style="font-family:'Manrope',sans-serif; font-weight:800; font-size:1.22rem; color:#0A1A3D; line-height:1.18; letter-spacing:-0.025em;">Primary Care<br>Intelligence Hub</div>
+                <div style="font-size:0.72rem; color:#64748B; font-weight:500; margin-top:0.3rem;">Pfizer Analytics</div>
             </div>
-            <div style="height:1px; background:rgba(15,23,42,0.08); margin:0 -0.3rem 0.6rem;"></div>
-            <div style="font-family:'Manrope',sans-serif; font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:#64748B; margin-bottom:0.2rem;">Primary Care Workspace</div>
         </div>
+        <div style="height:1px; background:rgba(15,23,42,0.08); margin:0 0.85rem;"></div>
+        <div style="font-family:'Manrope',sans-serif; font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:#64748B; padding:0.95rem 1.15rem 0.4rem;">Primary Care Workspace</div>
         """, unsafe_allow_html=True)
 
         # Nav buttons
@@ -337,9 +338,25 @@ if nav in ("home", "deepdive", "cowork"):
             st.session_state["nav_state"] = "cowork"
             st.rerun()
 
-        # Footer at bottom of sidebar
+        # Inject JS to apply active class to correct button (Streamlit buttons can't have custom classes natively)
+        st.markdown(f"""
+        <script>
+        (function() {{
+            var col = document.querySelector('[data-testid="column"]:first-child');
+            if (!col) return;
+            var buttons = col.querySelectorAll('.stButton > button');
+            buttons.forEach(function(b) {{ b.classList.remove('nav-active'); }});
+            var activeIdx = {'0' if nav == 'deepdive' else '1' if nav == 'cowork' else '-1'};
+            if (activeIdx >= 0 && buttons[activeIdx]) {{
+                buttons[activeIdx].classList.add('nav-active');
+            }}
+        }})();
+        </script>
+        """, unsafe_allow_html=True)
+
+        # Footer anchored at bottom of sidebar card
         st.markdown("""
-        <div style="position:absolute; bottom:0; left:0; right:0; padding:0.85rem 1.15rem 1rem; font-size:0.7rem; color:#64748B; line-height:1.55; border-top:1px solid rgba(15,23,42,0.06);">
+        <div style="position:absolute; bottom:0; left:0; right:0; padding:0.85rem 1.15rem 1rem; font-size:0.7rem; color:#64748B; line-height:1.55; border-top:1px solid rgba(15,23,42,0.06); background:linear-gradient(180deg, transparent 0%, rgba(28,79,192,0.025) 100%);">
             <div style="margin-bottom:0.2rem;"><strong style="color:#475569;font-weight:600;">Primary Care Analytics</strong></div>
             <div>Team_ZS_PC_Analytics@zs.com</div>
         </div>
