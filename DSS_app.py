@@ -220,7 +220,7 @@ BRAND_CONFIG = {
 
 nav = st.session_state["nav_state"]
 
-if nav in ("home", "deepdive"):
+if nav in ("home", "deepdive", "cowork"):
     # =========================================================
     # LANDING PAGE — Two-column layout (sidebar | main content)
     # Everything fits in viewport, no scrolling
@@ -239,42 +239,49 @@ if nav in ("home", "deepdive"):
 
     # --- LEFT COLUMN: Sidebar with clickable nav ---
     with sidebar_col:
-        # CSS to stitch sidebar pieces into one seamless full-height card + style nav buttons
+        # Build active-state CSS based on current nav
         nav_active_css = ""
         if nav == "deepdive":
-            nav_active_css = "[data-testid='column']:first-child .stButton:first-of-type > button { background: linear-gradient(90deg, rgba(28,79,192,0.08) 0%, rgba(28,79,192,0.02) 100%) !important; color: #163990 !important; font-weight: 600 !important; border-left: 2.5px solid #1C4FC0 !important; }"
+            nav_active_css = """
+            [data-testid='column']:first-child [data-testid='stBaseButton-secondary'][key='nav_deepdive'],
+            [data-testid='column']:first-child .stButton:nth-of-type(1) > button {
+                background: linear-gradient(90deg, rgba(28,79,192,0.08) 0%, rgba(28,79,192,0.02) 100%) !important;
+                color: #163990 !important; font-weight: 600 !important;
+                border-left: 2.5px solid #1C4FC0 !important;
+            }"""
+        elif nav == "cowork":
+            nav_active_css = """
+            [data-testid='column']:first-child .stButton:nth-of-type(2) > button {
+                background: linear-gradient(90deg, rgba(28,79,192,0.08) 0%, rgba(28,79,192,0.02) 100%) !important;
+                color: #163990 !important; font-weight: 600 !important;
+                border-left: 2.5px solid #1C4FC0 !important;
+            }"""
 
         st.markdown("""
         <style>
-            /* Force sidebar column to fill full viewport height */
+            /* Sidebar column — single glassmorphism card */
             [data-testid="column"]:first-child {
                 min-height: calc(100vh - 16px) !important;
                 height: calc(100vh - 16px) !important;
-                display: flex !important;
-                flex-direction: column !important;
             }
             [data-testid="column"]:first-child > [data-testid="stVerticalBlockBorderWrapper"] {
-                flex: 1 !important;
-                display: flex !important;
-                flex-direction: column !important;
-            }
-            [data-testid="column"]:first-child > [data-testid="stVerticalBlockBorderWrapper"] > div {
-                flex: 1 !important;
-                display: flex !important;
-                flex-direction: column !important;
+                height: 100% !important;
+                background: rgba(255,255,255,0.62) !important;
+                backdrop-filter: saturate(180%) blur(22px) !important;
+                -webkit-backdrop-filter: saturate(180%) blur(22px) !important;
+                border: 1px solid rgba(15,23,42,0.08) !important;
+                border-radius: 18px !important;
+                box-shadow: 0 8px 24px rgba(15,23,42,0.07), 0 2px 6px rgba(15,23,42,0.04) !important;
+                overflow: hidden !important;
             }
             [data-testid="column"]:first-child [data-testid="stVerticalBlock"] {
                 gap: 0 !important;
-                flex: 1 !important;
-                display: flex !important;
-                flex-direction: column !important;
             }
-            /* Button wrapper — compact, inset from edges */
+            /* Nav buttons — compact, inset */
             [data-testid="column"]:first-child .stButton {
                 margin: 2px 12px !important;
                 padding: 0 !important;
             }
-            /* Nav buttons — sleek, compact, inset within sidebar */
             [data-testid="column"]:first-child .stButton > button {
                 background: transparent !important;
                 border: none !important;
@@ -303,14 +310,14 @@ if nav in ("home", "deepdive"):
                 transform: none !important;
                 box-shadow: none !important;
             }
-            /* Active state */
+            /* Active nav highlight */
             """ + nav_active_css + """
         </style>
         """, unsafe_allow_html=True)
 
-        # --- PART 1: Sidebar header ---
+        # Sidebar header (inside the card)
         st.markdown("""
-        <div style="background:rgba(255,255,255,0.62); backdrop-filter:saturate(180%) blur(22px); -webkit-backdrop-filter:saturate(180%) blur(22px); border:1px solid rgba(15,23,42,0.08); border-bottom:none; border-radius:18px 18px 0 0; box-shadow:0 8px 24px rgba(15,23,42,0.07),0 2px 6px rgba(15,23,42,0.04); padding:14px 1.2rem 0.6rem;">
+        <div style="padding:14px 1.2rem 0.6rem;">
             <div style="display:flex; flex-direction:column; gap:0.5rem; margin-bottom:0.8rem;">
                 <img src="https://cdn.pfizer.com/pfizercom/2022-10/Pfizer_Logo_Color_CMYK.png" style="height:28px; align-self:flex-start;" />
                 <div style="font-family:'Manrope',sans-serif; font-weight:800; font-size:1.2rem; color:#0A1A3D; line-height:1.18; letter-spacing:-0.025em;">Primary Care<br>Intelligence Hub</div>
@@ -321,21 +328,20 @@ if nav in ("home", "deepdive"):
         </div>
         """, unsafe_allow_html=True)
 
-        # --- PART 2: Nav buttons (inset within sidebar via margin on .stButton) ---
+        # Nav buttons
         if st.button("📊  Deep Dive Dashboards", key="nav_deepdive"):
             st.session_state["nav_state"] = "deepdive"
             st.rerun()
 
         if st.button("🤖  CoWork Agents", key="nav_cowork"):
-            pass  # Placeholder for future
+            st.session_state["nav_state"] = "cowork"
+            st.rerun()
 
-        # --- PART 3: Flexible spacer + footer (stretches sidebar to bottom) ---
+        # Footer at bottom of sidebar
         st.markdown("""
-        <div style="background:rgba(255,255,255,0.62); backdrop-filter:saturate(180%) blur(22px); -webkit-backdrop-filter:saturate(180%) blur(22px); border-left:1px solid rgba(15,23,42,0.08); border-right:1px solid rgba(15,23,42,0.08); border-bottom:1px solid rgba(15,23,42,0.08); border-radius:0 0 18px 18px; flex:1; display:flex; flex-direction:column; justify-content:flex-end;">
-            <div style="padding:0.85rem 1.15rem 1rem; font-size:0.7rem; color:#64748B; line-height:1.55; border-top:1px solid rgba(15,23,42,0.06);">
-                <div style="margin-bottom:0.2rem;"><strong style="color:#475569;font-weight:600;">Primary Care Analytics</strong></div>
-                <div>Team_ZS_PC_Analytics@zs.com</div>
-            </div>
+        <div style="position:absolute; bottom:0; left:0; right:0; padding:0.85rem 1.15rem 1rem; font-size:0.7rem; color:#64748B; line-height:1.55; border-top:1px solid rgba(15,23,42,0.06);">
+            <div style="margin-bottom:0.2rem;"><strong style="color:#475569;font-weight:600;">Primary Care Analytics</strong></div>
+            <div>Team_ZS_PC_Analytics@zs.com</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -401,7 +407,7 @@ if nav in ("home", "deepdive"):
         </div>
         """, unsafe_allow_html=True)
 
-        # Conditional: Mission text (home) vs Brand tiles (deepdive)
+        # Conditional: Mission text (home) vs Brand tiles (deepdive) vs CoWork (cowork)
         if nav == "home":
             st.markdown("""
             <div style="text-align:center; padding:0.6rem 0 0;">
@@ -410,12 +416,12 @@ if nav in ("home", "deepdive"):
                     Empowering Pfizer's Primary Care business with real-time market intelligence, competitive analytics, and actionable insights across our key therapeutic brands. This platform consolidates NPA, DDD, and LAAD data sources into unified quarterly performance views.
                 </div>
                 <div style="margin-top:0.8rem; font-size:12px; color:#64748B;">
-                    Select <strong style="color:#1C4FC0;">Deep Dive Dashboards</strong> in the sidebar to explore brand-level QoQ analysis.
+                    Select <strong style="color:#1C4FC0;">Deep Dive Dashboards</strong> or <strong style="color:#1C4FC0;">CoWork Agents</strong> in the sidebar to get started.
                 </div>
             </div>
             """, unsafe_allow_html=True)
 
-        else:
+        elif nav == "deepdive":
             # Deep Dive header + brand tiles
             st.markdown("""
             <div style="text-align:center; padding:0.1rem 0 0.6rem;">
@@ -442,6 +448,23 @@ if nav in ("home", "deepdive"):
                     if st.button(name, key=f"brand_btn_{key}", use_container_width=True):
                         st.session_state["nav_state"] = key
                         st.rerun()
+
+        elif nav == "cowork":
+            # CoWork Agents — Coming Soon placeholder
+            st.markdown("""
+            <div style="text-align:center; padding:2.5rem 0 0;">
+                <div style="display:inline-flex; align-items:center; justify-content:center; width:64px; height:64px; border-radius:16px; background:rgba(28,79,192,0.06); margin-bottom:1rem;">
+                    <span style="font-size:28px;">🤖</span>
+                </div>
+                <div style="font-family:'Manrope',sans-serif; font-weight:800; font-size:18px; color:#0A1A3D; letter-spacing:-0.02em; margin-bottom:0.5rem;">CoWork Agents</div>
+                <div style="font-size:13px; color:#475569; line-height:1.7; max-width:480px; margin:0 auto;">
+                    AI-powered analytical agents are being developed to assist with market insights, competitive intelligence, and automated reporting.
+                </div>
+                <div style="margin-top:1.2rem; display:inline-block; padding:6px 16px; border-radius:8px; background:rgba(28,79,192,0.06); border:1px solid rgba(28,79,192,0.12);">
+                    <span style="font-family:'Manrope',sans-serif; font-size:12px; font-weight:700; color:#1C4FC0; letter-spacing:0.02em;">Coming Soon</span>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
 
 else:
     # === RENDER BRAND PAGE ===
