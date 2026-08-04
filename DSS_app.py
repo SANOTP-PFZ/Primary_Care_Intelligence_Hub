@@ -255,21 +255,20 @@ if nav in ("home", "deepdive"):
                 margin: 0 !important;
                 padding: 0 !important;
             }
-            /* Nav buttons styled as sidebar items */
+            /* Nav buttons styled as sidebar items — uniform size */
             [data-testid="column"]:first-child .stButton > button {
                 background: transparent !important;
                 border: none !important;
                 border-left: 3px solid transparent !important;
-                border-radius: 0 !important;
-                padding: 0.5rem 0.7rem 0.5rem 0.9rem !important;
-                margin: 0.04rem 0.55rem !important;
+                border-radius: 8px !important;
+                padding: 0.55rem 0.7rem !important;
                 color: #475569 !important;
                 font-size: 0.84rem !important;
                 font-weight: 500 !important;
                 font-family: 'Inter', sans-serif !important;
-                min-height: auto !important;
-                height: auto !important;
-                width: calc(100% - 1.1rem) !important;
+                min-height: 38px !important;
+                height: 38px !important;
+                width: 100% !important;
                 text-align: left !important;
                 justify-content: flex-start !important;
                 box-shadow: none !important;
@@ -302,17 +301,23 @@ if nav in ("home", "deepdive"):
         </div>
         """, unsafe_allow_html=True)
 
-        # --- PART 2: Real clickable nav buttons ---
-        if st.button("📊  Deep Dive Dashboards", key="nav_deepdive"):
+        # --- PART 2: Nav buttons container (middle section, matches card borders) ---
+        st.markdown("""
+        <div style="background:rgba(255,255,255,0.62); backdrop-filter:saturate(180%) blur(22px); -webkit-backdrop-filter:saturate(180%) blur(22px); border-left:1px solid rgba(15,23,42,0.08); border-right:1px solid rgba(15,23,42,0.08); padding:0.4rem 0.55rem;">
+        """, unsafe_allow_html=True)
+
+        if st.button("📊  Deep Dive Dashboards", key="nav_deepdive", use_container_width=True):
             st.session_state["nav_state"] = "deepdive"
             st.rerun()
 
-        if st.button("🤖  CoWork Agents", key="nav_cowork"):
+        if st.button("🤖  CoWork Agents", key="nav_cowork", use_container_width=True):
             pass  # Placeholder for future
 
-        # --- PART 3: Sidebar footer (bottom-rounded, no top border) ---
+        st.markdown("</div>", unsafe_allow_html=True)
+
+        # --- PART 3: Sidebar footer (bottom-rounded) ---
         st.markdown("""
-        <div style="background:rgba(255,255,255,0.62); backdrop-filter:saturate(180%) blur(22px); -webkit-backdrop-filter:saturate(180%) blur(22px); border:1px solid rgba(15,23,42,0.08); border-top:none; border-radius:0 0 18px 18px; padding:0.85rem 1.15rem 1rem; font-size:0.7rem; color:#64748B; line-height:1.55; border-top:1px solid rgba(15,23,42,0.06);">
+        <div style="background:rgba(255,255,255,0.62); backdrop-filter:saturate(180%) blur(22px); -webkit-backdrop-filter:saturate(180%) blur(22px); border:1px solid rgba(15,23,42,0.08); border-top:1px solid rgba(15,23,42,0.06); border-radius:0 0 18px 18px; padding:0.85rem 1.15rem 1rem; font-size:0.7rem; color:#64748B; line-height:1.55;">
             <div style="margin-bottom:0.2rem;"><strong style="color:#475569;font-weight:600;">Primary Care Analytics</strong></div>
             <div>Team_ZS_PC_Analytics@zs.com</div>
         </div>
