@@ -85,7 +85,7 @@ def build_brand_card_data(df):
             'delta': f"{delta:+.1f}",
             'delta_class': 'up' if delta >= 0 else 'down',
             'color': BRAND_COLORS[brand],
-            'first_qtr': quarters[0] if quarters else '',
+            'prior_qtr': quarters[-2] if len(quarters) >= 2 else '',
             'latest_qtr': quarters[-1] if quarters else '',
         })
     return cards
@@ -147,7 +147,7 @@ else:
     for c in brand_cards:
         delta_class = "up" if c['delta_class'] == 'up' else "down"
         tri = "&#9650;" if delta_class == "up" else "&#9660;"
-        hero_kpis_html += f'''<div class="hero-kpi"><div class="kpi-label">{c['brand'].title()} TRx Mkt Share</div><div class="kpi-value">{c['value']}</div><div class="kpi-delta {delta_class}"><span class="tri">{tri}</span>{c['delta']}pp <span class="vs">QoQ</span></div></div>'''
+        hero_kpis_html += f'''<div class="hero-kpi"><div class="kpi-label">{c['brand'].title()} TRx Mkt Share</div><div class="kpi-period">{c['latest_qtr']}</div><div class="kpi-value">{c['value']}</div><div class="kpi-delta {delta_class}"><span class="tri">{tri}</span>{c['delta']}pp <span class="vs">vs {c['prior_qtr']}</span></div></div>'''
 
     # Build brand cards HTML for dashboard section
     brand_cards_grid = ""
@@ -242,18 +242,19 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
 .hero-kpi .kpi-delta.down{{color:var(--down)}}
 .hero-kpi .kpi-delta .tri{{font-size:0.65rem;line-height:1}}
 .hero-kpi .kpi-delta .vs{{color:var(--text-muted);font-weight:500}}
+.hero-kpi .kpi-period{{font-size:0.62rem;color:var(--text-muted);font-weight:500;margin-bottom:0.15rem;opacity:0.8}}
 .workspace-divider{{height:1px;background:var(--hairline);margin:1.4rem 0}}
 .dropdown-wrap{{position:relative}}
 .icon-btn{{display:inline-flex;align-items:center;gap:0.4rem;padding:0.4rem 0.7rem;border-radius:7px;background:rgba(255,255,255,0.7);border:1px solid var(--hairline);color:var(--text-soft);font-size:0.75rem;font-weight:500;cursor:pointer;font-family:inherit;transition:all 0.18s var(--ease)}}
 .icon-btn:hover{{background:#fff;color:var(--navy-700);border-color:rgba(28,79,192,0.25)}}
 .icon-btn svg{{width:13px;height:13px;stroke-width:1.8;fill:none;stroke:currentColor}}
-.dropdown{{position:absolute;top:calc(100% + 6px);right:0;background:rgba(255,255,255,0.96);backdrop-filter:saturate(180%) blur(20px);border:1px solid var(--hairline);border-radius:12px;box-shadow:var(--shadow-lg);min-width:240px;padding:0.45rem 0;opacity:0;visibility:hidden;transform:translateY(-6px) scale(0.98);transform-origin:top right;transition:opacity 0.2s var(--ease),transform 0.2s var(--ease),visibility 0.2s;z-index:200}}
+.dropdown{{position:absolute;top:calc(100% + 6px);right:0;background:rgba(255,255,255,0.96);backdrop-filter:saturate(180%) blur(20px);border:1px solid var(--hairline);border-radius:12px;box-shadow:var(--shadow-lg);min-width:320px;padding:0.45rem 0;opacity:0;visibility:hidden;transform:translateY(-6px) scale(0.98);transform-origin:top right;transition:opacity 0.2s var(--ease),transform 0.2s var(--ease),visibility 0.2s;z-index:200}}
 .dropdown.show{{opacity:1;visibility:visible;transform:translateY(0) scale(1)}}
 .dropdown-header{{font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);padding:0.5rem 0.95rem 0.35rem}}
 .dropdown-item{{display:flex;align-items:center;justify-content:space-between;padding:0.45rem 0.95rem;font-size:0.78rem}}
 .dropdown-item:hover{{background:rgba(15,23,42,0.04)}}
 .dropdown-item .src{{font-weight:500}}
-.dropdown-item .date{{font-size:0.7rem;color:var(--text-muted);font-variant-numeric:tabular-nums}}
+.dropdown-item .date{{font-size:0.7rem;color:var(--text-muted);font-variant-numeric:tabular-nums;white-space:nowrap}}
 .section-head-row{{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:0.2rem}}
 </style>
 </head>
