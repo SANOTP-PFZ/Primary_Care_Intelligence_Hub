@@ -513,13 +513,32 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
 
     <!-- HOME SECTION (default) -->
     <section class="section is-active is-visible" id="home">
-        <div style="text-align:center;padding:2.5rem 0 0;">
-            <div style="font-family:'Manrope',sans-serif;font-weight:800;font-size:1.4rem;color:var(--navy-900);letter-spacing:-0.02em;margin-bottom:0.6rem;">Welcome to the Primary Care Intelligence Hub</div>
-            <div style="font-size:0.88rem;color:var(--text-muted);line-height:1.8;max-width:600px;margin:0 auto;">
-                Empowering Pfizer's Primary Care business with real-time market intelligence, competitive analytics, and actionable insights across our key therapeutic brands. This platform consolidates NPA, DDD, and LAAD data sources into unified quarterly performance views.
-            </div>
-            <div style="margin-top:1.2rem;font-size:0.8rem;color:var(--text-muted);">
-                Select <strong style="color:var(--navy-600);">Workspace</strong>, <strong style="color:var(--navy-600);">Deep-Dive Dashboards</strong>, or <strong style="color:var(--navy-600);">CoWork Agents</strong> from the sidebar to get started.
+        <div style="display:flex;align-items:center;justify-content:center;min-height:calc(100% - 2rem);padding:1.5rem 2rem;">
+            <div style="max-width:720px;text-align:center;">
+                <div style="display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:14px;background:rgba(28,79,192,0.06);margin-bottom:1.2rem;">
+                    <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#1C4FC0" stroke-width="1.8"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg>
+                </div>
+                <div style="font-family:'Manrope',sans-serif;font-weight:800;font-size:1.65rem;color:var(--navy-900);letter-spacing:-0.025em;margin-bottom:0.8rem;line-height:1.2;">Welcome to the Primary Care<br>Intelligence Hub</div>
+                <div style="font-size:0.92rem;color:var(--text-muted);line-height:1.85;margin-bottom:1.5rem;">
+                    Empowering Pfizer's Primary Care business with real-time market intelligence, competitive analytics, and actionable insights across our key therapeutic brands. This platform consolidates NPA, DDD, and LAAD data sources into unified quarterly performance views — enabling faster decisions and deeper market understanding.
+                </div>
+                <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+                    <div style="background:rgba(255,255,255,0.8);border:1px solid var(--hairline);border-radius:12px;padding:1rem 1.4rem;text-align:center;min-width:160px;">
+                        <div style="font-family:'Manrope',sans-serif;font-size:1.4rem;font-weight:700;color:var(--navy-900);">8</div>
+                        <div style="font-size:0.72rem;color:var(--text-muted);font-weight:500;margin-top:0.2rem;">Brand Dashboards</div>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.8);border:1px solid var(--hairline);border-radius:12px;padding:1rem 1.4rem;text-align:center;min-width:160px;">
+                        <div style="font-family:'Manrope',sans-serif;font-size:1.4rem;font-weight:700;color:var(--navy-900);">32</div>
+                        <div style="font-size:0.72rem;color:var(--text-muted);font-weight:500;margin-top:0.2rem;">AI Agents</div>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.8);border:1px solid var(--hairline);border-radius:12px;padding:1rem 1.4rem;text-align:center;min-width:160px;">
+                        <div style="font-family:'Manrope',sans-serif;font-size:1.4rem;font-weight:700;color:var(--navy-900);">5</div>
+                        <div style="font-size:0.72rem;color:var(--text-muted);font-weight:500;margin-top:0.2rem;">Data Sources</div>
+                    </div>
+                </div>
+                <div style="margin-top:1.5rem;font-size:0.78rem;color:var(--text-muted);">
+                    Select <strong style="color:var(--navy-600);">Workspace</strong>, <strong style="color:var(--navy-600);">Deep-Dive Dashboards</strong>, or <strong style="color:var(--navy-600);">CoWork Agents</strong> from the sidebar to get started.
+                </div>
             </div>
         </div>
     </section>
