@@ -122,11 +122,151 @@ BRANDS_LIST = [
 # ROUTING — query param based
 # =====================================================
 brand_param = st.query_params.get("brand", None)
+agents_param = st.query_params.get("agents", None)
 
 if brand_param and brand_param in BRAND_CONFIG:
     # === RENDER BRAND PAGE ===
     from brand_pages import render_brand_page
     render_brand_page(brand_param, BRAND_CONFIG)
+elif agents_param in ("ta", "tad"):
+    # === RENDER AGENTS PAGE in new tab ===
+    st.markdown("""
+    <style>
+    [data-testid="stHeader"],[data-testid="stToolbar"],[data-testid="stDecoration"],
+    [data-testid="stSidebar"],[data-testid="collapsedControl"],[data-testid="stSidebarCollapseButton"],
+    #MainMenu,footer,.stApp>header{display:none!important}
+    .block-container{padding:0!important;max-width:100%!important}
+    [data-testid="stAppViewBlockContainer"]{padding:0!important}
+    [data-testid="stMainBlockContainer"]{padding:0!important}
+    [data-testid="stVerticalBlock"]{gap:0!important}
+    </style>
+    """, unsafe_allow_html=True)
+
+    if agents_param == "ta":
+        agents_page_title = "Therapy Area Agents"
+        agents_page_desc = "Ask technical and business questions across all available data sources for your therapy area."
+        agents_page_cards = """
+                <a class="ta-agent-card" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/ai/chat/new?db=VAW_AMER_DESIGN&schema=USIMVACCINESSDL&agent=PC_PCV_VACCINE_AGENT" target="_blank" rel="noopener"><div class="ta-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="7" rx="2"/><path d="M9 11v4M15 11v4M8 18h8M12 15v3"/></svg></div><div class="ta-card-title">Pneumococcal (PCV)</div><div class="ta-card-desc">Conversational querying across all Pneumococcal data sources.</div></a>
+                <a class="ta-agent-card" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/ai/chat/new?db=VAW_AMER_DESIGN&schema=USIMVACCINESSDL&agent=PC_RSV_VACCINE_AGENT" target="_blank" rel="noopener"><div class="ta-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="7" rx="2"/><path d="M9 11v4M15 11v4M8 18h8M12 15v3"/></svg></div><div class="ta-card-title">Respiratory Syncytial Virus (RSV)</div><div class="ta-card-desc">Conversational querying across all RSV data sources.</div></a>
+                <a class="ta-agent-card" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/ai/chat/new?db=VAW_AMER_DESIGN&schema=USIMVACCINESSDL&agent=PC_FLU_VACCINE_AGENT" target="_blank" rel="noopener"><div class="ta-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="7" rx="2"/><path d="M9 11v4M15 11v4M8 18h8M12 15v3"/></svg></div><div class="ta-card-title">Flu</div><div class="ta-card-desc">Conversational querying across all Flu data sources.</div></a>
+                <a class="ta-agent-card" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/ai/chat/new?db=VAW_AMER_DESIGN&schema=USIMVACCINESSDL&agent=PC_OAC_AGENT" target="_blank" rel="noopener"><div class="ta-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="7" rx="2"/><path d="M9 11v4M15 11v4M8 18h8M12 15v3"/></svg></div><div class="ta-card-title">Oral Anticoagulant (OAC)</div><div class="ta-card-desc">Conversational querying across all OAC data sources.</div></a>
+                <a class="ta-agent-card" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/ai/chat/new?db=VAW_AMER_DESIGN&schema=USIMVACCINESSDL&agent=PC_COVID_VACCINE_AGENT" target="_blank" rel="noopener"><div class="ta-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="7" rx="2"/><path d="M9 11v4M15 11v4M8 18h8M12 15v3"/></svg></div><div class="ta-card-title">COVID</div><div class="ta-card-desc">Conversational querying across all COVID data sources.</div></a>
+                <a class="ta-agent-card" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/ai/chat/new?db=VAW_AMER_DESIGN&schema=USIMVACCINESSDL&agent=PC_MIGRAINE_AGENT" target="_blank" rel="noopener"><div class="ta-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="7" rx="2"/><path d="M9 11v4M15 11v4M8 18h8M12 15v3"/></svg></div><div class="ta-card-title">Migraine (OCGRP)</div><div class="ta-card-desc">Conversational querying across all Migraine data sources.</div></a>
+"""
+    else:
+        agents_page_title = "Therapy Area + Data Source Agents"
+        agents_page_desc = "Query specific data sources scoped to a therapy area."
+        agents_page_cards = """
+                <a class="ta-agent-card" data-source="cdc" data-market="vaccines" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/ai/chat/new?db=VAW_AMER_DESIGN&schema=USIMVACCINESSDL&agent=PC_CDC_PROVIDER_DOSES" target="_blank" rel="noopener"><div class="ta-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="7" rx="2"/><path d="M9 11v4M15 11v4M8 18h8M12 15v3"/></svg></div><div class="ta-card-title">CDC Provider</div><div class="ta-card-desc">CDC provider-level administration data for vaccines.</div><div class="ta-card-chip">CDC</div></a>
+                <a class="ta-agent-card" data-source="cdc" data-market="vaccines" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/ai/chat/new?db=VAW_AMER_DESIGN&schema=USIMVACCINESSDL&agent=PC_CDC_BULK_SHIPMENTS" target="_blank" rel="noopener"><div class="ta-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="7" rx="2"/><path d="M9 11v4M15 11v4M8 18h8M12 15v3"/></svg></div><div class="ta-card-title">CDC Bulk</div><div class="ta-card-desc">CDC bulk dose distribution data for vaccines.</div><div class="ta-card-chip">CDC</div></a>
+                <a class="ta-agent-card" data-source="ddd" data-market="vaccines" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/ai/chat/new?db=VAW_AMER_DESIGN&schema=USIMVACCINESSDL&agent=PC_DDD_VACCINES_WEEKLY" target="_blank" rel="noopener"><div class="ta-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="7" rx="2"/><path d="M9 11v4M15 11v4M8 18h8M12 15v3"/></svg></div><div class="ta-card-title">DDD Vaccines</div><div class="ta-card-desc">DDD weekly demand and shipment insights for vaccines.</div><div class="ta-card-chip">DDD</div></a>
+                <a class="ta-agent-card" data-source="ddd" data-market="oac" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/ai/chat/new?db=VAW_AMER_DESIGN&schema=USIMVACCINESSDL&agent=DDD_SALES_WEEKLY" target="_blank" rel="noopener"><div class="ta-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="7" rx="2"/><path d="M9 11v4M15 11v4M8 18h8M12 15v3"/></svg></div><div class="ta-card-title">DDD IM</div><div class="ta-card-desc">DDD weekly demand and shipment for Internal Medicine.</div><div class="ta-card-chip">DDD</div></a>
+                <a class="ta-agent-card" data-source="867" data-market="vaccines" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/ai/chat/new?db=VAW_AMER_DESIGN&schema=USIMVACCINESSDL&agent=PC_867_VACCINES" target="_blank" rel="noopener"><div class="ta-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="7" rx="2"/><path d="M9 11v4M15 11v4M8 18h8M12 15v3"/></svg></div><div class="ta-card-title">867 Vaccines</div><div class="ta-card-desc">867 EDI channel distribution data for vaccines.</div><div class="ta-card-chip">867</div></a>
+                <a class="ta-agent-card" data-source="elaad" data-market="covid" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/ai/chat/new?db=VAW_AMER_DESIGN&schema=USIMVACCINESSDL&agent=ELAAD_COVID_MARKET_AGENT" target="_blank" rel="noopener"><div class="ta-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="7" rx="2"/><path d="M9 11v4M15 11v4M8 18h8M12 15v3"/></svg></div><div class="ta-card-title">eLAAD COVID</div><div class="ta-card-desc">eLAAD claims-based tracking for COVID vaccines.</div><div class="ta-card-chip">eLAAD</div></a>
+                <a class="ta-agent-card" data-source="elaad" data-market="rsv" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/agents/database/VAW_AMER_DESIGN/schema/USIMVACCINESSDL/agent/PC_ELAAD_RSV_VACCINES/details?tab=preview" target="_blank" rel="noopener"><div class="ta-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="7" rx="2"/><path d="M9 11v4M15 11v4M8 18h8M12 15v3"/></svg></div><div class="ta-card-title">eLAAD RSV</div><div class="ta-card-desc">eLAAD claims-based insights for RSV vaccines.</div><div class="ta-card-chip">eLAAD</div></a>
+                <a class="ta-agent-card" data-source="elaad" data-market="flu" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/ai/chat/new?db=VAW_AMER_DESIGN&schema=USIMVACCINESSDL&agent=PC_ELAAD_FLU_VACCINES" target="_blank" rel="noopener"><div class="ta-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="7" rx="2"/><path d="M9 11v4M15 11v4M8 18h8M12 15v3"/></svg></div><div class="ta-card-title">eLAAD Flu</div><div class="ta-card-desc">eLAAD claims-based insights for Flu vaccines.</div><div class="ta-card-chip">eLAAD</div></a>
+                <a class="ta-agent-card" data-source="elaad" data-market="pcv" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/ai/chat/new?db=VAW_AMER_DESIGN&schema=USIMVACCINESSDL&agent=PC_ELAAD_PCV_VACCINES" target="_blank" rel="noopener"><div class="ta-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="7" rx="2"/><path d="M9 11v4M15 11v4M8 18h8M12 15v3"/></svg></div><div class="ta-card-title">eLAAD PCV</div><div class="ta-card-desc">eLAAD claims-based insights for PCV.</div><div class="ta-card-chip">eLAAD</div></a>
+                <a class="ta-agent-card" data-source="elaad" data-market="oac" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/ai/chat/new?db=VAW_AMER_DESIGN&schema=USIMVACCINESSDL&agent=PC_ELAAD_OAC" target="_blank" rel="noopener"><div class="ta-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="7" rx="2"/><path d="M9 11v4M15 11v4M8 18h8M12 15v3"/></svg></div><div class="ta-card-title">eLAAD OAC</div><div class="ta-card-desc">eLAAD claims-based tracking for OAC.</div><div class="ta-card-chip">eLAAD</div></a>
+                <a class="ta-agent-card" data-source="optum" data-market="covid" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/ai/chat/new?db=VAW_AMER_DESIGN&schema=USIMVACCINESSDL&agent=PC_OPTUM_COVID_VACCINES" target="_blank" rel="noopener"><div class="ta-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="7" rx="2"/><path d="M9 11v4M15 11v4M8 18h8M12 15v3"/></svg></div><div class="ta-card-title">Optum COVID</div><div class="ta-card-desc">Optum claims-based analytics for COVID vaccines.</div><div class="ta-card-chip">Optum</div></a>
+                <a class="ta-agent-card" data-source="optum" data-market="rsv" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/ai/chat/new?db=VAW_AMER_DESIGN&schema=USIMVACCINESSDL&agent=PC_OPTUM_RSV_VACCINES" target="_blank" rel="noopener"><div class="ta-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="7" rx="2"/><path d="M9 11v4M15 11v4M8 18h8M12 15v3"/></svg></div><div class="ta-card-title">Optum RSV</div><div class="ta-card-desc">Optum claims-based analytics for RSV vaccines.</div><div class="ta-card-chip">Optum</div></a>
+                <a class="ta-agent-card" data-source="optum" data-market="flu" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/ai/chat/new?db=VAW_AMER_DESIGN&schema=USIMVACCINESSDL&agent=PC_OPTUM_FLU_VACCINES" target="_blank" rel="noopener"><div class="ta-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="7" rx="2"/><path d="M9 11v4M15 11v4M8 18h8M12 15v3"/></svg></div><div class="ta-card-title">Optum Flu</div><div class="ta-card-desc">Optum claims-based analytics for Flu vaccines.</div><div class="ta-card-chip">Optum</div></a>
+                <a class="ta-agent-card" data-source="optum" data-market="pcv" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/ai/chat/new?db=VAW_AMER_DESIGN&schema=USIMVACCINESSDL&agent=PC_OPTUM_PCV_VACCINES" target="_blank" rel="noopener"><div class="ta-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="7" rx="2"/><path d="M9 11v4M15 11v4M8 18h8M12 15v3"/></svg></div><div class="ta-card-title">Optum PCV</div><div class="ta-card-desc">Optum claims-based analytics for PCV.</div><div class="ta-card-chip">Optum</div></a>
+                <a class="ta-agent-card" data-source="optum" data-market="oac" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/ai/chat/new?db=VAW_AMER_DESIGN&schema=USIMVACCINESSDL&agent=PC_OPTUM_OAC" target="_blank" rel="noopener"><div class="ta-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="7" rx="2"/><path d="M9 11v4M15 11v4M8 18h8M12 15v3"/></svg></div><div class="ta-card-title">Optum OAC</div><div class="ta-card-desc">Optum claims-based analytics for OAC.</div><div class="ta-card-chip">Optum</div></a>
+                <a class="ta-agent-card" data-source="hv" data-market="covid" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/ai/chat/new?db=VAW_AMER_DESIGN&schema=USIMVACCINESSDL&agent=PC_HV_COVID_VACCINES" target="_blank" rel="noopener"><div class="ta-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="7" rx="2"/><path d="M9 11v4M15 11v4M8 18h8M12 15v3"/></svg></div><div class="ta-card-title">Health Verity COVID</div><div class="ta-card-desc">HealthVerity claims analytics for COVID vaccines.</div><div class="ta-card-chip">HV</div></a>
+                <a class="ta-agent-card" data-source="hv" data-market="rsv" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/ai/chat/new?db=VAW_AMER_DESIGN&schema=USIMVACCINESSDL&agent=PC_HV_RSV_VACCINES" target="_blank" rel="noopener"><div class="ta-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="7" rx="2"/><path d="M9 11v4M15 11v4M8 18h8M12 15v3"/></svg></div><div class="ta-card-title">Health Verity RSV</div><div class="ta-card-desc">HealthVerity claims analytics for RSV vaccines.</div><div class="ta-card-chip">HV</div></a>
+                <a class="ta-agent-card" data-source="hv" data-market="flu" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/ai/chat/new?db=VAW_AMER_DESIGN&schema=USIMVACCINESSDL&agent=PC_HV_FLU_VACCINES" target="_blank" rel="noopener"><div class="ta-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="7" rx="2"/><path d="M9 11v4M15 11v4M8 18h8M12 15v3"/></svg></div><div class="ta-card-title">Health Verity Flu</div><div class="ta-card-desc">HealthVerity claims analytics for Flu vaccines.</div><div class="ta-card-chip">HV</div></a>
+                <a class="ta-agent-card" data-source="hv" data-market="pcv" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/ai/chat/new?db=VAW_AMER_DESIGN&schema=USIMVACCINESSDL&agent=PC_HV_PCV_VACCINES" target="_blank" rel="noopener"><div class="ta-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="7" rx="2"/><path d="M9 11v4M15 11v4M8 18h8M12 15v3"/></svg></div><div class="ta-card-title">Health Verity PCV</div><div class="ta-card-desc">HealthVerity claims analytics for PCV.</div><div class="ta-card-chip">HV</div></a>
+                <a class="ta-agent-card" data-source="elaad" data-market="migraine" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/ai/chat/new?db=VAW_AMER_DESIGN&schema=USMIGRAINEIISRPTETL&agent=MIGRAINE_LAAD_W_AGENT" target="_blank" rel="noopener"><div class="ta-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="7" rx="2"/><path d="M9 11v4M15 11v4M8 18h8M12 15v3"/></svg></div><div class="ta-card-title">Migraine LAAD</div><div class="ta-card-desc">LAAD weekly monitoring for Migraine portfolio.</div><div class="ta-card-chip">LAAD</div></a>
+                <a class="ta-agent-card" data-source="npa" data-market="migraine" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/ai/chat/new?db=VAW_AMER_DESIGN&schema=MIGRAINEDEEPDIVEDUPLICATE&agent=MIGRAINE_NPA_AGENT" target="_blank" rel="noopener"><div class="ta-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="7" rx="2"/><path d="M9 11v4M15 11v4M8 18h8M12 15v3"/></svg></div><div class="ta-card-title">Migraine NPA</div><div class="ta-card-desc">NPA prescription data insights for Migraine.</div><div class="ta-card-chip">NPA</div></a>
+                <a class="ta-agent-card" data-source="forsyth" data-market="migraine" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/ai/chat/new?db=VAW_AMER_DESIGN&schema=USIMVACCINESSDL&agent=PC_FORSYTH_MIGRAINE" target="_blank" rel="noopener"><div class="ta-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="7" rx="2"/><path d="M9 11v4M15 11v4M8 18h8M12 15v3"/></svg></div><div class="ta-card-title">Forsyth</div><div class="ta-card-desc">Forsyth market research for Migraine.</div><div class="ta-card-chip">Forsyth</div></a>
+                <a class="ta-agent-card" data-source="elaad" data-market="migraine" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/ai" target="_blank" rel="noopener"><div class="ta-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="7" rx="2"/><path d="M9 11v4M15 11v4M8 18h8M12 15v3"/></svg></div><div class="ta-card-title">Migraine eLAAD</div><div class="ta-card-desc">Monthly eLAAD aggregation for Migraine.</div><div class="ta-card-chip">eLAAD</div></a>
+                <a class="ta-agent-card" data-source="npa" data-market="all" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/ai/chat/new?db=VAW_AMER_DESIGN&schema=USPRIMARYCAREADHOCANALYTICSPARTC&agent=PC_NPA_TRX_ALL_BRANDS" target="_blank" rel="noopener"><div class="ta-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="7" rx="2"/><path d="M9 11v4M15 11v4M8 18h8M12 15v3"/></svg></div><div class="ta-card-title">NPA TRx</div><div class="ta-card-desc">NPA TRx performance tracking across all brands.</div><div class="ta-card-chip">NPA</div></a>
+                <a class="ta-agent-card" data-source="npa" data-market="all" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/ai/chat/new?db=VAW_AMER_DESIGN&schema=USPRIMARYCAREADHOCANALYTICSPARTC&agent=PC_NPA_NBRX_ALL_BRANDS" target="_blank" rel="noopener"><div class="ta-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="7" rx="2"/><path d="M9 11v4M15 11v4M8 18h8M12 15v3"/></svg></div><div class="ta-card-title">NPA NBRx</div><div class="ta-card-desc">NPA NBRx acquisition trends across all brands.</div><div class="ta-card-chip">NPA</div></a>
+                <a class="ta-agent-card" data-source="copay" data-market="all" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/ai/chat/new?db=VAW_AMER_DESIGN&schema=USIMVACCINESSDL&agent=PC_COPAY_REDEMPTION_AGENT" target="_blank" rel="noopener"><div class="ta-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="7" rx="2"/><path d="M9 11v4M15 11v4M8 18h8M12 15v3"/></svg></div><div class="ta-card-title">CoPay</div><div class="ta-card-desc">Copay and voucher program claim-level data.</div><div class="ta-card-chip">CoPay</div></a>
+"""
+
+    # Build filter bar HTML (only for TAD)
+    filter_bar_html = ""
+    if agents_param == "tad":
+        filter_bar_html = """
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <span class="filter-group-label">Source:</span>
+                    <button class="filter-chip active" onclick="filterTAD(this,'source','all')">All</button>
+                    <button class="filter-chip" onclick="filterTAD(this,'source','cdc')">CDC</button>
+                    <button class="filter-chip" onclick="filterTAD(this,'source','ddd')">DDD</button>
+                    <button class="filter-chip" onclick="filterTAD(this,'source','867')">867</button>
+                    <button class="filter-chip" onclick="filterTAD(this,'source','elaad')">eLAAD</button>
+                    <button class="filter-chip" onclick="filterTAD(this,'source','optum')">Optum</button>
+                    <button class="filter-chip" onclick="filterTAD(this,'source','hv')">Health Verity</button>
+                    <button class="filter-chip" onclick="filterTAD(this,'source','npa')">NPA</button>
+                    <button class="filter-chip" onclick="filterTAD(this,'source','forsyth')">Forsyth</button>
+                    <button class="filter-chip" onclick="filterTAD(this,'source','copay')">CoPay</button>
+                </div>
+                <div class="filter-group">
+                    <span class="filter-group-label">Market:</span>
+                    <button class="filter-chip active" onclick="filterTAD(this,'market','all')">All</button>
+                    <button class="filter-chip" onclick="filterTAD(this,'market','covid')">COVID</button>
+                    <button class="filter-chip" onclick="filterTAD(this,'market','rsv')">RSV</button>
+                    <button class="filter-chip" onclick="filterTAD(this,'market','flu')">Flu</button>
+                    <button class="filter-chip" onclick="filterTAD(this,'market','pcv')">PCV</button>
+                    <button class="filter-chip" onclick="filterTAD(this,'market','oac')">OAC</button>
+                    <button class="filter-chip" onclick="filterTAD(this,'market','migraine')">Migraine</button>
+                </div>
+            </div>"""
+
+    agents_html = f"""<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{{--navy-900:#0A1A3D;--navy-700:#163990;--navy-600:#1C4FC0;--accent:#41B6E6;--bg:#EEF3FB;--surface:#FFFFFF;--text:#0F172A;--text-muted:#64748B;--text-soft:#475569;--hairline:rgba(15,23,42,0.08);--shadow-sm:0 2px 8px rgba(15,23,42,0.05),0 1px 2px rgba(15,23,42,0.04);--shadow-lg:0 18px 40px rgba(15,23,42,0.10),0 6px 12px rgba(15,23,42,0.06);--ease:cubic-bezier(0.4,0,0.2,1);--ease-out:cubic-bezier(0.16,1,0.3,1)}}
+*{{margin:0;padding:0;box-sizing:border-box}}
+body{{font-family:'Inter',system-ui,sans-serif;background:radial-gradient(ellipse 80% 60% at 0% 0%,rgba(28,79,192,0.08) 0%,transparent 60%),radial-gradient(ellipse 70% 50% at 100% 0%,rgba(65,182,230,0.07) 0%,transparent 55%),var(--bg);color:var(--text);padding:2rem 3rem;-webkit-font-smoothing:antialiased}}
+h1{{font-family:'Manrope',sans-serif;font-weight:800;font-size:1.6rem;color:var(--navy-900);letter-spacing:-0.025em;margin-bottom:0.3rem}}
+.subtitle{{font-size:0.84rem;color:var(--text-muted);margin-bottom:1.2rem}}
+.warning{{background:rgba(255,200,50,0.08);border:1px solid rgba(200,150,0,0.15);border-radius:10px;padding:0.7rem 1rem;margin-bottom:1.2rem;font-size:0.78rem;color:var(--text-soft);display:flex;align-items:center;gap:0.5rem}}
+.agent-grid{{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}}
+.ta-agent-card{{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:var(--surface);border:1px solid var(--hairline);border-radius:14px;padding:1.2rem 1rem;min-height:150px;box-shadow:var(--shadow-sm);transition:transform 0.28s var(--ease-out),box-shadow 0.28s var(--ease),border-color 0.18s var(--ease);text-align:center;text-decoration:none;cursor:pointer;overflow:hidden}}
+.ta-agent-card::after{{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(135deg,rgba(255,255,255,0) 55%,rgba(65,182,230,0.05) 80%,rgba(28,79,192,0.07) 100%);opacity:0;transition:opacity 0.28s var(--ease);pointer-events:none}}
+.ta-agent-card:hover{{transform:translateY(-3px);box-shadow:var(--shadow-lg);border-color:rgba(28,79,192,0.2)}}
+.ta-agent-card:hover::after{{opacity:1}}
+.ta-card-icon{{width:36px;height:36px;border-radius:10px;background:rgba(65,182,230,0.10);display:flex;align-items:center;justify-content:center}}
+.ta-card-icon svg{{width:18px;height:18px;stroke:var(--accent)}}
+.ta-card-title{{font-family:'Manrope',sans-serif;font-size:0.92rem;font-weight:700;color:var(--navy-900);line-height:1.25;margin-top:4px}}
+.ta-card-desc{{font-size:0.72rem;color:var(--text-muted);line-height:1.45}}
+.ta-card-chip{{font-size:0.62rem;color:var(--text-muted);display:flex;align-items:center;gap:5px;margin-top:auto;padding-top:0.4rem}}
+.ta-card-chip::before{{content:'';width:7px;height:7px;border-radius:2px;background:var(--accent);display:inline-block}}
+.filter-bar{{display:flex;flex-direction:column;gap:0.6rem;padding:0.7rem 0.9rem;background:rgba(255,255,255,0.6);border:1px solid var(--hairline);border-radius:10px;margin-bottom:1rem}}
+.filter-group{{display:flex;align-items:center;gap:0.35rem;flex-wrap:wrap}}
+.filter-group-label{{font-size:0.62rem;font-weight:600;color:var(--text-muted);margin-right:0.2rem}}
+.filter-chip{{font-size:0.7rem;font-weight:500;padding:0.25rem 0.6rem;border-radius:6px;border:1px solid var(--hairline);background:rgba(255,255,255,0.7);color:var(--text-soft);cursor:pointer;font-family:inherit;transition:all 0.15s var(--ease)}}
+.filter-chip:hover{{background:#fff;border-color:rgba(28,79,192,0.25);color:var(--navy-700)}}
+.filter-chip.active{{background:linear-gradient(90deg,var(--navy-700),var(--accent));color:#fff;border-color:transparent;box-shadow:0 2px 8px rgba(22,57,144,0.2)}}
+</style></head><body>
+<h1>{agents_page_title}</h1>
+<div class="subtitle">{agents_page_desc}</div>
+<div class="warning"><span style="font-size:1rem;">&#9888;</span>Answers from these agents are produced by AI and may be incomplete or inaccurate. Please verify with the relevant team before making decisions.</div>
+{filter_bar_html}
+<div class="agent-grid" id="tad-agent-grid">
+{agents_page_cards}
+</div>
+<script>
+var tadSourceFilter='all',tadMarketFilter='all';
+function filterTAD(btn,type,value){{
+    if(type==='source')tadSourceFilter=value;
+    if(type==='market')tadMarketFilter=value;
+    btn.parentElement.querySelectorAll('.filter-chip').forEach(function(c){{c.classList.remove('active')}});
+    btn.classList.add('active');
+    document.querySelectorAll('#tad-agent-grid .ta-agent-card').forEach(function(card){{
+        var src=card.getAttribute('data-source'),mkt=card.getAttribute('data-market');
+        var showSrc=(tadSourceFilter==='all'||src===tadSourceFilter);
+        var showMkt=(tadMarketFilter==='all'||mkt===tadMarketFilter||mkt==='all'||mkt==='vaccines');
+        card.style.display=(showSrc&&showMkt)?'':'none';
+    }});
+}}
+</script>
+</body></html>"""
+    st.components.v1.html(agents_html, height=900, scrolling=True)
 else:
     # === RENDER LANDING PAGE as single HTML component ===
     st.markdown("""
@@ -379,12 +519,12 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
             Answers from these agents are produced by AI and may be incomplete or inaccurate. Please verify with the relevant team before making decisions.
         </div>
         <div class="agent-categories" id="agent-cat-container">
-            <div class="agent-cat-card" id="cat-ta" onclick="showAgentPanel('ta')">
+            <div class="agent-cat-card" id="cat-ta" onclick="window.open(window.parent.location.origin + window.parent.location.pathname + '?agents=ta', '_blank')">
                 <div class="agent-cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l2.5 2.5"/></svg></div>
                 <div class="agent-cat-title">Therapy Area Agents</div>
                 <div class="agent-cat-desc">Ask technical and business questions across all available data sources for your therapy area.</div>
             </div>
-            <div class="agent-cat-card" id="cat-tad" onclick="showAgentPanel('tad')">
+            <div class="agent-cat-card" id="cat-tad" onclick="window.open(window.parent.location.origin + window.parent.location.pathname + '?agents=tad', '_blank')">
                 <div class="agent-cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></div>
                 <div class="agent-cat-title">Therapy Area + Data Source Agents</div>
                 <div class="agent-cat-desc">Query specific data sources — NPA, DDD, LAAD, CDC, Optum, HealthVerity — scoped to a therapy area.</div>
