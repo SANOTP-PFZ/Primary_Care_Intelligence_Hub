@@ -245,7 +245,7 @@ h1{{font-family:'Manrope',sans-serif;font-weight:800;font-size:1.6rem;color:var(
 </style></head><body>
 <h1>{agents_page_title}</h1>
 <div class="subtitle">{agents_page_desc}</div>
-<div class="warning"><span style="font-size:1rem;">&#9888;</span>Answers from these agents are produced by AI and may be incomplete or inaccurate. Please verify with the relevant team before making decisions.</div>
+<div class="warning"><span style="font-size:1rem;">&#9888;</span>Answers from these agents are produced by AI and may be incomplete or inaccurate. For complex or business-critical outputs, please verify with the relevant ZS team to validate the underlying logic and code before making decisions.</div>
 {filter_bar_html}
 <div class="agent-grid" id="tad-agent-grid">
 {agents_page_cards}
@@ -516,7 +516,7 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
         <div class="section-head"><h2>CoWork Agents</h2><p>AI-powered analytical agents for conversational data exploration and automated insights.</p></div>
         <div style="background:rgba(255,200,50,0.08);border:1px solid rgba(200,150,0,0.15);border-radius:10px;padding:0.7rem 1rem;margin-bottom:1rem;font-size:0.78rem;color:var(--text-soft);display:flex;align-items:center;gap:0.5rem;">
             <span style="font-size:1rem;">&#9888;</span>
-            Answers from these agents are produced by AI and may be incomplete or inaccurate. Please verify with the relevant team before making decisions.
+            Answers from these agents are produced by AI and may be incomplete or inaccurate. For complex or business-critical outputs, please verify with the relevant ZS team to validate the underlying logic and code before making decisions.
         </div>
         <div class="agent-categories" id="agent-cat-container">
             <div class="agent-cat-card" id="cat-ta" onclick="window.open(window.parent.location.origin + window.parent.location.pathname + '?agents=ta', '_blank')">
