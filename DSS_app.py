@@ -609,20 +609,28 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
     <!-- AGENTS SECTION -->
     <section class="section" id="agents">
         <div class="section-head"><h2>CoWork Agents</h2><p>AI-powered analytical agents for conversational data exploration and automated insights.</p></div>
-        <div style="background:rgba(255,200,50,0.08);border:1px solid rgba(200,150,0,0.15);border-radius:10px;padding:0.7rem 1rem;margin-bottom:1rem;font-size:0.78rem;color:var(--text-soft);display:flex;align-items:center;gap:0.5rem;">
+        <div style="background:rgba(255,200,50,0.08);border:1px solid rgba(200,150,0,0.15);border-radius:10px;padding:0.7rem 1rem;margin-bottom:1.2rem;font-size:0.78rem;color:var(--text-soft);display:flex;align-items:center;gap:0.5rem;">
             <span style="font-size:1rem;">&#9888;</span>
             Answers from these agents are produced by AI and may be incomplete or inaccurate. For complex or business-critical outputs, please verify with the relevant ZS team to validate the underlying logic and code before making decisions.
         </div>
-        <div class="agent-categories" id="agent-cat-container">
-            <div class="agent-cat-card" id="cat-ta" onclick="window.open(window.parent.location.origin + window.parent.location.pathname + '?agents=ta', '_blank')">
-                <div class="agent-cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l2.5 2.5"/></svg></div>
-                <div class="agent-cat-title">Therapy Area Agents</div>
-                <div class="agent-cat-desc">Ask technical and business questions across all available data sources for your therapy area.</div>
+        <div class="agent-categories" id="agent-cat-container" style="min-height:260px;">
+            <div class="agent-cat-card" id="cat-ta" onclick="window.open(window.parent.location.origin + window.parent.location.pathname + '?agents=ta', '_blank')" style="min-height:240px;display:flex;flex-direction:column;justify-content:center;">
+                <div class="agent-cat-icon" style="width:52px;height:52px;border-radius:14px;margin-bottom:1.2rem;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:24px;height:24px;"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l2.5 2.5"/></svg></div>
+                <div class="agent-cat-title" style="font-size:1.2rem;margin-bottom:0.5rem;">Therapy Area Agents</div>
+                <div class="agent-cat-desc" style="font-size:0.86rem;line-height:1.65;">Ask technical and business questions across all available data sources for your therapy area.</div>
+                <div style="margin-top:1.2rem;display:flex;align-items:center;gap:0.5rem;">
+                    <span style="font-size:0.72rem;font-weight:600;color:var(--navy-700);background:rgba(28,79,192,0.08);padding:0.2rem 0.6rem;border-radius:5px;">6 Agents</span>
+                    <span style="font-size:0.72rem;color:var(--text-muted);">PCV &middot; RSV &middot; Flu &middot; OAC &middot; COVID &middot; Migraine</span>
+                </div>
             </div>
-            <div class="agent-cat-card" id="cat-tad" onclick="window.open(window.parent.location.origin + window.parent.location.pathname + '?agents=tad', '_blank')">
-                <div class="agent-cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></div>
-                <div class="agent-cat-title">Therapy Area + Data Source Agents</div>
-                <div class="agent-cat-desc">Query specific data sources — NPA, DDD, LAAD, CDC, Optum, HealthVerity — scoped to a therapy area.</div>
+            <div class="agent-cat-card" id="cat-tad" onclick="window.open(window.parent.location.origin + window.parent.location.pathname + '?agents=tad', '_blank')" style="min-height:240px;display:flex;flex-direction:column;justify-content:center;">
+                <div class="agent-cat-icon" style="width:52px;height:52px;border-radius:14px;margin-bottom:1.2rem;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:24px;height:24px;"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></div>
+                <div class="agent-cat-title" style="font-size:1.2rem;margin-bottom:0.5rem;">Therapy Area + Data Source Agents</div>
+                <div class="agent-cat-desc" style="font-size:0.86rem;line-height:1.65;">Query specific data sources — NPA, DDD, LAAD, CDC, Optum, HealthVerity — scoped to a therapy area.</div>
+                <div style="margin-top:1.2rem;display:flex;align-items:center;gap:0.5rem;">
+                    <span style="font-size:0.72rem;font-weight:600;color:var(--navy-700);background:rgba(28,79,192,0.08);padding:0.2rem 0.6rem;border-radius:5px;">26 Agents</span>
+                    <span style="font-size:0.72rem;color:var(--text-muted);">10 Sources &middot; 6 Markets</span>
+                </div>
             </div>
         </div>
 
