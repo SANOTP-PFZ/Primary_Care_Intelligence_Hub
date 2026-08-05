@@ -191,19 +191,23 @@ elif agents_param in ("ta", "tad"):
     if agents_param == "tad":
         # Read the supply chain flowchart HTML file
         try:
-            with open("supply-chain-updated.html", "r", encoding="utf-8") as f:
+            import os
+            sc_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "supply-chain-updated.html")
+            with open(sc_path, "r", encoding="utf-8") as f:
                 sc_content = f.read()
-            # Extract just the body content (between <body> and </body>)
+            # Extract body and style, escape curly braces for f-string safety
             import re
             body_match = re.search(r'<body[^>]*>(.*?)</body>', sc_content, re.DOTALL)
             style_match = re.search(r'<style>(.*?)</style>', sc_content, re.DOTALL)
             sc_body = body_match.group(1) if body_match else ""
             sc_style = style_match.group(1) if style_match else ""
-            flowchart_html = f"""
-            <style>{sc_style}</style>
-            <div style="margin-bottom:1.2rem;border:1px solid var(--hairline);border-radius:14px;padding:1rem;background:rgba(255,255,255,0.7);">
-                {sc_body}
-            </div>"""
+            # Use string concatenation instead of f-string to avoid brace issues
+            flowchart_html = (
+                "<style>" + sc_style + "</style>"
+                '<div style="margin-bottom:1.2rem;border:1px solid var(--hairline);border-radius:14px;padding:1rem;background:rgba(255,255,255,0.7);">'
+                + sc_body +
+                "</div>"
+            )
         except Exception:
             flowchart_html = ""
 
@@ -233,6 +237,9 @@ elif agents_param in ("ta", "tad"):
                     <button class="filter-chip" onclick="filterTAD(this,'market','migraine')">Migraine</button>
                 </div>
             </div>"""
+
+    # Escape flowchart braces for f-string interpolation
+    flowchart_html_escaped = flowchart_html.replace("{", "{{").replace("}", "}}")
 
     agents_html = f"""<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8">
@@ -265,7 +272,7 @@ h1{{font-family:'Manrope',sans-serif;font-weight:800;font-size:1.6rem;color:var(
 <h1>{agents_page_title}</h1>
 <div class="subtitle">{agents_page_desc}</div>
 <div class="warning"><span style="font-size:1rem;">&#9888;</span>Answers from these agents are produced by AI and may be incomplete or inaccurate. For complex or business-critical outputs, please verify with the relevant ZS team to validate the underlying logic and code before making decisions.</div>
-{flowchart_html}
+{flowchart_html_escaped}
 {filter_bar_html}
 <div class="agent-grid" id="tad-agent-grid">
 {agents_page_cards}
@@ -373,6 +380,12 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
 .section-head h2{{font-size:1.35rem;font-weight:700;color:var(--navy-900);letter-spacing:-0.02em;margin-bottom:0.2rem}}
 .section-head p{{font-size:0.84rem;color:var(--text-muted);max-width:680px}}
 .grid{{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}}
+.grid-4{{gap:1.4rem}}
+.grid-4 .card{{min-height:180px;padding:1.5rem 1.4rem;justify-content:center;align-items:center;text-align:center}}
+.grid-4 .card .card-top{{justify-content:center;margin-bottom:1rem}}
+.grid-4 .card .card-title{{font-size:1.15rem;margin-bottom:0}}
+.grid-4 .card .icon-chip{{width:44px;height:44px;border-radius:12px}}
+.grid-4 .card .icon-chip svg{{width:22px;height:22px}}
 .card{{position:relative;display:flex;flex-direction:column;background:var(--surface);border-radius:14px;padding:1.15rem 1.2rem;min-height:148px;overflow:hidden;box-shadow:var(--shadow-sm);transition:transform 0.28s var(--ease-out),box-shadow 0.28s var(--ease);cursor:pointer}}
 .card::after{{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(135deg,rgba(255,255,255,0) 55%,rgba(65,182,230,0.05) 80%,rgba(28,79,192,0.07) 100%);opacity:0;transition:opacity 0.28s var(--ease);pointer-events:none}}
 .card:hover{{transform:translateY(-3px);box-shadow:var(--shadow-lg)}}
@@ -564,7 +577,7 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
             <div class="section-head-row"><h2>Deep-Dive Dashboards</h2></div>
             <p>Select a brand to explore detailed QoQ analysis, competitive trends, and exportable reports.</p>
         </div>
-        <div class="grid">
+        <div class="grid grid-4">
             {brand_cards_grid}
         </div>
     </section>
