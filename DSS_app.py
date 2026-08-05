@@ -447,6 +447,16 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
 .tad-group-label{{font-family:'Manrope',sans-serif;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);padding:1.2rem 0 0.5rem;border-bottom:1px solid var(--hairline);margin-bottom:0.8rem}}
 .back-to-cats{{display:inline-flex;align-items:center;gap:0.3rem;padding:0.4rem 0.8rem;border-radius:8px;background:rgba(255,255,255,0.7);border:1px solid var(--hairline);color:var(--text-soft);font-size:0.75rem;font-weight:500;cursor:pointer;font-family:inherit;transition:all 0.18s var(--ease);flex-shrink:0}}
 .back-to-cats:hover{{background:#fff;color:var(--navy-700);border-color:rgba(28,79,192,0.25)}}
+.tab-bar{{display:flex;gap:0.4rem;margin-bottom:1rem;border-bottom:1px solid var(--hairline);padding-bottom:0.5rem}}
+.tab-btn{{font-size:0.78rem;font-weight:500;padding:0.4rem 0.9rem;border-radius:7px;border:1px solid var(--hairline);background:rgba(255,255,255,0.7);color:var(--text-soft);cursor:pointer;font-family:inherit;transition:all 0.15s var(--ease)}}
+.tab-btn:hover{{background:#fff;border-color:rgba(28,79,192,0.25);color:var(--navy-700)}}
+.tab-btn.active{{background:linear-gradient(90deg,var(--navy-700),var(--accent));color:#fff;border-color:transparent;box-shadow:0 2px 8px rgba(22,57,144,0.2)}}
+.ds-table-wrap{{overflow-x:auto;border:1px solid var(--hairline);border-radius:10px;background:var(--surface)}}
+.ds-table{{width:100%;border-collapse:collapse;font-size:0.78rem}}
+.ds-table th{{text-align:left;padding:0.6rem 0.8rem;background:rgba(28,79,192,0.04);color:var(--navy-700);font-weight:600;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.04em;border-bottom:1px solid var(--hairline)}}
+.ds-table td{{padding:0.55rem 0.8rem;border-bottom:1px solid rgba(15,23,42,0.04);color:var(--text-soft);vertical-align:top;line-height:1.5}}
+.ds-table tr:last-child td{{border-bottom:none}}
+.ds-table tr:hover td{{background:rgba(28,79,192,0.02)}}
 .filter-bar{{display:flex;flex-direction:column;gap:0.6rem;padding:0.7rem 0.9rem;background:rgba(255,255,255,0.6);border:1px solid var(--hairline);border-radius:10px;margin-bottom:1rem}}
 .filter-label{{font-size:0.7rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em}}
 .filter-group{{display:flex;align-items:center;gap:0.35rem;flex-wrap:wrap}}
@@ -525,7 +535,7 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
         </button>
         <button class="nav-item" data-target="brandinfo">
             <span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 16v-4M12 8h.01" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span>
-            <span class="nav-label">Brand Info</span>
+            <span class="nav-label">Data Source Guide</span>
         </button>
         <button class="nav-item" data-target="links">
             <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span>
@@ -615,38 +625,61 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
     <section class="section" id="datadict">
         <div class="section-head"><h2>Data Dictionary</h2><p>Definitions, metric calculations, and data source documentation.</p></div>
         <div class="grid" style="grid-template-columns:repeat(3,1fr);">
-            <a class="card" href="https://pfizer.sharepoint.com/:x:/s/PrimaryCareAnalytics2/IQDyuMCo9GpMTIn4FCiPyp0kAYGZUi2J4mTd-IEeGfDwSiI?e=y2vifJ" target="_blank" rel="noopener" style="min-height:140px;align-items:center;text-align:center;justify-content:center;">
-                <div class="card-top" style="justify-content:center;"><span class="icon-chip chip-s1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 3v4a1 1 0 001 1h4"/><path d="M17 21H7a2 2 0 01-2-2V5a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z"/><path d="M9 9h6M9 13h6M9 17h4"/></svg></span></div>
-                <div class="card-title">Health Verity</div>
-                <div class="card-desc">HealthVerity pharmacy claims data dictionary — field definitions, coding schemes, and data specifications.</div>
+            <a class="card" href="https://pfizer.sharepoint.com/:x:/s/PrimaryCareAnalytics2/IQDyuMCo9GpMTIn4FCiPyp0kAYGZUi2J4mTd-IEeGfDwSiI?e=y2vifJ" target="_blank" rel="noopener" style="min-height:120px;align-items:center;text-align:center;justify-content:center;text-decoration:none;">
+                <div class="card-title" style="margin-bottom:0.5rem;">Health Verity</div>
                 <div style="display:inline-flex;align-items:center;gap:0.3rem;font-size:0.68rem;font-weight:600;color:var(--text-muted);padding:0.2rem 0.5rem;border-radius:5px;background:rgba(15,23,42,0.05);"><span style="color:#107C41;">&#9632;</span>Excel &middot; SharePoint</div>
             </a>
-            <a class="card" href="https://pfizer.sharepoint.com/:x:/r/sites/PrimaryCareAnalytics2/Shared%20Documents/General/Data%20Dictionaries/OPTUM%20CDM%20Data%20Dictionary%207.1%20DOD.xlsx?d=wff2ab05100274f0bbec58a918e826c06&csf=1&web=1&e=UCTDrw" target="_blank" rel="noopener" style="min-height:140px;align-items:center;text-align:center;justify-content:center;">
-                <div class="card-top" style="justify-content:center;"><span class="icon-chip chip-s1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 3v4a1 1 0 001 1h4"/><path d="M17 21H7a2 2 0 01-2-2V5a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z"/><path d="M9 9h6M9 13h6M9 17h4"/></svg></span></div>
-                <div class="card-title">Optum</div>
-                <div class="card-desc">Optum CDM Data Dictionary v7.1 — claims data model, field mappings, and coding reference.</div>
+            <a class="card" href="https://pfizer.sharepoint.com/:x:/r/sites/PrimaryCareAnalytics2/Shared%20Documents/General/Data%20Dictionaries/OPTUM%20CDM%20Data%20Dictionary%207.1%20DOD.xlsx?d=wff2ab05100274f0bbec58a918e826c06&csf=1&web=1&e=UCTDrw" target="_blank" rel="noopener" style="min-height:120px;align-items:center;text-align:center;justify-content:center;text-decoration:none;">
+                <div class="card-title" style="margin-bottom:0.5rem;">Optum</div>
                 <div style="display:inline-flex;align-items:center;gap:0.3rem;font-size:0.68rem;font-weight:600;color:var(--text-muted);padding:0.2rem 0.5rem;border-radius:5px;background:rgba(15,23,42,0.05);"><span style="color:#107C41;">&#9632;</span>Excel &middot; SharePoint</div>
             </a>
-            <a class="card" href="https://pfizer.sharepoint.com/:x:/s/PrimaryCareAnalytics2/IQCHVLmo2oDcTog8ou2FMycWAfrtwQ4BE0NfXWTWG-GEpUg?e=E7jCYE" target="_blank" rel="noopener" style="min-height:140px;align-items:center;text-align:center;justify-content:center;">
-                <div class="card-top" style="justify-content:center;"><span class="icon-chip chip-s1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 3v4a1 1 0 001 1h4"/><path d="M17 21H7a2 2 0 01-2-2V5a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z"/><path d="M9 9h6M9 13h6M9 17h4"/></svg></span></div>
-                <div class="card-title">LAAD</div>
-                <div class="card-desc">LAAD pharmacy and medical claims data dictionary — field definitions and source specifications.</div>
+            <a class="card" href="https://pfizer.sharepoint.com/:x:/s/PrimaryCareAnalytics2/IQCHVLmo2oDcTog8ou2FMycWAfrtwQ4BE0NfXWTWG-GEpUg?e=E7jCYE" target="_blank" rel="noopener" style="min-height:120px;align-items:center;text-align:center;justify-content:center;text-decoration:none;">
+                <div class="card-title" style="margin-bottom:0.5rem;">LAAD</div>
                 <div style="display:inline-flex;align-items:center;gap:0.3rem;font-size:0.68rem;font-weight:600;color:var(--text-muted);padding:0.2rem 0.5rem;border-radius:5px;background:rgba(15,23,42,0.05);"><span style="color:#107C41;">&#9632;</span>Excel &middot; SharePoint</div>
             </a>
         </div>
     </section>
 
-    <!-- BRAND INFO SECTION -->
+    <!-- DATA SOURCE GUIDE SECTION -->
     <section class="section" id="brandinfo">
-        <div class="section-head"><h2>Brand Info</h2><p>Key brand information, therapeutic area context, and competitive landscape.</p></div>
-        <div style="text-align:center;padding:3rem 0;">
-            <div style="display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:16px;background:rgba(28,79,192,0.06);margin-bottom:1rem;">
-                <span style="font-size:28px;">&#128138;</span>
+        <div class="section-head"><h2>Data Source Guide</h2><p>Dataset reference for Primary Care Vaccines OE — tables, brands covered, and data caveats.</p></div>
+        <div class="tab-bar">
+            <button class="tab-btn active" onclick="switchTab(this,'shipments-tab')">Shipments (DDD / 867 / 852 / 844)</button>
+            <button class="tab-btn" onclick="switchTab(this,'admins-tab')">Admins (LAAD / Optum / HV / Forsyth / NPA / CDS)</button>
+        </div>
+        <div class="tab-content" id="shipments-tab" style="display:block;">
+            <div class="ds-table-wrap">
+                <table class="ds-table">
+                    <thead><tr><th>Dataset</th><th>Table</th><th>Brands</th><th>Data Caveats</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>DDD</strong></td><td>FCT_DDD_WK_VX</td><td>PFE Vaccines</td><td>Can't perform retail chain-level analytics (data at ZIP level). Kaiser shipments under-represented.</td></tr>
+                        <tr><td><strong>DDD</strong></td><td>DDD_FCT_SLS_M</td><td>PFE Vaccines + Orals (Nurtec, Paxlovid, Eliquis)</td><td>Only non-retail coverage of Nurtec, Paxlovid, and Eliquis.</td></tr>
+                        <tr><td><strong>867</strong></td><td>FCT_IND_867</td><td>PFE Vaccines</td><td>&#8212;</td></tr>
+                        <tr><td><strong>867</strong></td><td>EDI_867_TRD_INSGT_EXTRT_VW</td><td>PFE Vaccines + Orals</td><td>For retail, ~50% doses don't get mapping for PFZ_CUST_ID (blinded).</td></tr>
+                        <tr><td><strong>852</strong></td><td>EDI_852_TRD_INSGT_FCT</td><td>PFE Vaccines + Orals</td><td>&#8212;</td></tr>
+                        <tr><td><strong>844</strong></td><td>FCT_IND_844</td><td>PFE Vaccines</td><td>&#8212;</td></tr>
+                        <tr><td><strong>844</strong></td><td>FCT_CUST_END</td><td>PFE Vaccines</td><td>Filter for SRC_TYP_CD = '844' to get 844 shipments.</td></tr>
+                    </tbody>
+                </table>
             </div>
-            <div style="font-family:'Manrope',sans-serif;font-weight:700;font-size:1.1rem;color:var(--navy-900);margin-bottom:0.4rem;">Brand Info</div>
-            <div style="font-size:0.84rem;color:var(--text-muted);max-width:480px;margin:0 auto;line-height:1.7;">Brand profiles, therapeutic area overviews, competitive positioning, and key market context for Primary Care brands.</div>
-            <div style="margin-top:1.2rem;display:inline-block;padding:6px 16px;border-radius:8px;background:rgba(28,79,192,0.06);border:1px solid rgba(28,79,192,0.12);">
-                <span style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;color:var(--navy-600);letter-spacing:0.02em;">Coming Soon</span>
+        </div>
+        <div class="tab-content" id="admins-tab" style="display:none;">
+            <div class="ds-table-wrap">
+                <table class="ds-table">
+                    <thead><tr><th>Dataset</th><th>Table</th><th>Brands</th><th>Data Caveats</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>ELAAD</strong></td><td>ELAAD_FACT_MX / ELAAD_FACT_RX</td><td>All brands</td><td>Low diagnosis capture. Need HCP affiliations to roll up to account level.</td></tr>
+                        <tr><td><strong>Weekly LAAD</strong></td><td>LAAD_FCT_PX_W / LAAD_FCT_RX_W / LAAD_FCT_DX_W</td><td>PCV, Covid, Flu, Eliquis</td><td>Low diagnosis capture. Need HCP affiliations to roll up to account level.</td></tr>
+                        <tr><td><strong>Migraine LAAD</strong></td><td>LAAD_MIG_FCT_MX_W / LAAD_MIG_FCT_RX_W</td><td>Migraine brands</td><td>Low diagnosis capture. Need HCP affiliations to roll up to account level.</td></tr>
+                        <tr><td><strong>Optum</strong></td><td>RX / MEDICAL_PROC / MEDICAL_DIAG / CONFINEMENT / MEDICAL</td><td>All brands</td><td>Low coverage (only UHG payer). No HCP info. Cannot do payer-level analysis. All claims are paid claims.</td></tr>
+                        <tr><td><strong>Health Verity</strong></td><td>PHARMACY_CLAIMS / EVENTS</td><td>All brands</td><td>Chain-level coverage inaccurate. Payer info largely "Unknown". Only retail admins.</td></tr>
+                        <tr><td><strong>Forsyth</strong></td><td>FH_COM_104_MIGRAINE_RX_PAID + 6 more tables</td><td>Migraine brands</td><td>Low coverage (only ESI payer). No HCP info in Diagnosis table.</td></tr>
+                        <tr><td><strong>NPA</strong></td><td>Flatfile (via email)</td><td>All brands</td><td>Only retail information.</td></tr>
+                        <tr><td><strong>Rapid NPA</strong></td><td>Flatfile (via email)</td><td>PCV, RSV, Covid</td><td>Only retail information.</td></tr>
+                        <tr><td><strong>Firstlook</strong></td><td>Flatfile (via email)</td><td>Oral CGRP (Nurtec, Ubrelvy, Qulipta) + Zavzpret</td><td>Only retail information.</td></tr>
+                        <tr><td><strong>CDS</strong></td><td>MDCR_PARTB_PROD_ORG_IND_MTH + 2 more</td><td>Covid, PCV, Flu vaccines</td><td>Coverage drops at granular levels. Medicare only (60+ age).</td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </section>
@@ -846,6 +879,14 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
     document.addEventListener('click', function(e) {{
         if (!e.target.closest('.dropdown-wrap')) document.querySelectorAll('.dropdown.show').forEach(function(d){{d.classList.remove('show')}});
     }});
+
+    // Tab switching for Data Source Guide
+    window.switchTab = function(btn, tabId) {{
+        document.querySelectorAll('.tab-btn').forEach(function(t){{ t.classList.remove('active'); }});
+        btn.classList.add('active');
+        document.querySelectorAll('.tab-content').forEach(function(c){{ c.style.display = 'none'; }});
+        document.getElementById(tabId).style.display = 'block';
+    }};
 
     // Agent panel switching
     window.showAgentPanel = function(panel) {{
