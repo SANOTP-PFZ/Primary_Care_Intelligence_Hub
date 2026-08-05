@@ -1,12 +1,12 @@
 """
-Primary Care Intelligence Hub - Landing Page
+Primary Care OE Maximization Intelligence Hub - Landing Page
 """
 import streamlit as st
 import dataiku
 import pandas as pd
 
 st.set_page_config(
-    page_title="Primary Care Intelligence Hub",
+    page_title="Primary Care OE Maximization Intelligence Hub",
     page_icon="P",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -457,7 +457,7 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
     <div class="sidebar-brand">
         <img src="https://cdn.pfizer.com/pfizercom/2022-10/Pfizer_Logo_Color_CMYK.png" alt="Pfizer">
         <div>
-            <div class="title">Primary Care<br>Intelligence Hub</div>
+            <div class="title">Primary Care OE<br>Maximization<br>Intelligence Hub</div>
             <div class="subtitle">Pfizer Analytics</div>
         </div>
     </div>
@@ -518,7 +518,7 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
                 <div style="display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:14px;background:rgba(28,79,192,0.06);margin-bottom:1.2rem;">
                     <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#1C4FC0" stroke-width="1.8"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg>
                 </div>
-                <div style="font-family:'Manrope',sans-serif;font-weight:800;font-size:1.65rem;color:var(--navy-900);letter-spacing:-0.025em;margin-bottom:0.8rem;line-height:1.2;">Welcome to the Primary Care<br>Intelligence Hub</div>
+                <div style="font-family:'Manrope',sans-serif;font-weight:800;font-size:1.65rem;color:var(--navy-900);letter-spacing:-0.025em;margin-bottom:0.8rem;line-height:1.2;">Welcome to the Primary Care OE<br>Maximization Intelligence Hub</div>
                 <div style="font-size:0.92rem;color:var(--text-muted);line-height:1.85;margin-bottom:1.5rem;">
                     Empowering Pfizer's Primary Care business with real-time market intelligence, competitive analytics, and actionable insights across our key therapeutic brands. This platform consolidates NPA, DDD, and LAAD data sources into unified quarterly performance views — enabling faster decisions and deeper market understanding.
                 </div>
