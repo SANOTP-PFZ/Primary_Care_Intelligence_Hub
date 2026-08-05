@@ -614,7 +614,7 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
             Answers from these agents are produced by AI and may be incomplete or inaccurate. For complex or business-critical outputs, please verify with the relevant ZS team to validate the underlying logic and code before making decisions.
         </div>
         <div class="agent-categories" id="agent-cat-container" style="min-height:260px;">
-            <div class="agent-cat-card" id="cat-ta" onclick="window.open(window.parent.location.origin + window.parent.location.pathname + '?agents=ta', '_blank')" style="min-height:240px;display:flex;flex-direction:column;justify-content:center;">
+            <div class="agent-cat-card" id="cat-ta" onclick="showAgentPanel('ta')" style="min-height:240px;display:flex;flex-direction:column;justify-content:center;">
                 <div class="agent-cat-icon" style="width:52px;height:52px;border-radius:14px;margin-bottom:1.2rem;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:24px;height:24px;"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l2.5 2.5"/></svg></div>
                 <div class="agent-cat-title" style="font-size:1.2rem;margin-bottom:0.5rem;">Therapy Area Agents</div>
                 <div class="agent-cat-desc" style="font-size:0.86rem;line-height:1.65;">Ask technical and business questions across all available data sources for your therapy area.</div>
@@ -623,7 +623,7 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
                     <span style="font-size:0.72rem;color:var(--text-muted);">PCV &middot; RSV &middot; Flu &middot; OAC &middot; COVID &middot; Migraine</span>
                 </div>
             </div>
-            <div class="agent-cat-card" id="cat-tad" onclick="window.open(window.parent.location.origin + window.parent.location.pathname + '?agents=tad', '_blank')" style="min-height:240px;display:flex;flex-direction:column;justify-content:center;">
+            <div class="agent-cat-card" id="cat-tad" onclick="showAgentPanel('tad')" style="min-height:240px;display:flex;flex-direction:column;justify-content:center;">
                 <div class="agent-cat-icon" style="width:52px;height:52px;border-radius:14px;margin-bottom:1.2rem;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:24px;height:24px;"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></div>
                 <div class="agent-cat-title" style="font-size:1.2rem;margin-bottom:0.5rem;">Therapy Area + Data Source Agents</div>
                 <div class="agent-cat-desc" style="font-size:0.86rem;line-height:1.65;">Query specific data sources — NPA, DDD, LAAD, CDC, Optum, HealthVerity — scoped to a therapy area.</div>
@@ -641,7 +641,7 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
                     <div class="sub-panel-title">Therapy Area Agents</div>
                     <div class="sub-panel-desc" style="margin-bottom:0;">Ask technical and business questions across all available data sources for your therapy area.</div>
                 </div>
-                <button class="back-to-cats" onclick="hideAgentPanels()">&#8592; Back</button>
+                <button class="back-to-cats" onclick="hideAgentPanels()">&#8592; Back to Home</button>
             </div>
             <div class="agent-grid">
                 <a class="ta-agent-card" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/ai/chat/new?db=VAW_AMER_DESIGN&schema=USIMVACCINESSDL&agent=PC_PCV_VACCINE_AGENT" target="_blank" rel="noopener">
@@ -684,7 +684,31 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
                     <div class="sub-panel-title">Therapy Area + Data Source Agents</div>
                     <div class="sub-panel-desc" style="margin-bottom:0;">Query specific data sources scoped to a therapy area.</div>
                 </div>
-                <button class="back-to-cats" onclick="hideAgentPanels()">&#8592; Back</button>
+                <button class="back-to-cats" onclick="hideAgentPanels()">&#8592; Back to Home</button>
+            </div>
+            <div style="margin-bottom:1.2rem;border:1px solid rgba(15,23,42,0.08);border-radius:14px;padding:1.2rem 1rem 0.8rem;background:rgba(255,255,255,0.7);">
+                <div style="font-size:13px;font-weight:700;color:#1f2a44;margin-bottom:4px;">Pharmaceutical Supply Chain</div>
+                <div style="font-size:11px;color:#5a6478;margin-bottom:10px;">Medicine moves right along the chain, money flows back left, and rebates close the loop.</div>
+                <div style="overflow-x:auto;padding-bottom:6px;">
+                    <svg viewBox="0 0 1392 200" style="display:block;width:100%;min-width:940px;height:auto;">
+                        <defs><linearGradient id="cs2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#fbfcff"/></linearGradient><filter id="sf2" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#26386b" flood-opacity="0.10"/></filter><marker id="aM2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2f6fd0"/></marker><marker id="aMo2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#3f8f3f"/></marker><marker id="aR2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#d98a2b"/></marker></defs>
+                        <path d="M162,111 L227,111" fill="none" stroke="#2f6fd0" stroke-width="2" stroke-opacity=".42" marker-end="url(#aM2)"/><path d="M227,129 L162,129" fill="none" stroke="#3f8f3f" stroke-width="2" stroke-opacity=".42" marker-end="url(#aMo2)"/><path d="M362,111 L427,111" fill="none" stroke="#2f6fd0" stroke-width="2" stroke-opacity=".42" marker-end="url(#aM2)"/><path d="M427,129 L362,129" fill="none" stroke="#3f8f3f" stroke-width="2" stroke-opacity=".42" marker-end="url(#aMo2)"/><path d="M562,111 L627,111" fill="none" stroke="#2f6fd0" stroke-width="2" stroke-opacity=".42" marker-end="url(#aM2)"/><path d="M627,129 L562,129" fill="none" stroke="#3f8f3f" stroke-width="2" stroke-opacity=".42" marker-end="url(#aMo2)"/><path d="M762,120 L827,120" fill="none" stroke="#3f8f3f" stroke-width="2" stroke-opacity=".42" marker-end="url(#aMo2)"/><path d="M962,120 L1027,120" fill="none" stroke="#3f8f3f" stroke-width="2" stroke-opacity=".42" marker-end="url(#aMo2)"/><path d="M1162,120 L1227,120" fill="none" stroke="#3f8f3f" stroke-width="2" stroke-opacity=".42" marker-end="url(#aMo2)"/><path d="M430,84 C 414,58 378,58 363,84" fill="none" stroke="#d98a2b" stroke-width="2" stroke-opacity=".65" stroke-dasharray="5 4" marker-end="url(#aR2)"/>
+                        <g fill="#4a5468" font-size="11" text-anchor="middle"><text x="196" y="60" fill="#2f6fd0">medicine &#8594;</text><text x="196" y="74" fill="#3f8f3f">money &#8592;</text><text x="396" y="50" font-size="10.5" fill="#d98a2b">Returns</text><text x="796" y="66">Premiums</text><text x="996" y="66">Payments &amp; rebates</text><text x="1196" y="66">Rebates</text></g>
+                        <g><rect x="30" y="82" width="132" height="72" rx="12" fill="url(#cs2)" stroke="#e3e8f2" filter="url(#sf2)"/><text x="42" y="100" font-size="9.5" font-weight="700" letter-spacing=".08em" fill="#8b93a6">01</text><text x="96" y="119" text-anchor="middle" font-size="13.5" font-weight="700">Manufacturer</text><text x="96" y="133" text-anchor="middle" font-size="10" fill="#5a6478">e.g. Pfizer</text></g>
+                        <g><rect x="230" y="82" width="132" height="72" rx="12" fill="url(#cs2)" stroke="#e3e8f2" filter="url(#sf2)"/><text x="242" y="100" font-size="9.5" font-weight="700" letter-spacing=".08em" fill="#8b93a6">02</text><text x="296" y="119" text-anchor="middle" font-size="13.5" font-weight="700">Wholesaler</text><text x="296" y="133" text-anchor="middle" font-size="10" fill="#5a6478">Distributes</text><rect x="234" y="164" width="124" height="18" rx="9" fill="#eef0fc" stroke="#d7dbf6"/><text x="296" y="176.5" text-anchor="middle" font-size="9.5" fill="#6a5fd0">DDD &#183; 867</text></g>
+                        <g><rect x="430" y="82" width="132" height="72" rx="12" fill="url(#cs2)" stroke="#e3e8f2" filter="url(#sf2)"/><text x="442" y="100" font-size="9.5" font-weight="700" letter-spacing=".08em" fill="#8b93a6">03</text><text x="496" y="119" text-anchor="middle" font-size="13.5" font-weight="700">Pharmacy</text><text x="496" y="133" text-anchor="middle" font-size="10" fill="#5a6478">Dispenses</text><rect x="408" y="164" width="176" height="18" rx="9" fill="#eef0fc" stroke="#d7dbf6"/><text x="496" y="176.5" text-anchor="middle" font-size="9" fill="#6a5fd0">ELAAD &#183; Optum &#183; Health Verity</text></g>
+                        <g><rect x="630" y="82" width="132" height="72" rx="12" fill="url(#cs2)" stroke="#e3e8f2" filter="url(#sf2)"/><text x="642" y="100" font-size="9.5" font-weight="700" letter-spacing=".08em" fill="#8b93a6">04</text><text x="696" y="119" text-anchor="middle" font-size="13.5" font-weight="700">Patient</text><text x="696" y="133" text-anchor="middle" font-size="10" fill="#5a6478">Fills prescription</text><rect x="654" y="164" width="84" height="18" rx="9" fill="#eef0fc" stroke="#d7dbf6"/><text x="696" y="176.5" text-anchor="middle" font-size="9.5" fill="#6a5fd0">CDC</text></g>
+                        <g><rect x="830" y="82" width="132" height="72" rx="12" fill="url(#cs2)" stroke="#e3e8f2" filter="url(#sf2)"/><text x="842" y="100" font-size="9.5" font-weight="700" letter-spacing=".08em" fill="#8b93a6">05</text><text x="896" y="119" text-anchor="middle" font-size="13.5" font-weight="700">Health plan</text><text x="896" y="133" text-anchor="middle" font-size="10" fill="#5a6478">Insurer</text></g>
+                        <g><rect x="1030" y="82" width="132" height="72" rx="12" fill="url(#cs2)" stroke="#e3e8f2" filter="url(#sf2)"/><text x="1042" y="100" font-size="9.5" font-weight="700" letter-spacing=".08em" fill="#8b93a6">06</text><text x="1096" y="119" text-anchor="middle" font-size="13.5" font-weight="700">PBM</text><text x="1096" y="133" text-anchor="middle" font-size="10" fill="#5a6478">Manages benefits</text><rect x="1044" y="164" width="104" height="18" rx="9" fill="#f1f2f6" stroke="#d6dae4" stroke-dasharray="4 3"/><text x="1096" y="176.5" text-anchor="middle" font-size="9" fill="#98a0b3">Network contract</text></g>
+                        <g><rect x="1230" y="82" width="132" height="72" rx="12" fill="#f4f6fb" stroke="#cfd6e6" stroke-dasharray="5 4"/><text x="1296" y="119" text-anchor="middle" font-size="12.5" font-weight="700" fill="#98a0b3">Manufacturer</text><text x="1296" y="134" text-anchor="middle" font-size="9" fill="#98a0b3">loop closes &#8635;</text></g>
+                    </svg>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;margin:8px 2px 0;font-size:11.5px;color:#5a6478;">
+                    <span style="display:flex;align-items:center;gap:8px;"><span style="width:26px;border-top:3px solid #2f6fd0;border-radius:2px;"></span>Flow of medicine</span>
+                    <span style="display:flex;align-items:center;gap:8px;"><span style="width:26px;border-top:3px solid #3f8f3f;border-radius:2px;"></span>Flow of money</span>
+                    <span style="display:flex;align-items:center;gap:8px;"><span style="width:26px;border-top:3px dashed #d98a2b;border-radius:2px;"></span>Returns</span>
+                    <span style="display:flex;align-items:center;gap:8px;"><span style="width:30px;height:16px;border-radius:8px;background:#eef0fc;border:1px solid #d7dbf6;display:inline-block;"></span>Data sources</span>
+                </div>
             </div>
             <div class="filter-bar">
                 <div class="filter-group">
@@ -762,6 +786,11 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
         document.getElementById('agent-cat-container').style.display = 'none';
         document.getElementById('cat-ta').classList.toggle('selected', panel === 'ta');
         document.getElementById('cat-tad').classList.toggle('selected', panel === 'tad');
+        // Hide hero and divider
+        document.querySelector('.hero').style.display = 'none';
+        document.querySelector('.workspace-divider').style.display = 'none';
+        document.querySelector('.section-head').style.display = 'none';
+        document.querySelector('#agents > div:nth-child(2)').style.display = 'none';
     }};
     window.hideAgentPanels = function() {{
         document.getElementById('agents-ta').style.display = 'none';
@@ -769,6 +798,11 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
         document.getElementById('agent-cat-container').style.display = 'grid';
         document.getElementById('cat-ta').classList.remove('selected');
         document.getElementById('cat-tad').classList.remove('selected');
+        // Restore hero and divider
+        document.querySelector('.hero').style.display = '';
+        document.querySelector('.workspace-divider').style.display = '';
+        document.querySelector('#agents .section-head').style.display = '';
+        document.querySelector('#agents > div:nth-child(2)').style.display = '';
     }};
 
     // TAD filter logic
