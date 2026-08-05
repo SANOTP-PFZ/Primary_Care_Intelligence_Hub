@@ -464,6 +464,10 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
     <div class="sidebar-divider"></div>
     <div class="sidebar-section-label">Primary Care Workspace</div>
     <nav class="nav" id="sidebarNav">
+        <button class="nav-item" data-target="workspace">
+            <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 22V12h6v10" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span>
+            <span class="nav-label">Workspace</span>
+        </button>
         <button class="nav-item" data-target="dashboards">
             <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
             <span class="nav-label">Deep-Dive Dashboards</span>
@@ -472,7 +476,7 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
         <button class="nav-item" data-target="agents">
             <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="10" rx="2"/><path d="M9 16v3M15 16v3M9 6V3M15 6V3M3 11h3M18 11h3"/></svg></span>
             <span class="nav-label">CoWork Agents</span>
-            <span class="nav-count">3</span>
+            <span class="nav-count">32</span>
         </button>
     </nav>
     <div class="sidebar-spacer"></div>
@@ -515,7 +519,22 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
                 Empowering Pfizer's Primary Care business with real-time market intelligence, competitive analytics, and actionable insights across our key therapeutic brands. This platform consolidates NPA, DDD, and LAAD data sources into unified quarterly performance views.
             </div>
             <div style="margin-top:1.2rem;font-size:0.8rem;color:var(--text-muted);">
-                Select <strong style="color:var(--navy-600);">Deep-Dive Dashboards</strong> or <strong style="color:var(--navy-600);">CoWork Agents</strong> from the sidebar to get started.
+                Select <strong style="color:var(--navy-600);">Workspace</strong>, <strong style="color:var(--navy-600);">Deep-Dive Dashboards</strong>, or <strong style="color:var(--navy-600);">CoWork Agents</strong> from the sidebar to get started.
+            </div>
+        </div>
+    </section>
+
+    <!-- WORKSPACE SECTION -->
+    <section class="section" id="workspace">
+        <div class="section-head"><h2>Workspace</h2><p>Collaborative workspace for the Primary Care analytics team — content coming soon.</p></div>
+        <div style="text-align:center;padding:3rem 0;">
+            <div style="display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:16px;background:rgba(28,79,192,0.06);margin-bottom:1rem;">
+                <span style="font-size:28px;">&#128196;</span>
+            </div>
+            <div style="font-family:'Manrope',sans-serif;font-weight:700;font-size:1.1rem;color:var(--navy-900);margin-bottom:0.4rem;">Workspace</div>
+            <div style="font-size:0.84rem;color:var(--text-muted);max-width:480px;margin:0 auto;line-height:1.7;">Content for this section will be added soon. This will serve as the central hub for team collaboration, shared resources, and key documents.</div>
+            <div style="margin-top:1.2rem;display:inline-block;padding:6px 16px;border-radius:8px;background:rgba(28,79,192,0.06);border:1px solid rgba(28,79,192,0.12);">
+                <span style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;color:var(--navy-600);letter-spacing:0.02em;">Coming Soon</span>
             </div>
         </div>
     </section>
@@ -710,7 +729,7 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
     }};
     var nav = document.getElementById('sidebarNav');
     var items = nav.querySelectorAll('.nav-item');
-    var sections = {{'home': document.getElementById('home')}};
+    var sections = {{'home': document.getElementById('home'), 'workspace': document.getElementById('workspace')}};
     items.forEach(function(it){{ sections[it.dataset.target] = document.getElementById(it.dataset.target); }});
     var switching = false;
     function showSection(id) {{
