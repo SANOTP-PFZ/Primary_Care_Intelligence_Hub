@@ -501,10 +501,6 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
     <div class="sidebar-divider"></div>
     <div class="sidebar-section-label">Primary Care Workspace</div>
     <nav class="nav" id="sidebarNav">
-        <button class="nav-item" data-target="workspace">
-            <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 22V12h6v10" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span>
-            <span class="nav-label">Workspace</span>
-        </button>
         <button class="nav-item" data-target="dashboards">
             <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
             <span class="nav-label">Deep-Dive Dashboards</span>
@@ -514,6 +510,26 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
             <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="10" rx="2"/><path d="M9 16v3M15 16v3M9 6V3M15 6V3M3 11h3M18 11h3"/></svg></span>
             <span class="nav-label">CoWork Agents</span>
             <span class="nav-count">32</span>
+        </button>
+        <button class="nav-item" data-target="tools">
+            <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span>
+            <span class="nav-label">Analytical Tools</span>
+        </button>
+    </nav>
+    <div class="sidebar-divider" style="margin-top:0.6rem;"></div>
+    <div class="sidebar-section-label">Knowledge Center</div>
+    <nav class="nav">
+        <button class="nav-item" data-target="datadict">
+            <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span>
+            <span class="nav-label">Data Dictionary</span>
+        </button>
+        <button class="nav-item" data-target="brandinfo">
+            <span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 16v-4M12 8h.01" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span>
+            <span class="nav-label">Brand Info</span>
+        </button>
+        <button class="nav-item" data-target="links">
+            <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span>
+            <span class="nav-label">Relevant Links</span>
         </button>
     </nav>
     <div class="sidebar-spacer"></div>
@@ -580,15 +596,60 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
         </div>
     </section>
 
-    <!-- WORKSPACE SECTION -->
-    <section class="section" id="workspace">
-        <div class="section-head"><h2>Workspace</h2><p>Collaborative workspace for the Primary Care analytics team — content coming soon.</p></div>
+    <!-- ANALYTICAL TOOLS SECTION -->
+    <section class="section" id="tools">
+        <div class="section-head"><h2>Analytical Tools</h2><p>Advanced analytical tools and utilities for the Primary Care team.</p></div>
         <div style="text-align:center;padding:3rem 0;">
             <div style="display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:16px;background:rgba(28,79,192,0.06);margin-bottom:1rem;">
-                <span style="font-size:28px;">&#128196;</span>
+                <span style="font-size:28px;">&#128295;</span>
             </div>
-            <div style="font-family:'Manrope',sans-serif;font-weight:700;font-size:1.1rem;color:var(--navy-900);margin-bottom:0.4rem;">Workspace</div>
-            <div style="font-size:0.84rem;color:var(--text-muted);max-width:480px;margin:0 auto;line-height:1.7;">Content for this section will be added soon. This will serve as the central hub for team collaboration, shared resources, and key documents.</div>
+            <div style="font-family:'Manrope',sans-serif;font-weight:700;font-size:1.1rem;color:var(--navy-900);margin-bottom:0.4rem;">Analytical Tools</div>
+            <div style="font-size:0.84rem;color:var(--text-muted);max-width:480px;margin:0 auto;line-height:1.7;">Advanced analytical tools and utilities are being developed to support deeper market analysis, custom reporting, and data exploration workflows.</div>
+            <div style="margin-top:1.2rem;display:inline-block;padding:6px 16px;border-radius:8px;background:rgba(28,79,192,0.06);border:1px solid rgba(28,79,192,0.12);">
+                <span style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;color:var(--navy-600);letter-spacing:0.02em;">Coming Soon</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- DATA DICTIONARY SECTION -->
+    <section class="section" id="datadict">
+        <div class="section-head"><h2>Data Dictionary</h2><p>Definitions, metric calculations, and data source documentation.</p></div>
+        <div style="text-align:center;padding:3rem 0;">
+            <div style="display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:16px;background:rgba(28,79,192,0.06);margin-bottom:1rem;">
+                <span style="font-size:28px;">&#128214;</span>
+            </div>
+            <div style="font-family:'Manrope',sans-serif;font-weight:700;font-size:1.1rem;color:var(--navy-900);margin-bottom:0.4rem;">Data Dictionary</div>
+            <div style="font-size:0.84rem;color:var(--text-muted);max-width:480px;margin:0 auto;line-height:1.7;">Comprehensive data dictionary with metric definitions, source mappings, and business rules documentation will be available here.</div>
+            <div style="margin-top:1.2rem;display:inline-block;padding:6px 16px;border-radius:8px;background:rgba(28,79,192,0.06);border:1px solid rgba(28,79,192,0.12);">
+                <span style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;color:var(--navy-600);letter-spacing:0.02em;">Coming Soon</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- BRAND INFO SECTION -->
+    <section class="section" id="brandinfo">
+        <div class="section-head"><h2>Brand Info</h2><p>Key brand information, therapeutic area context, and competitive landscape.</p></div>
+        <div style="text-align:center;padding:3rem 0;">
+            <div style="display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:16px;background:rgba(28,79,192,0.06);margin-bottom:1rem;">
+                <span style="font-size:28px;">&#128138;</span>
+            </div>
+            <div style="font-family:'Manrope',sans-serif;font-weight:700;font-size:1.1rem;color:var(--navy-900);margin-bottom:0.4rem;">Brand Info</div>
+            <div style="font-size:0.84rem;color:var(--text-muted);max-width:480px;margin:0 auto;line-height:1.7;">Brand profiles, therapeutic area overviews, competitive positioning, and key market context for Primary Care brands.</div>
+            <div style="margin-top:1.2rem;display:inline-block;padding:6px 16px;border-radius:8px;background:rgba(28,79,192,0.06);border:1px solid rgba(28,79,192,0.12);">
+                <span style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;color:var(--navy-600);letter-spacing:0.02em;">Coming Soon</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- RELEVANT LINKS SECTION -->
+    <section class="section" id="links">
+        <div class="section-head"><h2>Relevant Links</h2><p>Quick access to frequently used tools, portals, and resources.</p></div>
+        <div style="text-align:center;padding:3rem 0;">
+            <div style="display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:16px;background:rgba(28,79,192,0.06);margin-bottom:1rem;">
+                <span style="font-size:28px;">&#128279;</span>
+            </div>
+            <div style="font-family:'Manrope',sans-serif;font-weight:700;font-size:1.1rem;color:var(--navy-900);margin-bottom:0.4rem;">Relevant Links</div>
+            <div style="font-size:0.84rem;color:var(--text-muted);max-width:480px;margin:0 auto;line-height:1.7;">Curated links to Snowflake, Dataiku, Tableau, SharePoint, and other tools used by the Primary Care analytics team.</div>
             <div style="margin-top:1.2rem;display:inline-block;padding:6px 16px;border-radius:8px;background:rgba(28,79,192,0.06);border:1px solid rgba(28,79,192,0.12);">
                 <span style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;color:var(--navy-600);letter-spacing:0.02em;">Coming Soon</span>
             </div>
@@ -823,9 +884,10 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
         }});
     }};
     var nav = document.getElementById('sidebarNav');
+    var allNavItems = document.querySelectorAll('.nav .nav-item');
     var items = nav.querySelectorAll('.nav-item');
-    var sections = {{'home': document.getElementById('home'), 'workspace': document.getElementById('workspace')}};
-    items.forEach(function(it){{ sections[it.dataset.target] = document.getElementById(it.dataset.target); }});
+    var sections = {{'home': document.getElementById('home'), 'tools': document.getElementById('tools'), 'datadict': document.getElementById('datadict'), 'brandinfo': document.getElementById('brandinfo'), 'links': document.getElementById('links')}};
+    allNavItems.forEach(function(it){{ if(it.dataset.target) sections[it.dataset.target] = document.getElementById(it.dataset.target); }});
     var switching = false;
     function showSection(id) {{
         if (switching) return;
@@ -843,10 +905,10 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
             switching = false;
         }}, 220);
     }}
-    items.forEach(function(item) {{
+    allNavItems.forEach(function(item) {{
         item.addEventListener('click', function(e) {{
             e.preventDefault();
-            items.forEach(function(i){{ i.classList.remove('active'); }});
+            allNavItems.forEach(function(i){{ i.classList.remove('active'); }});
             item.classList.add('active');
             showSection(item.dataset.target);
             // Reset agent panels when navigating away
