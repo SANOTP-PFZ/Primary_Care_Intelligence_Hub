@@ -636,12 +636,10 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
 
         <!-- TA Agents Grid -->
         <div id="agents-ta" style="display:none;padding-top:1.2rem;">
-            <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;">
-                <button class="back-to-cats" onclick="hideAgentPanels()">&#8592; Back to Home</button>
-                <div>
-                    <div class="sub-panel-title" style="font-size:1.3rem;margin-bottom:0.15rem;background:linear-gradient(90deg,var(--navy-900),var(--navy-600));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Therapy Area Agents</div>
-                    <div class="sub-panel-desc" style="margin-bottom:0;">Ask technical and business questions across all available data sources for your therapy area.</div>
-                </div>
+            <button class="back-to-cats" onclick="hideAgentPanels()" style="margin-bottom:0.8rem;">&#8592; Back to Home</button>
+            <div style="margin-bottom:1rem;">
+                <div class="sub-panel-title" style="font-size:1.3rem;margin-bottom:0.15rem;background:linear-gradient(90deg,var(--navy-900),var(--navy-600));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Therapy Area Agents</div>
+                <div class="sub-panel-desc" style="margin-bottom:0;">Ask technical and business questions across all available data sources for your therapy area.</div>
             </div>
             <div class="agent-grid">
                 <a class="ta-agent-card" href="https://app.us-east-1.privatelink.snowflakecomputing.com/pfe/amerprod01/#/ai/chat/new?db=VAW_AMER_DESIGN&schema=USIMVACCINESSDL&agent=PC_PCV_VACCINE_AGENT" target="_blank" rel="noopener">
@@ -679,14 +677,13 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
 
         <!-- TAD Agents Grid -->
         <div id="agents-tad" style="display:none;padding-top:1.2rem;">
-            <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;">
-                <button class="back-to-cats" onclick="hideAgentPanels()">&#8592; Back to Home</button>
-                <div>
-                    <div class="sub-panel-title" style="font-size:1.3rem;margin-bottom:0.15rem;background:linear-gradient(90deg,var(--navy-900),var(--navy-600));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Therapy Area + Data Source Agents</div>
-                    <div class="sub-panel-desc" style="margin-bottom:0;">Query specific data sources scoped to a therapy area.</div>
-                </div>
+            <button class="back-to-cats" onclick="hideAgentPanels()" style="margin-bottom:0.8rem;">&#8592; Back to Home</button>
+            <div style="margin-bottom:1rem;">
+                <div class="sub-panel-title" style="font-size:1.3rem;margin-bottom:0.15rem;background:linear-gradient(90deg,var(--navy-900),var(--navy-600));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Therapy Area + Data Source Agents</div>
+                <div class="sub-panel-desc" style="margin-bottom:0;">Query specific data sources scoped to a therapy area.</div>
             </div>
-            <div style="margin-bottom:1.2rem;border:1px solid rgba(15,23,42,0.08);border-radius:14px;padding:1.2rem 1rem 0.8rem;background:rgba(255,255,255,0.7);">
+            <div style="position:relative;margin-bottom:1.2rem;border:1px solid rgba(15,23,42,0.08);border-radius:14px;padding:1.2rem 1rem 0.8rem;background:rgba(255,255,255,0.7);overflow:hidden;">
+                <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#1C4FC0,#41B6E6,#3B6FD9);border-radius:14px 14px 0 0;opacity:0.7;"></div>
                 <div style="font-size:13px;font-weight:700;color:#1f2a44;margin-bottom:4px;">Pharmaceutical Supply Chain</div>
                 <div style="font-size:11px;color:#5a6478;margin-bottom:10px;">Medicine moves right along the chain, money flows back left, and rebates close the loop.</div>
                 <div style="overflow-x:auto;padding-bottom:6px;">
