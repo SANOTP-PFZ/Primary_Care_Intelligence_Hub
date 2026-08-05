@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pharmaceutical supply chain — horizontal pipeline</title>
+<style>
+  :root{
+    --bg-a:#eef3fc; --bg-b:#dfe8f7;
+    --ink:#1f2a44; --ink-2:#5a6478; --line-label:#4a5468; --muted:#98a0b3;
+    --card-brd:#e3e8f2;
+    --med:#2f6fd0; --med-dot:#4d86e6;
+    --money:#3f8f3f; --money-dot:#54ac54;
+    --returns:#d98a2b; --contract:#98a0b3;
+    --src-bg:#eef0fc; --src-brd:#d7dbf6; --src-ink:#6a5fd0;
+    --con-bg:#f1f2f6; --con-brd:#d6dae4;
+    --eyebrow:#8b93a6;
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Inter, Arial, sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    font-family:var(--font); color:var(--ink);
+    background:linear-gradient(160deg,var(--bg-a),var(--bg-b));
+    min-height:100vh; padding:28px 18px 40px; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1240px;margin:0 auto}
+  .head h1{font-size:19px;font-weight:700;letter-spacing:-.01em;margin:0 0 4px}
+  .head p{font-size:13px;line-height:1.45;color:var(--ink-2);margin:0;max-width:62ch}
+  /* horizontal scroll on narrow screens; keeps text legible */
+  .scroller{width:100%;overflow-x:auto;margin:10px 0 0;padding-bottom:6px;
+    -webkit-overflow-scrolling:touch}
+  svg{display:block;height:auto;width:100%;min-width:940px}
+  .legend{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;margin:12px 2px 0;font-size:12.5px;color:var(--ink-2)}
+  .legend .item{display:flex;align-items:center;gap:8px}
+  .swatch{width:26px;border-top-width:3px;border-top-style:solid;border-radius:2px}
+  .swatch.med{border-color:var(--med)} .swatch.money{border-color:var(--money)}
+  .swatch.returns{border-color:var(--returns);border-top-style:dashed}
+  .swatch.contract{border-color:var(--contract);border-top-style:dashed}
+  .pill-swatch{width:30px;height:16px;border-radius:8px;background:var(--src-bg);border:1px solid var(--src-brd)}
+  @media (max-width:520px){ body{padding:20px 12px 32px} .head h1{font-size:17px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="head">
+    <h1>Pharmaceutical supply chain</h1>
+    <p>The whole system as one horizontal pipeline: medicine moves right along the chain, money flows back left, and rebates close the loop to the manufacturer.</p>
+  </header>
+
+  <div class="scroller">
+    <svg viewBox="0 0 1392 200" role="img" aria-label="Horizontal pipeline: Manufacturer, Wholesaler, Pharmacy, Patient, Health plan, PBM, and the rebate that closes the loop back to the Manufacturer.">
+      <defs>
+        <linearGradient id="cardShine" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#fbfcff"/>
+        </linearGradient>
+        <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+          <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#26386b" flood-opacity="0.10"/>
+        </filter>
+        <filter id="glow" x="-140%" y="-140%" width="380%" height="380%">
+          <feGaussianBlur stdDeviation="2.1" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <marker id="arrMed" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#2f6fd0"/></marker>
+        <marker id="arrMoney" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#3f8f3f"/></marker>
+        <marker id="arrRet" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#d98a2b"/></marker>
+      </defs>
+
+      <!-- =============== CONNECTORS (one continuous horizontal line) =============== -->
+      <!-- supply links: medicine right (blue y=111), money left (green y=129) -->
+      <path id="l1_med" class="flow" d="M162,111 L227,111" fill="none" stroke="var(--med)"   stroke-width="2" stroke-opacity=".42" marker-end="url(#arrMed)"/>
+      <path id="l1_mon" class="flow" d="M227,129 L162,129" fill="none" stroke="var(--money)" stroke-width="2" stroke-opacity=".42" marker-end="url(#arrMoney)"/>
+      <path id="l2_med" class="flow" d="M362,111 L427,111" fill="none" stroke="var(--med)"   stroke-width="2" stroke-opacity=".42" marker-end="url(#arrMed)"/>
+      <path id="l2_mon" class="flow" d="M427,129 L362,129" fill="none" stroke="var(--money)" stroke-width="2" stroke-opacity=".42" marker-end="url(#arrMoney)"/>
+      <path id="l3_med" class="flow" d="M562,111 L627,111" fill="none" stroke="var(--med)"   stroke-width="2" stroke-opacity=".42" marker-end="url(#arrMed)"/>
+      <path id="l3_mon" class="flow" d="M627,129 L562,129" fill="none" stroke="var(--money)" stroke-width="2" stroke-opacity=".42" marker-end="url(#arrMoney)"/>
+      <!-- money links: green right y=120 -->
+      <path id="l4" class="flow" d="M762,120 L827,120" fill="none" stroke="var(--money)" stroke-width="2" stroke-opacity=".42" marker-end="url(#arrMoney)"/>
+      <path id="l5" class="flow" d="M962,120 L1027,120" fill="none" stroke="var(--money)" stroke-width="2" stroke-opacity=".42" marker-end="url(#arrMoney)"/>
+      <path id="l6" class="flow" d="M1162,120 L1227,120" fill="none" stroke="var(--money)" stroke-width="2" stroke-opacity=".42" marker-end="url(#arrMoney)"/>
+      <!-- returns: small dashed bump over link 2 (Pharmacy -> Wholesaler) -->
+      <path id="p_returns" class="flow" d="M430,84 C 414,58 378,58 363,84" fill="none" stroke="var(--returns)" stroke-width="2" stroke-opacity=".65" stroke-dasharray="5 4" marker-end="url(#arrRet)"/>
+
+      <g id="particles"></g>
+
+      <!-- =============== LINK LABELS =============== -->
+      <g fill="var(--line-label)" font-size="11" text-anchor="middle">
+        <text x="196" y="60" fill="var(--med)">medicine &#8594;</text>
+        <text x="196" y="74" fill="var(--money)">money &#8592;</text>
+        <text x="396" y="50" font-size="10.5" fill="var(--returns)">Returns</text>
+        <text x="796" y="66">Premiums</text>
+        <text x="996" y="66">Payments &amp; rebates</text>
+        <text x="1196" y="66">Rebates</text>
+      </g>
+
+      <!-- =============== NODES (single horizontal row, y 82-154, cy 118) =============== -->
+      <!-- 01 Manufacturer -->
+      <g>
+        <rect x="30" y="82" width="132" height="72" rx="12" fill="url(#cardShine)" stroke="var(--card-brd)" filter="url(#soft)"/>
+        <text x="42" y="100" font-size="9.5" font-weight="700" letter-spacing=".08em" fill="var(--eyebrow)">01</text>
+        <text x="96" y="119" text-anchor="middle" font-size="13.5" font-weight="700">Manufacturer</text>
+        <text x="96" y="133" text-anchor="middle" font-size="10" fill="var(--ink-2)">e.g. Pfizer</text>
+      </g>
+      <!-- 02 Wholesaler -->
+      <g>
+        <rect x="230" y="82" width="132" height="72" rx="12" fill="url(#cardShine)" stroke="var(--card-brd)" filter="url(#soft)"/>
+        <text x="242" y="100" font-size="9.5" font-weight="700" letter-spacing=".08em" fill="var(--eyebrow)">02</text>
+        <text x="296" y="119" text-anchor="middle" font-size="13.5" font-weight="700">Wholesaler</text>
+        <text x="296" y="133" text-anchor="middle" font-size="10" fill="var(--ink-2)">Distributes</text>
+        <rect x="234" y="164" width="124" height="18" rx="9" fill="var(--src-bg)" stroke="var(--src-brd)"/>
+        <text x="296" y="176.5" text-anchor="middle" font-size="9.5" fill="var(--src-ink)">DDD · 867</text>
+      </g>
+      <!-- 03 Pharmacy -->
+      <g>
+        <rect x="430" y="82" width="132" height="72" rx="12" fill="url(#cardShine)" stroke="var(--card-brd)" filter="url(#soft)"/>
+        <text x="442" y="100" font-size="9.5" font-weight="700" letter-spacing=".08em" fill="var(--eyebrow)">03</text>
+        <text x="496" y="119" text-anchor="middle" font-size="13.5" font-weight="700">Pharmacy</text>
+        <text x="496" y="133" text-anchor="middle" font-size="10" fill="var(--ink-2)">Dispenses</text>
+        <rect x="408" y="164" width="176" height="18" rx="9" fill="var(--src-bg)" stroke="var(--src-brd)"/>
+        <text x="496" y="176.5" text-anchor="middle" font-size="9" fill="var(--src-ink)">ELAAD · Optum · Health Verity</text>
+      </g>
+      <!-- 04 Patient -->
+      <g>
+        <rect x="630" y="82" width="132" height="72" rx="12" fill="url(#cardShine)" stroke="var(--card-brd)" filter="url(#soft)"/>
+        <text x="642" y="100" font-size="9.5" font-weight="700" letter-spacing=".08em" fill="var(--eyebrow)">04</text>
+        <text x="696" y="119" text-anchor="middle" font-size="13.5" font-weight="700">Patient</text>
+        <text x="696" y="133" text-anchor="middle" font-size="10" fill="var(--ink-2)">Fills prescription</text>
+        <rect x="654" y="164" width="84" height="18" rx="9" fill="var(--src-bg)" stroke="var(--src-brd)"/>
+        <text x="696" y="176.5" text-anchor="middle" font-size="9.5" fill="var(--src-ink)">CDC</text>
+      </g>
+      <!-- 05 Health plan -->
+      <g>
+        <rect x="830" y="82" width="132" height="72" rx="12" fill="url(#cardShine)" stroke="var(--card-brd)" filter="url(#soft)"/>
+        <text x="842" y="100" font-size="9.5" font-weight="700" letter-spacing=".08em" fill="var(--eyebrow)">05</text>
+        <text x="896" y="119" text-anchor="middle" font-size="13.5" font-weight="700">Health plan</text>
+        <text x="896" y="133" text-anchor="middle" font-size="10" fill="var(--ink-2)">Insurer</text>
+      </g>
+      <!-- 06 PBM -->
+      <g>
+        <rect x="1030" y="82" width="132" height="72" rx="12" fill="url(#cardShine)" stroke="var(--card-brd)" filter="url(#soft)"/>
+        <text x="1042" y="100" font-size="9.5" font-weight="700" letter-spacing=".08em" fill="var(--eyebrow)">06</text>
+        <text x="1096" y="119" text-anchor="middle" font-size="13.5" font-weight="700">PBM</text>
+        <text x="1096" y="133" text-anchor="middle" font-size="10" fill="var(--ink-2)">Manages benefits</text>
+        <rect x="1044" y="164" width="104" height="18" rx="9" fill="var(--con-bg)" stroke="var(--con-brd)" stroke-dasharray="4 3"/>
+        <text x="1096" y="176.5" text-anchor="middle" font-size="9" fill="var(--muted)">Network contract</text>
+      </g>
+      <!-- loop closes: ghost Manufacturer -->
+      <g>
+        <rect x="1230" y="82" width="132" height="72" rx="12" fill="#f4f6fb" stroke="#cfd6e6" stroke-dasharray="5 4"/>
+        <text x="1296" y="119" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--muted)">Manufacturer</text>
+        <text x="1296" y="134" text-anchor="middle" font-size="9" fill="var(--muted)">loop closes &#8635;</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="legend" aria-hidden="true">
+    <span class="item"><span class="swatch med"></span>Flow of medicine</span>
+    <span class="item"><span class="swatch money"></span>Flow of money</span>
+    <span class="item"><span class="swatch returns"></span>Returns</span>
+    <span class="item"><span class="swatch contract"></span>Contracts</span>
+    <span class="item"><span class="pill-swatch"></span>Data sources</span>
+  </div>
+</div>
+
+<script>
+(function(){
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var NS="http://www.w3.org/2000/svg", XL="http://www.w3.org/1999/xlink";
+  var host=document.getElementById('particles');
+  var flows=[
+    ['l1_med','var(--med-dot)',2,2.2,3.0],['l1_mon','var(--money-dot)',2,2.5,2.7],
+    ['l2_med','var(--med-dot)',2,2.2,3.0],['l2_mon','var(--money-dot)',2,2.5,2.7],
+    ['l3_med','var(--med-dot)',2,2.2,3.0],['l3_mon','var(--money-dot)',2,2.5,2.7],
+    ['l4','var(--money-dot)',2,2.4,3.0],['l5','var(--money-dot)',2,2.4,3.0],
+    ['l6','var(--money-dot)',2,2.4,3.0],['p_returns','#e0993a',2,3.0,2.5]
+  ];
+  flows.forEach(function(f){
+    var id=f[0],color=f[1],n=f[2],dur=f[3],r=f[4];
+    if(!document.getElementById(id))return;
+    for(var i=0;i<n;i++){
+      var c=document.createElementNS(NS,'circle');
+      c.setAttribute('r',r);c.setAttribute('cx',0);c.setAttribute('cy',0);
+      c.setAttribute('fill',color);c.setAttribute('filter','url(#glow)');c.setAttribute('opacity','.95');
+      var m=document.createElementNS(NS,'animateMotion');
+      m.setAttribute('dur',dur+'s');m.setAttribute('repeatCount','indefinite');
+      m.setAttribute('begin',(-(dur/n)*i)+'s');m.setAttribute('calcMode','linear');
+      var mp=document.createElementNS(NS,'mpath');
+      mp.setAttributeNS(XL,'href','#'+id);mp.setAttribute('href','#'+id);
+      m.appendChild(mp);c.appendChild(m);host.appendChild(c);
+    }
+  });
+})();
+</script>
+</body>
+</html>

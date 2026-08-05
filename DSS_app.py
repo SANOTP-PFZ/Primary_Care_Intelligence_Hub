@@ -187,7 +187,26 @@ elif agents_param in ("ta", "tad"):
 
     # Build filter bar HTML (only for TAD)
     filter_bar_html = ""
+    flowchart_html = ""
     if agents_param == "tad":
+        # Read the supply chain flowchart HTML file
+        try:
+            with open("supply-chain-updated.html", "r", encoding="utf-8") as f:
+                sc_content = f.read()
+            # Extract just the body content (between <body> and </body>)
+            import re
+            body_match = re.search(r'<body[^>]*>(.*?)</body>', sc_content, re.DOTALL)
+            style_match = re.search(r'<style>(.*?)</style>', sc_content, re.DOTALL)
+            sc_body = body_match.group(1) if body_match else ""
+            sc_style = style_match.group(1) if style_match else ""
+            flowchart_html = f"""
+            <style>{sc_style}</style>
+            <div style="margin-bottom:1.2rem;border:1px solid var(--hairline);border-radius:14px;padding:1rem;background:rgba(255,255,255,0.7);">
+                {sc_body}
+            </div>"""
+        except Exception:
+            flowchart_html = ""
+
         filter_bar_html = """
             <div class="filter-bar">
                 <div class="filter-group">
@@ -246,6 +265,7 @@ h1{{font-family:'Manrope',sans-serif;font-weight:800;font-size:1.6rem;color:var(
 <h1>{agents_page_title}</h1>
 <div class="subtitle">{agents_page_desc}</div>
 <div class="warning"><span style="font-size:1rem;">&#9888;</span>Answers from these agents are produced by AI and may be incomplete or inaccurate. For complex or business-critical outputs, please verify with the relevant ZS team to validate the underlying logic and code before making decisions.</div>
+{flowchart_html}
 {filter_bar_html}
 <div class="agent-grid" id="tad-agent-grid">
 {agents_page_cards}
