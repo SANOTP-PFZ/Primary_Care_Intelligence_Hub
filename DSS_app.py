@@ -614,15 +614,25 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
     <!-- DATA DICTIONARY SECTION -->
     <section class="section" id="datadict">
         <div class="section-head"><h2>Data Dictionary</h2><p>Definitions, metric calculations, and data source documentation.</p></div>
-        <div style="text-align:center;padding:3rem 0;">
-            <div style="display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:16px;background:rgba(28,79,192,0.06);margin-bottom:1rem;">
-                <span style="font-size:28px;">&#128214;</span>
-            </div>
-            <div style="font-family:'Manrope',sans-serif;font-weight:700;font-size:1.1rem;color:var(--navy-900);margin-bottom:0.4rem;">Data Dictionary</div>
-            <div style="font-size:0.84rem;color:var(--text-muted);max-width:480px;margin:0 auto;line-height:1.7;">Comprehensive data dictionary with metric definitions, source mappings, and business rules documentation will be available here.</div>
-            <div style="margin-top:1.2rem;display:inline-block;padding:6px 16px;border-radius:8px;background:rgba(28,79,192,0.06);border:1px solid rgba(28,79,192,0.12);">
-                <span style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;color:var(--navy-600);letter-spacing:0.02em;">Coming Soon</span>
-            </div>
+        <div class="grid" style="grid-template-columns:repeat(3,1fr);">
+            <a class="card" href="https://pfizer.sharepoint.com/:x:/s/PrimaryCareAnalytics2/IQDyuMCo9GpMTIn4FCiPyp0kAYGZUi2J4mTd-IEeGfDwSiI?e=y2vifJ" target="_blank" rel="noopener" style="min-height:140px;align-items:center;text-align:center;justify-content:center;">
+                <div class="card-top" style="justify-content:center;"><span class="icon-chip chip-s1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 3v4a1 1 0 001 1h4"/><path d="M17 21H7a2 2 0 01-2-2V5a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z"/><path d="M9 9h6M9 13h6M9 17h4"/></svg></span></div>
+                <div class="card-title">Health Verity</div>
+                <div class="card-desc">HealthVerity pharmacy claims data dictionary — field definitions, coding schemes, and data specifications.</div>
+                <div style="display:inline-flex;align-items:center;gap:0.3rem;font-size:0.68rem;font-weight:600;color:var(--text-muted);padding:0.2rem 0.5rem;border-radius:5px;background:rgba(15,23,42,0.05);"><span style="color:#107C41;">&#9632;</span>Excel &middot; SharePoint</div>
+            </a>
+            <a class="card" href="https://pfizer.sharepoint.com/:x:/r/sites/PrimaryCareAnalytics2/Shared%20Documents/General/Data%20Dictionaries/OPTUM%20CDM%20Data%20Dictionary%207.1%20DOD.xlsx?d=wff2ab05100274f0bbec58a918e826c06&csf=1&web=1&e=UCTDrw" target="_blank" rel="noopener" style="min-height:140px;align-items:center;text-align:center;justify-content:center;">
+                <div class="card-top" style="justify-content:center;"><span class="icon-chip chip-s1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 3v4a1 1 0 001 1h4"/><path d="M17 21H7a2 2 0 01-2-2V5a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z"/><path d="M9 9h6M9 13h6M9 17h4"/></svg></span></div>
+                <div class="card-title">Optum</div>
+                <div class="card-desc">Optum CDM Data Dictionary v7.1 — claims data model, field mappings, and coding reference.</div>
+                <div style="display:inline-flex;align-items:center;gap:0.3rem;font-size:0.68rem;font-weight:600;color:var(--text-muted);padding:0.2rem 0.5rem;border-radius:5px;background:rgba(15,23,42,0.05);"><span style="color:#107C41;">&#9632;</span>Excel &middot; SharePoint</div>
+            </a>
+            <a class="card" href="https://pfizer.sharepoint.com/:x:/s/PrimaryCareAnalytics2/IQCHVLmo2oDcTog8ou2FMycWAfrtwQ4BE0NfXWTWG-GEpUg?e=E7jCYE" target="_blank" rel="noopener" style="min-height:140px;align-items:center;text-align:center;justify-content:center;">
+                <div class="card-top" style="justify-content:center;"><span class="icon-chip chip-s1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 3v4a1 1 0 001 1h4"/><path d="M17 21H7a2 2 0 01-2-2V5a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z"/><path d="M9 9h6M9 13h6M9 17h4"/></svg></span></div>
+                <div class="card-title">LAAD</div>
+                <div class="card-desc">LAAD pharmacy and medical claims data dictionary — field definitions and source specifications.</div>
+                <div style="display:inline-flex;align-items:center;gap:0.3rem;font-size:0.68rem;font-weight:600;color:var(--text-muted);padding:0.2rem 0.5rem;border-radius:5px;background:rgba(15,23,42,0.05);"><span style="color:#107C41;">&#9632;</span>Excel &middot; SharePoint</div>
+            </a>
         </div>
     </section>
 
