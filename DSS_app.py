@@ -576,7 +576,7 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
 
     <!-- HOME SECTION (default) -->
     <section class="section is-active is-visible" id="home">
-        <div style="position:relative;background:radial-gradient(ellipse 90% 80% at 20% 20%,rgba(28,79,192,0.06) 0%,transparent 50%),radial-gradient(ellipse 60% 70% at 80% 80%,rgba(65,182,230,0.05) 0%,transparent 50%),linear-gradient(135deg,rgba(255,255,255,0.9) 0%,rgba(248,250,253,0.95) 100%);border-radius:16px;padding:2.5rem 2rem;border:1px solid rgba(15,23,42,0.05);box-shadow:0 2px 8px rgba(15,23,42,0.05),0 1px 2px rgba(15,23,42,0.04);overflow:hidden;text-align:center;">
+        <div style="position:relative;background:radial-gradient(ellipse 90% 80% at 20% 20%,rgba(28,79,192,0.06) 0%,transparent 50%),radial-gradient(ellipse 60% 70% at 80% 80%,rgba(65,182,230,0.05) 0%,transparent 50%),linear-gradient(135deg,rgba(255,255,255,0.9) 0%,rgba(248,250,253,0.95) 100%);border-radius:16px;padding:2.5rem 2rem;border:1px solid rgba(15,23,42,0.05);box-shadow:0 2px 8px rgba(15,23,42,0.05),0 1px 2px rgba(15,23,42,0.04);overflow:hidden;text-align:center;min-height:calc(100vh - 380px);display:flex;flex-direction:column;align-items:center;justify-content:center;">
             <div style="position:absolute;top:-1px;left:0;right:0;height:3px;background:linear-gradient(90deg,#1C4FC0,#41B6E6,#3B6FD9);border-radius:16px 16px 0 0;opacity:0.7;"></div>
             <div style="display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:14px;background:rgba(28,79,192,0.06);margin-bottom:1.2rem;">
                 <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#1C4FC0" stroke-width="1.8"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg>
