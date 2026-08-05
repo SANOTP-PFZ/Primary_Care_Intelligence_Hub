@@ -687,15 +687,15 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
     <!-- RELEVANT LINKS SECTION -->
     <section class="section" id="links">
         <div class="section-head"><h2>Relevant Links</h2><p>Quick access to frequently used tools, portals, and resources.</p></div>
-        <div style="text-align:center;padding:3rem 0;">
-            <div style="display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:16px;background:rgba(28,79,192,0.06);margin-bottom:1rem;">
-                <span style="font-size:28px;">&#128279;</span>
-            </div>
-            <div style="font-family:'Manrope',sans-serif;font-weight:700;font-size:1.1rem;color:var(--navy-900);margin-bottom:0.4rem;">Relevant Links</div>
-            <div style="font-size:0.84rem;color:var(--text-muted);max-width:480px;margin:0 auto;line-height:1.7;">Curated links to Snowflake, Dataiku, Tableau, SharePoint, and other tools used by the Primary Care analytics team.</div>
-            <div style="margin-top:1.2rem;display:inline-block;padding:6px 16px;border-radius:8px;background:rgba(28,79,192,0.06);border:1px solid rgba(28,79,192,0.12);">
-                <span style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;color:var(--navy-600);letter-spacing:0.02em;">Coming Soon</span>
-            </div>
+        <div class="grid" style="grid-template-columns:repeat(2,1fr);">
+            <a class="card" href="https://pfizer.sharepoint.com/sites/EnterpriseDataSolutions1/Document%20Library/Forms/AllItems.aspx?id=%2Fsites%2FEnterpriseDataSolutions1%2FDocument%20Library%2FSupportive%20Docs%2FReal%20World%20Data%2FRWD%20Assets&viewid=00000000%2D0000%2D0000%2D0000%2D000000000000" target="_blank" rel="noopener" style="min-height:100px;justify-content:center;text-decoration:none;">
+                <div class="card-title" style="margin-bottom:0.4rem;">Real World Data Assets</div>
+                <div class="card-desc" style="margin-bottom:0;">SharePoint location with data dictionaries and training materials for all data assets that Pfizer has access to.</div>
+            </a>
+            <a class="card" href="https://pfizer.sharepoint.com/sites/BA_US_CORE_VACCINES" target="_blank" rel="noopener" style="min-height:100px;justify-content:center;text-decoration:none;">
+                <div class="card-title" style="margin-bottom:0.4rem;">Vaccelerator Home Page</div>
+                <div class="card-desc" style="margin-bottom:0;">Understand all things BA_US_CORE_VACCINES — the central hub for vaccines data and analytics.</div>
+            </a>
         </div>
     </section>
 
