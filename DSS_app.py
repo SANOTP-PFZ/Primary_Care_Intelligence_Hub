@@ -187,29 +187,56 @@ elif agents_param in ("ta", "tad"):
 
     # Build filter bar HTML (only for TAD)
     filter_bar_html = ""
-    flowchart_html = ""
+    flowchart_html_escaped = ""
     if agents_param == "tad":
-        # Read the supply chain flowchart HTML file
-        try:
-            import os
-            sc_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "supply-chain-updated.html")
-            with open(sc_path, "r", encoding="utf-8") as f:
-                sc_content = f.read()
-            # Extract body and style, escape curly braces for f-string safety
-            import re
-            body_match = re.search(r'<body[^>]*>(.*?)</body>', sc_content, re.DOTALL)
-            style_match = re.search(r'<style>(.*?)</style>', sc_content, re.DOTALL)
-            sc_body = body_match.group(1) if body_match else ""
-            sc_style = style_match.group(1) if style_match else ""
-            # Use string concatenation instead of f-string to avoid brace issues
-            flowchart_html = (
-                "<style>" + sc_style + "</style>"
-                '<div style="margin-bottom:1.2rem;border:1px solid var(--hairline);border-radius:14px;padding:1rem;background:rgba(255,255,255,0.7);">'
-                + sc_body +
-                "</div>"
-            )
-        except Exception:
-            flowchart_html = ""
+        # Static supply chain flowchart (SVG embedded directly)
+        flowchart_html_escaped = """
+            <div style="margin-bottom:1.2rem;border:1px solid rgba(15,23,42,0.08);border-radius:14px;padding:1.2rem 1rem 0.8rem;background:rgba(255,255,255,0.7);">
+                <div style="font-size:13px;font-weight:700;color:#1f2a44;margin-bottom:4px;">Pharmaceutical Supply Chain</div>
+                <div style="font-size:11px;color:#5a6478;margin-bottom:10px;">Medicine moves right along the chain, money flows back left, and rebates close the loop.</div>
+                <div style="overflow-x:auto;padding-bottom:6px;">
+                    <svg viewBox="0 0 1392 200" style="display:block;width:100%;min-width:940px;height:auto;" role="img">
+                        <defs>
+                            <linearGradient id="cardShine" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#fbfcff"/></linearGradient>
+                            <filter id="soft" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#26386b" flood-opacity="0.10"/></filter>
+                            <marker id="arrMed" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2f6fd0"/></marker>
+                            <marker id="arrMoney" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#3f8f3f"/></marker>
+                            <marker id="arrRet" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#d98a2b"/></marker>
+                        </defs>
+                        <path d="M162,111 L227,111" fill="none" stroke="#2f6fd0" stroke-width="2" stroke-opacity=".42" marker-end="url(#arrMed)"/>
+                        <path d="M227,129 L162,129" fill="none" stroke="#3f8f3f" stroke-width="2" stroke-opacity=".42" marker-end="url(#arrMoney)"/>
+                        <path d="M362,111 L427,111" fill="none" stroke="#2f6fd0" stroke-width="2" stroke-opacity=".42" marker-end="url(#arrMed)"/>
+                        <path d="M427,129 L362,129" fill="none" stroke="#3f8f3f" stroke-width="2" stroke-opacity=".42" marker-end="url(#arrMoney)"/>
+                        <path d="M562,111 L627,111" fill="none" stroke="#2f6fd0" stroke-width="2" stroke-opacity=".42" marker-end="url(#arrMed)"/>
+                        <path d="M627,129 L562,129" fill="none" stroke="#3f8f3f" stroke-width="2" stroke-opacity=".42" marker-end="url(#arrMoney)"/>
+                        <path d="M762,120 L827,120" fill="none" stroke="#3f8f3f" stroke-width="2" stroke-opacity=".42" marker-end="url(#arrMoney)"/>
+                        <path d="M962,120 L1027,120" fill="none" stroke="#3f8f3f" stroke-width="2" stroke-opacity=".42" marker-end="url(#arrMoney)"/>
+                        <path d="M1162,120 L1227,120" fill="none" stroke="#3f8f3f" stroke-width="2" stroke-opacity=".42" marker-end="url(#arrMoney)"/>
+                        <path d="M430,84 C 414,58 378,58 363,84" fill="none" stroke="#d98a2b" stroke-width="2" stroke-opacity=".65" stroke-dasharray="5 4" marker-end="url(#arrRet)"/>
+                        <g fill="#4a5468" font-size="11" text-anchor="middle">
+                            <text x="196" y="60" fill="#2f6fd0">medicine &#8594;</text>
+                            <text x="196" y="74" fill="#3f8f3f">money &#8592;</text>
+                            <text x="396" y="50" font-size="10.5" fill="#d98a2b">Returns</text>
+                            <text x="796" y="66">Premiums</text>
+                            <text x="996" y="66">Payments &amp; rebates</text>
+                            <text x="1196" y="66">Rebates</text>
+                        </g>
+                        <g><rect x="30" y="82" width="132" height="72" rx="12" fill="url(#cardShine)" stroke="#e3e8f2" filter="url(#soft)"/><text x="42" y="100" font-size="9.5" font-weight="700" letter-spacing=".08em" fill="#8b93a6">01</text><text x="96" y="119" text-anchor="middle" font-size="13.5" font-weight="700">Manufacturer</text><text x="96" y="133" text-anchor="middle" font-size="10" fill="#5a6478">e.g. Pfizer</text></g>
+                        <g><rect x="230" y="82" width="132" height="72" rx="12" fill="url(#cardShine)" stroke="#e3e8f2" filter="url(#soft)"/><text x="242" y="100" font-size="9.5" font-weight="700" letter-spacing=".08em" fill="#8b93a6">02</text><text x="296" y="119" text-anchor="middle" font-size="13.5" font-weight="700">Wholesaler</text><text x="296" y="133" text-anchor="middle" font-size="10" fill="#5a6478">Distributes</text><rect x="234" y="164" width="124" height="18" rx="9" fill="#eef0fc" stroke="#d7dbf6"/><text x="296" y="176.5" text-anchor="middle" font-size="9.5" fill="#6a5fd0">DDD &#183; 867</text></g>
+                        <g><rect x="430" y="82" width="132" height="72" rx="12" fill="url(#cardShine)" stroke="#e3e8f2" filter="url(#soft)"/><text x="442" y="100" font-size="9.5" font-weight="700" letter-spacing=".08em" fill="#8b93a6">03</text><text x="496" y="119" text-anchor="middle" font-size="13.5" font-weight="700">Pharmacy</text><text x="496" y="133" text-anchor="middle" font-size="10" fill="#5a6478">Dispenses</text><rect x="408" y="164" width="176" height="18" rx="9" fill="#eef0fc" stroke="#d7dbf6"/><text x="496" y="176.5" text-anchor="middle" font-size="9" fill="#6a5fd0">ELAAD &#183; Optum &#183; Health Verity</text></g>
+                        <g><rect x="630" y="82" width="132" height="72" rx="12" fill="url(#cardShine)" stroke="#e3e8f2" filter="url(#soft)"/><text x="642" y="100" font-size="9.5" font-weight="700" letter-spacing=".08em" fill="#8b93a6">04</text><text x="696" y="119" text-anchor="middle" font-size="13.5" font-weight="700">Patient</text><text x="696" y="133" text-anchor="middle" font-size="10" fill="#5a6478">Fills prescription</text><rect x="654" y="164" width="84" height="18" rx="9" fill="#eef0fc" stroke="#d7dbf6"/><text x="696" y="176.5" text-anchor="middle" font-size="9.5" fill="#6a5fd0">CDC</text></g>
+                        <g><rect x="830" y="82" width="132" height="72" rx="12" fill="url(#cardShine)" stroke="#e3e8f2" filter="url(#soft)"/><text x="842" y="100" font-size="9.5" font-weight="700" letter-spacing=".08em" fill="#8b93a6">05</text><text x="896" y="119" text-anchor="middle" font-size="13.5" font-weight="700">Health plan</text><text x="896" y="133" text-anchor="middle" font-size="10" fill="#5a6478">Insurer</text></g>
+                        <g><rect x="1030" y="82" width="132" height="72" rx="12" fill="url(#cardShine)" stroke="#e3e8f2" filter="url(#soft)"/><text x="1042" y="100" font-size="9.5" font-weight="700" letter-spacing=".08em" fill="#8b93a6">06</text><text x="1096" y="119" text-anchor="middle" font-size="13.5" font-weight="700">PBM</text><text x="1096" y="133" text-anchor="middle" font-size="10" fill="#5a6478">Manages benefits</text><rect x="1044" y="164" width="104" height="18" rx="9" fill="#f1f2f6" stroke="#d6dae4" stroke-dasharray="4 3"/><text x="1096" y="176.5" text-anchor="middle" font-size="9" fill="#98a0b3">Network contract</text></g>
+                        <g><rect x="1230" y="82" width="132" height="72" rx="12" fill="#f4f6fb" stroke="#cfd6e6" stroke-dasharray="5 4"/><text x="1296" y="119" text-anchor="middle" font-size="12.5" font-weight="700" fill="#98a0b3">Manufacturer</text><text x="1296" y="134" text-anchor="middle" font-size="9" fill="#98a0b3">loop closes &#8635;</text></g>
+                    </svg>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;margin:8px 2px 0;font-size:11.5px;color:#5a6478;">
+                    <span style="display:flex;align-items:center;gap:8px;"><span style="width:26px;border-top:3px solid #2f6fd0;border-radius:2px;"></span>Flow of medicine</span>
+                    <span style="display:flex;align-items:center;gap:8px;"><span style="width:26px;border-top:3px solid #3f8f3f;border-radius:2px;"></span>Flow of money</span>
+                    <span style="display:flex;align-items:center;gap:8px;"><span style="width:26px;border-top:3px dashed #d98a2b;border-radius:2px;"></span>Returns</span>
+                    <span style="display:flex;align-items:center;gap:8px;"><span style="width:30px;height:16px;border-radius:8px;background:#eef0fc;border:1px solid #d7dbf6;display:inline-block;"></span>Data sources</span>
+                </div>
+            </div>"""
 
         filter_bar_html = """
             <div class="filter-bar">
@@ -237,9 +264,6 @@ elif agents_param in ("ta", "tad"):
                     <button class="filter-chip" onclick="filterTAD(this,'market','migraine')">Migraine</button>
                 </div>
             </div>"""
-
-    # Escape flowchart braces for f-string interpolation
-    flowchart_html_escaped = flowchart_html.replace("{", "{{").replace("}", "}}")
 
     agents_html = f"""<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8">
