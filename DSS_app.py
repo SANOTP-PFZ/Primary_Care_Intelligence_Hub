@@ -608,14 +608,17 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
     <!-- ANALYTICAL TOOLS SECTION -->
     <section class="section" id="tools">
         <div class="section-head"><h2>Analytical Tools</h2><p>Advanced analytical tools and utilities for the Primary Care team.</p></div>
-        <div style="text-align:center;padding:3rem 0;">
-            <div style="display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:16px;background:rgba(28,79,192,0.06);margin-bottom:1rem;">
-                <span style="font-size:28px;">&#128295;</span>
-            </div>
-            <div style="font-family:'Manrope',sans-serif;font-weight:700;font-size:1.1rem;color:var(--navy-900);margin-bottom:0.4rem;">Analytical Tools</div>
-            <div style="font-size:0.84rem;color:var(--text-muted);max-width:480px;margin:0 auto;line-height:1.7;">Advanced analytical tools and utilities are being developed to support deeper market analysis, custom reporting, and data exploration workflows.</div>
-            <div style="margin-top:1.2rem;display:inline-block;padding:6px 16px;border-radius:8px;background:rgba(28,79,192,0.06);border:1px solid rgba(28,79,192,0.12);">
-                <span style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;color:var(--navy-600);letter-spacing:0.02em;">Coming Soon</span>
+        <div class="grid" style="grid-template-columns:repeat(2,1fr);">
+            <a class="card" href="https://dss-amer-design.pfizer.com:10000/webapps/USPRIMARYCAREADHOCANALYTICSPARTC/anzthPT/" target="_blank" rel="noopener" style="min-height:180px;padding:1.5rem 1.4rem;justify-content:center;align-items:center;text-align:center;text-decoration:none;">
+                <div class="card-top" style="justify-content:center;margin-bottom:1rem;"><span class="icon-chip chip-s3" style="width:44px;height:44px;border-radius:12px;"><svg viewBox="0 0 24 24" style="width:22px;height:22px;"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span></div>
+                <div class="card-title" style="font-size:1.05rem;margin-bottom:0.4rem;">Rebate Decision Agent</div>
+                <div class="card-desc" style="font-size:0.78rem;color:var(--text-muted);line-height:1.5;">AI-powered rebate scenario modeling and decision support for Primary Care brands.</div>
+            </a>
+            <div class="card" style="min-height:180px;padding:1.5rem 1.4rem;justify-content:center;align-items:center;text-align:center;cursor:default;opacity:0.85;">
+                <div class="card-top" style="justify-content:center;margin-bottom:1rem;"><span class="icon-chip chip-s1" style="width:44px;height:44px;border-radius:12px;"><svg viewBox="0 0 24 24" style="width:22px;height:22px;"><path d="M3 3v18h18M7 16l4-4 4 4 5-5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span></div>
+                <div class="card-title" style="font-size:1.05rem;margin-bottom:0.4rem;">Nurtec Waterfall Model</div>
+                <div class="card-desc" style="font-size:0.78rem;color:var(--text-muted);line-height:1.5;">Waterfall analysis for Nurtec prescription volume drivers and market share changes.</div>
+                <div style="margin-top:0.6rem;display:inline-block;padding:4px 12px;border-radius:6px;background:rgba(28,79,192,0.06);border:1px solid rgba(28,79,192,0.12);"><span style="font-size:11px;font-weight:700;color:var(--navy-600);letter-spacing:0.02em;">Coming Soon</span></div>
             </div>
         </div>
     </section>
