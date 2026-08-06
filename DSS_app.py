@@ -370,7 +370,7 @@ html,body{{height:100%}}
 body{{font-family:'Inter',system-ui,sans-serif;background:radial-gradient(ellipse 80% 60% at 0% 0%,rgba(28,79,192,0.08) 0%,transparent 60%),radial-gradient(ellipse 70% 50% at 100% 0%,rgba(65,182,230,0.07) 0%,transparent 55%),radial-gradient(ellipse 60% 50% at 50% 100%,rgba(124,58,237,0.04) 0%,transparent 60%),var(--bg);color:var(--text);line-height:1.5;font-size:14px;-webkit-font-smoothing:antialiased;overflow:hidden}}
 h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-0.015em}}
 .app{{height:100vh;display:grid;grid-template-columns:var(--sidebar-w) 1fr;gap:var(--shell-pad);padding:var(--shell-pad);overflow:hidden}}
-.sidebar{{position:relative;background:rgba(255,255,255,0.62);backdrop-filter:saturate(180%) blur(22px);-webkit-backdrop-filter:saturate(180%) blur(22px);border:1px solid var(--hairline);border-radius:var(--panel-radius);box-shadow:var(--shadow-panel);display:flex;flex-direction:column;overflow:hidden}}
+.sidebar{{position:sticky;top:var(--shell-pad);height:calc(100vh - 2*var(--shell-pad));background:rgba(255,255,255,0.62);backdrop-filter:saturate(180%) blur(22px);-webkit-backdrop-filter:saturate(180%) blur(22px);border:1px solid var(--hairline);border-radius:var(--panel-radius);box-shadow:var(--shadow-panel);display:flex;flex-direction:column;overflow:hidden}}
 .sidebar-brand{{padding:1.4rem 1.2rem 1.2rem;display:flex;flex-direction:column;gap:0.7rem}}
 .sidebar-brand img{{height:28px;align-self:flex-start}}
 .sidebar-brand .title{{font-family:'Manrope',sans-serif;font-weight:800;font-size:1.22rem;color:var(--navy-900);line-height:1.18;letter-spacing:-0.025em}}
@@ -393,8 +393,8 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
 .sidebar-meta{{padding:0.85rem 1.15rem 1rem;font-size:0.7rem;color:var(--text-muted);line-height:1.55;border-top:1px solid var(--hairline);background:linear-gradient(180deg,transparent 0%,rgba(28,79,192,0.025) 100%)}}
 .sidebar-meta strong{{color:var(--text-soft);font-weight:600}}
 .sidebar-meta .meta-row{{margin-bottom:0.2rem}}
-.main{{background:rgba(255,255,255,0.55);backdrop-filter:saturate(180%) blur(14px);-webkit-backdrop-filter:saturate(180%) blur(14px);border:1px solid var(--hairline);border-radius:var(--panel-radius);box-shadow:var(--shadow-panel);display:flex;flex-direction:column;overflow:hidden;min-width:0}}
-.content{{flex:1;min-height:0;overflow-y:auto;padding:1.4rem}}
+.main{{background:rgba(255,255,255,0.55);backdrop-filter:saturate(180%) blur(14px);-webkit-backdrop-filter:saturate(180%) blur(14px);border:1px solid var(--hairline);border-radius:var(--panel-radius);box-shadow:var(--shadow-panel);display:flex;flex-direction:column;overflow:hidden;min-width:0;min-height:0}}
+.content{{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:1.4rem}}
 .content::-webkit-scrollbar{{width:6px}}
 .content::-webkit-scrollbar-thumb{{background:rgba(15,23,42,0.14);border-radius:3px}}
 .section{{display:none;opacity:0;transform:translateY(4px);transition:opacity 0.22s var(--ease),transform 0.22s var(--ease-out)}}
