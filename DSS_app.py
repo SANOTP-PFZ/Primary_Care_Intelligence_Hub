@@ -9,7 +9,7 @@ st.set_page_config(
     page_title="Primary Care OE Maximization Intelligence Hub",
     page_icon="P",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
 
 # --- DATA LOADING ---
@@ -329,7 +329,7 @@ else:
     [data-testid="stAppViewBlockContainer"]{padding:0!important}
     [data-testid="stMainBlockContainer"]{padding:0!important}
     [data-testid="stVerticalBlock"]{gap:0!important}
-    .stApp,[data-testid="stAppViewContainer"],[data-testid="stMain"]{overflow:hidden!important}
+    .stApp,[data-testid="stAppViewContainer"],[data-testid="stMain"]{overflow:auto!important}
     </style>
     """, unsafe_allow_html=True)
 
@@ -344,7 +344,7 @@ else:
     brand_cards_grid = ""
     for name, key, sources in BRANDS_LIST:
         chips_html = ''.join(f'<span class="source-chip">{s}</span>' for s in sources)
-        brand_cards_grid += f'''<div class="card" onclick="window.parent.location.href = window.parent.location.origin + window.parent.location.pathname + '?brand={key}'"><div class="card-top"><span class="icon-chip chip-s1"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-9 4 18 3-9h4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span></div><div class="card-title">{name}</div><div class="card-sources">{chips_html}</div></div>'''
+        brand_cards_grid += f'''<div class="card" onclick="window.open(window.parent.location.origin + window.parent.location.pathname + '?brand={key}', '_blank')"><div class="card-top"><span class="icon-chip chip-s1"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-9 4 18 3-9h4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span></div><div class="card-title">{name}</div><div class="card-sources">{chips_html}</div></div>'''
 
     landing_html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -945,4 +945,4 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
 </body>
 </html>"""
 
-    st.components.v1.html(landing_html, height=920, scrolling=False)
+    st.components.v1.html(landing_html, height=960, scrolling=True)

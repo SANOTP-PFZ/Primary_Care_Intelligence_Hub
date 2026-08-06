@@ -50,18 +50,9 @@ BRAND_PAGE_CSS = """
     #MainMenu {visibility: hidden;}
     header {visibility: hidden;}
     footer {visibility: hidden;}
-    [data-testid="stHeader"], [data-testid="stToolbar"], [data-testid="stDecoration"] { display: none !important; }
-
-    /* Sidebar styling for brand pages */
-    [data-testid="stSidebar"] {
-        background: rgba(255,255,255,0.62) !important;
-        backdrop-filter: saturate(180%) blur(22px) !important;
-        -webkit-backdrop-filter: saturate(180%) blur(22px) !important;
-        border-right: 1px solid rgba(15,23,42,0.08) !important;
-    }
-    [data-testid="stSidebar"] [data-testid="stSidebarContent"] {
-        padding-top: 1.5rem !important;
-    }
+    [data-testid="stSidebar"] {display: none;}
+    [data-testid="stHeader"], [data-testid="stToolbar"], [data-testid="stDecoration"],
+    [data-testid="collapsedControl"], [data-testid="stSidebarCollapseButton"] { display: none !important; }
 
     .block-container { padding-top: 1rem !important; max-width: 100% !important; padding-left: 3rem !important; padding-right: 3rem !important; }
     html, body, [class*="css"] { font-family: 'Inter', system-ui, -apple-system, sans-serif; color: var(--text-1) !important; -webkit-font-smoothing: antialiased; }
@@ -188,11 +179,8 @@ def render_header(title):
 
 
 def render_back_button():
-    """Back button to return to the main hub (same tab)."""
-    st.markdown(
-        '<a href="?" target="_self" style="display:inline-flex;align-items:center;gap:0.4rem;padding:8px 20px;border-radius:10px;background:rgba(255,255,255,0.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(15,23,42,0.08);color:#1C4FC0;font-size:14px;font-weight:600;text-decoration:none;box-shadow:0 1px 2px rgba(15,23,42,0.04);transition:all 0.18s cubic-bezier(0.4,0,0.2,1);margin-bottom:12px;" onmouseover="this.style.background=\'#FFFFFF\';this.style.borderColor=\'rgba(28,79,192,0.35)\';" onmouseout="this.style.background=\'rgba(255,255,255,0.7)\';this.style.borderColor=\'rgba(15,23,42,0.08)\';">&#8592; Back to Hub</a>',
-        unsafe_allow_html=True
-    )
+    """Back button removed — brand pages open in new tabs."""
+    pass
 
 
 def render_kpi_cards(cards):
@@ -291,33 +279,6 @@ def render_footer():
 # MAIN BRAND PAGE RENDERER
 # =====================================================
 
-def render_sidebar(brand_key, brand_config):
-    """Render the sidebar with brand navigation links matching the landing page design."""
-    with st.sidebar:
-        st.markdown(f"""
-        <div style="padding:0.2rem 0 0.8rem;">
-            <img src="{PFIZER_LOGO_URL}" style="height:26px;margin-bottom:10px;" />
-            <div style="font-family:'Manrope',sans-serif;font-weight:800;font-size:1.1rem;color:#0A1A3D;line-height:1.18;letter-spacing:-0.025em;">Primary Care OE<br>Maximization<br>Intelligence Hub</div>
-            <div style="font-size:0.72rem;color:#64748B;font-weight:500;margin-top:4px;">Pfizer Analytics</div>
-        </div>
-        <hr style="border:none;height:1px;background:rgba(15,23,42,0.08);margin:0.5rem 0;">
-        <div style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#64748B;padding:0.8rem 0 0.4rem;">Deep-Dive Dashboards</div>
-        """, unsafe_allow_html=True)
-
-        for key, cfg in brand_config.items():
-            is_active = (key == brand_key)
-            style = "background:linear-gradient(90deg,rgba(28,79,192,0.10),rgba(28,79,192,0.04));color:#163990;font-weight:600;border-left:3px solid #1C4FC0;" if is_active else "color:#475569;"
-            st.markdown(
-                f'<a href="?brand={key}" target="_self" style="display:block;padding:0.5rem 0.7rem;margin:0.08rem 0;border-radius:8px;font-size:0.84rem;text-decoration:none;{style}">{cfg["display_name"]}</a>',
-                unsafe_allow_html=True
-            )
-
-        st.markdown("""
-        <hr style="border:none;height:1px;background:rgba(15,23,42,0.08);margin:0.8rem 0;">
-        <a href="?" target="_self" style="display:block;padding:0.5rem 0.7rem;border-radius:8px;font-size:0.84rem;color:#1C4FC0;font-weight:600;text-decoration:none;">&#8592; Back to Hub</a>
-        """, unsafe_allow_html=True)
-
-
 def render_brand_page(brand_key, brand_config):
     """Main entry point: renders the brand deep dive page."""
     config = brand_config[brand_key]
@@ -325,9 +286,8 @@ def render_brand_page(brand_key, brand_config):
     market = config["market"]
     display_name = config["display_name"]
 
-    # Inject CSS + Sidebar + Header + Back button
+    # Inject CSS + Header + Back button
     inject_css()
-    render_sidebar(brand_key, brand_config)
     render_header(f"{display_name} Quarter on Quarter Report")
     render_back_button()
 
@@ -738,12 +698,12 @@ def render_brand_page(brand_key, brand_config):
     with col_dl1:
         render_download_link(generate_excel(), f"{display_name.lower()}_report.xlsx", "\U0001f4e5 Download Excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
     with col_dl2:
-        # PDF generation
+        # PDF generation — includes all charts, tables, and trends as shown on screen
         def generate_pdf():
             try:
                 from reportlab.lib.pagesizes import letter, landscape
                 from reportlab.lib.units import inch
-                from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+                from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image, PageBreak
                 from reportlab.lib import colors
                 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 
@@ -754,6 +714,7 @@ def render_brand_page(brand_key, brand_config):
 
                 title_style = ParagraphStyle("CustomTitle", parent=styles["Title"], fontSize=20, textColor=colors.HexColor("#1C4FC0"), spaceAfter=6)
                 heading_style = ParagraphStyle("CustomHeading", parent=styles["Heading2"], fontSize=14, textColor=colors.HexColor("#1C4FC0"), spaceBefore=16, spaceAfter=8)
+                subheading_style = ParagraphStyle("CustomSubheading", parent=styles["Heading3"], fontSize=12, textColor=colors.HexColor("#0A1A3D"), spaceBefore=12, spaceAfter=6)
                 kpi_style = ParagraphStyle("KPI", parent=styles["Normal"], fontSize=12, textColor=colors.HexColor("#1C4FC0"), spaceAfter=4)
 
                 table_style_rl = TableStyle([
@@ -771,6 +732,53 @@ def render_brand_page(brand_key, brand_config):
                     ("BOTTOMPADDING", (0, 1), (-1, -1), 5),
                 ])
 
+                def fig_to_image(fig, width=9*inch, height=3.2*inch):
+                    """Convert a Plotly figure to a ReportLab Image."""
+                    try:
+                        img_bytes = fig.to_image(format="png", width=900, height=320, scale=2)
+                        img_buf = BytesIO(img_bytes)
+                        return Image(img_buf, width=width, height=height)
+                    except Exception:
+                        return None
+
+                def build_trend_fig(pivoted_df, brands_order=None, is_percentage=True):
+                    """Build a Plotly figure for trend chart (mirrors render_trend_chart)."""
+                    if pivoted_df.empty:
+                        return None
+                    fig = go.Figure()
+                    brands = brands_order if brands_order else list(pivoted_df.columns)
+                    for i, brand in enumerate(brands):
+                        if brand not in pivoted_df.columns:
+                            continue
+                        y_vals = pivoted_df[brand].tolist()
+                        if i == 0:
+                            text_vals = [f"{v:.2f}" if pd.notna(v) else "" for v in y_vals] if is_percentage else [f"{v:,.0f}" if pd.notna(v) else "" for v in y_vals]
+                            fig.add_trace(go.Scatter(x=pivoted_df.index.tolist(), y=y_vals, mode="lines+markers+text", name=brand, text=text_vals, textposition="top center", textfont=dict(size=10, color=CHART_COLORS[0]), line=dict(color=CHART_COLORS[0], width=3), marker=dict(size=7)))
+                        else:
+                            fig.add_trace(go.Scatter(x=pivoted_df.index.tolist(), y=y_vals, mode="lines+markers", name=brand, line=dict(color=CHART_COLORS[i % len(CHART_COLORS)], width=2), marker=dict(size=5)))
+                    fig.update_layout(template="plotly_white", height=320, width=900, margin=dict(l=60, r=30, t=30, b=50), plot_bgcolor="#FFFFFF", paper_bgcolor="#FFFFFF", font=dict(family="Inter, system-ui, sans-serif", size=13, color="#0F172A"), legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0, font=dict(size=12, color="#64748B")), hovermode="x unified")
+                    fig.update_xaxes(showgrid=False, tickfont=dict(size=12, color="#64748B"))
+                    fig.update_yaxes(showgrid=True, gridcolor="rgba(15,23,42,0.06)", ticksuffix="%" if is_percentage else "", tickfont=dict(size=12, color="#64748B"))
+                    return fig
+
+                def add_table_to_pdf(df_data, title_text):
+                    """Add a DataFrame as a styled table to PDF elements."""
+                    if df_data.empty:
+                        return
+                    elements.append(Paragraph(title_text, subheading_style))
+                    header = list(df_data.columns)
+                    table_data = [header]
+                    for _, row in df_data.iterrows():
+                        table_data.append([str(v) for v in row])
+                    col_count = len(header)
+                    avail_width = 10 * inch
+                    col_w = min(1.3 * inch, avail_width / col_count)
+                    t = Table(table_data, colWidths=[col_w] * col_count)
+                    t.setStyle(table_style_rl)
+                    elements.append(t)
+                    elements.append(Spacer(1, 10))
+
+                # === TITLE & KPIs ===
                 elements.append(Paragraph(f"{display_name} \u2014 {config['market_display']} Market Report", title_style))
                 elements.append(Spacer(1, 10))
                 elements.append(Paragraph(f"<b>Latest Quarter:</b> {latest_qtr}", kpi_style))
@@ -782,45 +790,269 @@ def render_brand_page(brand_key, brand_config):
                 elements.append(Paragraph(f"<b>{display_name} NBRX Market Share (NPA):</b> {nbrx_v_str}{nbrx_d_str}", kpi_style))
                 elements.append(Spacer(1, 14))
 
+                # === TRX MARKET SHARE TREND CHART ===
                 if not trx_ms.empty:
-                    elements.append(Paragraph("TRX Market Share (%)", heading_style))
+                    elements.append(Paragraph(f"TRX Market Share Trend \u2014 {config['market_display']} Market (NPA)", heading_style))
+                    order = [brand_name] + [b for b in trx_ms.columns if b != brand_name]
+                    fig = build_trend_fig(trx_ms, order)
+                    if fig:
+                        img = fig_to_image(fig)
+                        if img:
+                            elements.append(img)
+                    elements.append(Spacer(1, 10))
+
+                # === NBRX MARKET SHARE TREND CHART ===
+                if not nbrx_ms.empty:
+                    elements.append(Paragraph(f"NBRX Market Share Trend \u2014 {config['market_display']} Market (NPA)", heading_style))
+                    order = [brand_name] + [b for b in nbrx_ms.columns if b != brand_name]
+                    fig = build_trend_fig(nbrx_ms, order)
+                    if fig:
+                        img = fig_to_image(fig)
+                        if img:
+                            elements.append(img)
+                    elements.append(Spacer(1, 10))
+
+                # === DDD METRICS (if applicable) ===
+                if "ddd_market" in config:
+                    ddd_market = config["ddd_market"]
+                    ddd_data = df[(df["DATASET"] == "DDD") & (df["MARKET"] == ddd_market)]
+                    if not ddd_data.empty:
+                        shipment_ms = pivot_metric(ddd_data, "OVERALL_MS")
+                        if not shipment_ms.empty:
+                            elements.append(Paragraph(f"Shipment Market Share \u2014 {ddd_market} Market (DDD)", heading_style))
+                            order = [brand_name] + [b for b in shipment_ms.columns if b != brand_name]
+                            fig = build_trend_fig(shipment_ms, order)
+                            if fig:
+                                img = fig_to_image(fig)
+                                if img:
+                                    elements.append(img)
+                            elements.append(Spacer(1, 10))
+
+                        retail_ms = pivot_metric(ddd_data, "RETAIL_MS")
+                        if not retail_ms.empty:
+                            elements.append(Paragraph(f"Retail Market Share \u2014 {ddd_market} Market (DDD)", heading_style))
+                            order = [brand_name] + [b for b in retail_ms.columns if b != brand_name]
+                            fig = build_trend_fig(retail_ms, order)
+                            if fig:
+                                img = fig_to_image(fig)
+                                if img:
+                                    elements.append(img)
+                            elements.append(Spacer(1, 10))
+
+                        non_retail_ms = pivot_metric(ddd_data, "NON_RETAIL_MS")
+                        if not non_retail_ms.empty:
+                            elements.append(Paragraph(f"Non-Retail Market Share \u2014 {ddd_market} Market (DDD)", heading_style))
+                            order = [brand_name] + [b for b in non_retail_ms.columns if b != brand_name]
+                            fig = build_trend_fig(non_retail_ms, order)
+                            if fig:
+                                img = fig_to_image(fig)
+                                if img:
+                                    elements.append(img)
+                            elements.append(Spacer(1, 10))
+
+                        # Channel Contribution
+                        retail_contrib = pivot_metric(ddd_data, "RETAIL_CONTRIBUTION")
+                        non_retail_contrib = pivot_metric(ddd_data, "NON_RETAIL_CONTRIBUTION")
+                        if (not retail_contrib.empty and brand_name in retail_contrib.columns) or \
+                           (not non_retail_contrib.empty and brand_name in non_retail_contrib.columns):
+                            elements.append(Paragraph(f"{display_name} Channel Contribution (DDD)", heading_style))
+                            latest_c_qtr = retail_contrib.index[-1] if not retail_contrib.empty else non_retail_contrib.index[-1]
+                            r_val = retail_contrib.loc[latest_c_qtr, brand_name] if (not retail_contrib.empty and brand_name in retail_contrib.columns) else 0
+                            nr_val = non_retail_contrib.loc[latest_c_qtr, brand_name] if (not non_retail_contrib.empty and brand_name in non_retail_contrib.columns) else 0
+
+                            # Pie chart
+                            fig_pie = go.Figure(data=[go.Pie(
+                                labels=["Retail", "Non-Retail"],
+                                values=[r_val if pd.notna(r_val) else 0, nr_val if pd.notna(nr_val) else 0],
+                                marker=dict(colors=["#1C4FC0", "#F8971D"], line=dict(color="#FFFFFF", width=2)),
+                                textinfo="label+percent", hole=0.4
+                            )])
+                            fig_pie.update_layout(template="plotly_white", height=300, width=450, margin=dict(l=20, r=20, t=30, b=20), plot_bgcolor="#FFFFFF", paper_bgcolor="#FFFFFF", title=dict(text=f"Latest: {latest_c_qtr}", font=dict(size=12, color="#1C4FC0")))
+                            img = fig_to_image(fig_pie, width=4.5*inch, height=3*inch)
+                            if img:
+                                elements.append(img)
+
+                            # Channel contribution trend
+                            fig_ct = go.Figure()
+                            if not retail_contrib.empty and brand_name in retail_contrib.columns:
+                                fig_ct.add_trace(go.Scatter(x=retail_contrib.index.tolist(), y=retail_contrib[brand_name].tolist(), mode="lines+markers", name="Retail", line=dict(color="#1C4FC0", width=3), marker=dict(size=7)))
+                            if not non_retail_contrib.empty and brand_name in non_retail_contrib.columns:
+                                fig_ct.add_trace(go.Scatter(x=non_retail_contrib.index.tolist(), y=non_retail_contrib[brand_name].tolist(), mode="lines+markers", name="Non-Retail", line=dict(color="#F8971D", width=3), marker=dict(size=7)))
+                            fig_ct.update_layout(template="plotly_white", height=320, width=900, margin=dict(l=60, r=30, t=30, b=50), plot_bgcolor="#FFFFFF", paper_bgcolor="#FFFFFF", font=dict(size=12), legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0))
+                            fig_ct.update_xaxes(showgrid=False)
+                            fig_ct.update_yaxes(showgrid=True, gridcolor="rgba(15,23,42,0.06)", ticksuffix="%")
+                            img = fig_to_image(fig_ct)
+                            if img:
+                                elements.append(img)
+                            elements.append(Spacer(1, 10))
+
+                        # Abrysvo-specific: OA MS + OA vs MA Contribution
+                        if brand_key == "abrysvo":
+                            oa_ms = pivot_metric(ddd_data, "OA_MS")
+                            if not oa_ms.empty:
+                                elements.append(Paragraph("OA Market Share \u2014 RSV Market (DDD)", heading_style))
+                                order = [brand_name] + [b for b in oa_ms.columns if b != brand_name]
+                                fig = build_trend_fig(oa_ms, order)
+                                if fig:
+                                    img = fig_to_image(fig)
+                                    if img:
+                                        elements.append(img)
+                                elements.append(Spacer(1, 10))
+
+                            oa_contrib = pivot_metric(ddd_data, "OA_CONTRIBUTION")
+                            ma_contrib = pivot_metric(ddd_data, "MA_CONTRIBUTION")
+                            if (not oa_contrib.empty and brand_name in oa_contrib.columns) or \
+                               (not ma_contrib.empty and brand_name in ma_contrib.columns):
+                                elements.append(Paragraph(f"{display_name} OA vs MA Contribution (DDD)", heading_style))
+                                latest_oa_qtr = oa_contrib.index[-1] if not oa_contrib.empty else ma_contrib.index[-1]
+                                oa_v = oa_contrib.loc[latest_oa_qtr, brand_name] if (not oa_contrib.empty and brand_name in oa_contrib.columns) else 0
+                                ma_v = ma_contrib.loc[latest_oa_qtr, brand_name] if (not ma_contrib.empty and brand_name in ma_contrib.columns) else 0
+
+                                fig_pie2 = go.Figure(data=[go.Pie(
+                                    labels=["OA", "MA"],
+                                    values=[oa_v if pd.notna(oa_v) else 0, ma_v if pd.notna(ma_v) else 0],
+                                    marker=dict(colors=["#1C4FC0", "#10B981"], line=dict(color="#FFFFFF", width=2)),
+                                    textinfo="label+percent", hole=0.4
+                                )])
+                                fig_pie2.update_layout(template="plotly_white", height=300, width=450, margin=dict(l=20, r=20, t=30, b=20), plot_bgcolor="#FFFFFF", paper_bgcolor="#FFFFFF", title=dict(text=f"Latest: {latest_oa_qtr}", font=dict(size=12, color="#1C4FC0")))
+                                img = fig_to_image(fig_pie2, width=4.5*inch, height=3*inch)
+                                if img:
+                                    elements.append(img)
+
+                                fig_oa = go.Figure()
+                                if not oa_contrib.empty and brand_name in oa_contrib.columns:
+                                    fig_oa.add_trace(go.Scatter(x=oa_contrib.index.tolist(), y=oa_contrib[brand_name].tolist(), mode="lines+markers", name="OA Contribution", line=dict(color="#1C4FC0", width=3), marker=dict(size=7)))
+                                if not ma_contrib.empty and brand_name in ma_contrib.columns:
+                                    fig_oa.add_trace(go.Scatter(x=ma_contrib.index.tolist(), y=ma_contrib[brand_name].tolist(), mode="lines+markers", name="MA Contribution", line=dict(color="#10B981", width=3), marker=dict(size=7)))
+                                fig_oa.update_layout(template="plotly_white", height=320, width=900, margin=dict(l=60, r=30, t=30, b=50), plot_bgcolor="#FFFFFF", paper_bgcolor="#FFFFFF", font=dict(size=12), legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0))
+                                fig_oa.update_xaxes(showgrid=False)
+                                fig_oa.update_yaxes(showgrid=True, gridcolor="rgba(15,23,42,0.06)", ticksuffix="%")
+                                img = fig_to_image(fig_oa)
+                                if img:
+                                    elements.append(img)
+                                elements.append(Spacer(1, 10))
+
+                        # Prevnar-specific: Peds + Adult MS
+                        if brand_key == "prevnar":
+                            ped_ms = pivot_metric(ddd_data, "PED_MS")
+                            if not ped_ms.empty:
+                                ped_brands = [b for b in ["PREVNAR", "VAXNEUVANCE"] if b in ped_ms.columns]
+                                ped_ms_filtered = ped_ms[ped_brands]
+                                ped_ms_filtered = ped_ms_filtered[ped_ms_filtered.index >= "2024Q1"]
+                                if not ped_ms_filtered.empty:
+                                    elements.append(Paragraph("Peds Market Share Trend \u2014 PCV Market (DDD)", heading_style))
+                                    fig = build_trend_fig(ped_ms_filtered, ped_brands)
+                                    if fig:
+                                        img = fig_to_image(fig)
+                                        if img:
+                                            elements.append(img)
+                                    elements.append(Spacer(1, 10))
+
+                            adult_ms = pivot_metric(ddd_data, "ADULT_MS")
+                            if not adult_ms.empty:
+                                adult_brands = [b for b in ["PREVNAR", "VAXNEUVANCE", "CAPVAXIVE"] if b in adult_ms.columns]
+                                adult_ms_filtered = adult_ms[adult_brands]
+                                adult_ms_filtered = adult_ms_filtered[adult_ms_filtered.index >= "2024Q1"]
+                                if not adult_ms_filtered.empty:
+                                    elements.append(Paragraph("Adult Market Share Trend \u2014 PCV Market (DDD)", heading_style))
+                                    fig = build_trend_fig(adult_ms_filtered, adult_brands)
+                                    if fig:
+                                        img = fig_to_image(fig)
+                                        if img:
+                                            elements.append(img)
+                                    elements.append(Spacer(1, 10))
+
+                elements.append(PageBreak())
+
+                # === QoQ MARKET SHARE DIFFERENCES TABLES ===
+                elements.append(Paragraph("QoQ Market Share Differences", heading_style))
+
+                if not trx_ms.empty and brand_name in trx_ms.columns:
+                    ms_trx_table = pd.DataFrame({"Quarter": trx_ms.index})
+                    ms_trx_table[f"{display_name} MS"] = trx_ms[brand_name].apply(lambda x: f"{x:.2f}" if pd.notna(x) else "-").values
+                    ms_trx_table["PQ MS"] = trx_pq_ms[brand_name].apply(lambda x: f"{x:.2f}" if pd.notna(x) else "-").values if (not trx_pq_ms.empty and brand_name in trx_pq_ms.columns) else "-"
+                    ms_trx_table["MS Diff vs STLY"] = trx_diff[brand_name].apply(lambda x: f"{x:+.2f}" if pd.notna(x) else "-").values if (not trx_diff.empty and brand_name in trx_diff.columns) else "-"
+                    ms_trx_table["MS Diff vs PQ"] = trx_ms_diff_pq[brand_name].apply(lambda x: f"{x:+.2f}" if pd.notna(x) else "-").values if (not trx_ms_diff_pq.empty and brand_name in trx_ms_diff_pq.columns) else "-"
+                    add_table_to_pdf(ms_trx_table, f"TRX Market Share Difference \u2014 {display_name} (NPA)")
+
+                if not nbrx_ms.empty and brand_name in nbrx_ms.columns:
+                    ms_nbrx_table = pd.DataFrame({"Quarter": nbrx_ms.index})
+                    ms_nbrx_table[f"{display_name} MS"] = nbrx_ms[brand_name].apply(lambda x: f"{x:.2f}" if pd.notna(x) else "-").values
+                    ms_nbrx_table["PQ MS"] = nbrx_pq_ms[brand_name].apply(lambda x: f"{x:.2f}" if pd.notna(x) else "-").values if (not nbrx_pq_ms.empty and brand_name in nbrx_pq_ms.columns) else "-"
+                    ms_nbrx_table["MS Diff vs STLY"] = nbrx_diff[brand_name].apply(lambda x: f"{x:+.2f}" if pd.notna(x) else "-").values if (not nbrx_diff.empty and brand_name in nbrx_diff.columns) else "-"
+                    ms_nbrx_table["MS Diff vs PQ"] = nbrx_ms_diff_pq[brand_name].apply(lambda x: f"{x:+.2f}" if pd.notna(x) else "-").values if (not nbrx_ms_diff_pq.empty and brand_name in nbrx_ms_diff_pq.columns) else "-"
+                    add_table_to_pdf(ms_nbrx_table, f"NBRX Market Share Difference \u2014 {display_name} (NPA)")
+
+                # === QoQ GROWTH SUMMARIES ===
+                elements.append(Paragraph("QoQ Growth Summaries", heading_style))
+
+                if not trx_claims.empty:
+                    gs_trx = pd.DataFrame({"Quarter": trx_claims.index})
+                    if brand_name in trx_claims.columns:
+                        gs_trx[f"{display_name} TRX Claims"] = trx_claims[brand_name].apply(lambda x: f"{x:,.0f}" if pd.notna(x) else "-").values
+                        gs_trx[f"{display_name} PQ Growth %"] = trx_qoq_growth[brand_name].reindex(trx_claims.index).apply(fmt_growth).values if (not trx_qoq_growth.empty and brand_name in trx_qoq_growth.columns) else "-"
+                        gs_trx[f"{display_name} STLY Growth %"] = trx_stly_growth[brand_name].reindex(trx_claims.index).apply(fmt_growth).values if (not trx_stly_growth.empty and brand_name in trx_stly_growth.columns) else "-"
+                    if market in trx_claims.columns:
+                        gs_trx[f"{market} TRX Claims"] = trx_claims[market].apply(lambda x: f"{x:,.0f}" if pd.notna(x) else "-").values
+                        gs_trx[f"{market} PQ Growth %"] = trx_qoq_growth[market].reindex(trx_claims.index).apply(fmt_growth).values if (not trx_qoq_growth.empty and market in trx_qoq_growth.columns) else "-"
+                        gs_trx[f"{market} STLY Growth %"] = trx_stly_growth[market].reindex(trx_claims.index).apply(fmt_growth).values if (not trx_stly_growth.empty and market in trx_stly_growth.columns) else "-"
+                    add_table_to_pdf(gs_trx, "TRX Growth Summary (NPA)")
+
+                if not nbrx_claims.empty:
+                    gs_nbrx = pd.DataFrame({"Quarter": nbrx_claims.index})
+                    if brand_name in nbrx_claims.columns:
+                        gs_nbrx[f"{display_name} NBRX Claims"] = nbrx_claims[brand_name].apply(lambda x: f"{x:,.0f}" if pd.notna(x) else "-").values
+                        gs_nbrx[f"{display_name} PQ Growth %"] = nbrx_qoq_growth[brand_name].reindex(nbrx_claims.index).apply(fmt_growth).values if (not nbrx_qoq_growth.empty and brand_name in nbrx_qoq_growth.columns) else "-"
+                        gs_nbrx[f"{display_name} STLY Growth %"] = nbrx_stly_growth[brand_name].reindex(nbrx_claims.index).apply(fmt_growth).values if (not nbrx_stly_growth.empty and brand_name in nbrx_stly_growth.columns) else "-"
+                    if market in nbrx_claims.columns:
+                        gs_nbrx[f"{market} NBRX Claims"] = nbrx_claims[market].apply(lambda x: f"{x:,.0f}" if pd.notna(x) else "-").values
+                        gs_nbrx[f"{market} PQ Growth %"] = nbrx_qoq_growth[market].reindex(nbrx_claims.index).apply(fmt_growth).values if (not nbrx_qoq_growth.empty and market in nbrx_qoq_growth.columns) else "-"
+                        gs_nbrx[f"{market} STLY Growth %"] = nbrx_stly_growth[market].reindex(nbrx_claims.index).apply(fmt_growth).values if (not nbrx_stly_growth.empty and market in nbrx_stly_growth.columns) else "-"
+                    add_table_to_pdf(gs_nbrx, "NBRX Growth Summary (NPA)")
+
+                # === RAW DATA TABLES ===
+                elements.append(PageBreak())
+                elements.append(Paragraph("Raw Data Tables", heading_style))
+
+                if not trx_ms.empty:
                     header = ["Quarter"] + list(trx_ms.columns)
                     table_data = [header]
                     for qtr in trx_ms.index:
-                        table_data.append([qtr] + [f"{v:.2f}" if pd.notna(v) else "-" for v in trx_ms.loc[qtr]])
+                        table_data.append([qtr] + [f"{v:.2f}%" if pd.notna(v) else "-" for v in trx_ms.loc[qtr]])
+                    elements.append(Paragraph("TRX Market Share (NPA)", subheading_style))
                     t = Table(table_data, colWidths=[1.2*inch] + [1.3*inch]*min(len(trx_ms.columns), 6))
                     t.setStyle(table_style_rl)
                     elements.append(t)
                     elements.append(Spacer(1, 10))
 
                 if not nbrx_ms.empty:
-                    elements.append(Paragraph("NBRX Market Share (%)", heading_style))
                     header = ["Quarter"] + list(nbrx_ms.columns)
                     table_data = [header]
                     for qtr in nbrx_ms.index:
-                        table_data.append([qtr] + [f"{v:.2f}" if pd.notna(v) else "-" for v in nbrx_ms.loc[qtr]])
+                        table_data.append([qtr] + [f"{v:.2f}%" if pd.notna(v) else "-" for v in nbrx_ms.loc[qtr]])
+                    elements.append(Paragraph("NBRX Market Share (NPA)", subheading_style))
                     t = Table(table_data, colWidths=[1.2*inch] + [1.3*inch]*min(len(nbrx_ms.columns), 6))
                     t.setStyle(table_style_rl)
                     elements.append(t)
                     elements.append(Spacer(1, 10))
 
                 if not trx_claims.empty:
-                    elements.append(Paragraph("TRX Claims", heading_style))
                     header = ["Quarter"] + list(trx_claims.columns)
                     table_data = [header]
                     for qtr in trx_claims.index:
                         table_data.append([qtr] + [f"{v:,.0f}" if pd.notna(v) else "-" for v in trx_claims.loc[qtr]])
+                    elements.append(Paragraph("TRX Claims (NPA)", subheading_style))
                     t = Table(table_data, colWidths=[1.2*inch] + [1.3*inch]*min(len(trx_claims.columns), 6))
                     t.setStyle(table_style_rl)
                     elements.append(t)
                     elements.append(Spacer(1, 10))
 
                 if not nbrx_claims.empty:
-                    elements.append(Paragraph("NBRX Claims", heading_style))
                     header = ["Quarter"] + list(nbrx_claims.columns)
                     table_data = [header]
                     for qtr in nbrx_claims.index:
                         table_data.append([qtr] + [f"{v:,.0f}" if pd.notna(v) else "-" for v in nbrx_claims.loc[qtr]])
+                    elements.append(Paragraph("NBRX Claims (NPA)", subheading_style))
                     t = Table(table_data, colWidths=[1.2*inch] + [1.3*inch]*min(len(nbrx_claims.columns), 6))
                     t.setStyle(table_style_rl)
                     elements.append(t)
