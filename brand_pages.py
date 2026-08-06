@@ -50,9 +50,18 @@ BRAND_PAGE_CSS = """
     #MainMenu {visibility: hidden;}
     header {visibility: hidden;}
     footer {visibility: hidden;}
-    [data-testid="stSidebar"] {display: none;}
-    [data-testid="stHeader"], [data-testid="stToolbar"], [data-testid="stDecoration"],
-    [data-testid="collapsedControl"], [data-testid="stSidebarCollapseButton"] { display: none !important; }
+    [data-testid="stHeader"], [data-testid="stToolbar"], [data-testid="stDecoration"] { display: none !important; }
+
+    /* Sidebar styling for brand pages */
+    [data-testid="stSidebar"] {
+        background: rgba(255,255,255,0.62) !important;
+        backdrop-filter: saturate(180%) blur(22px) !important;
+        -webkit-backdrop-filter: saturate(180%) blur(22px) !important;
+        border-right: 1px solid rgba(15,23,42,0.08) !important;
+    }
+    [data-testid="stSidebar"] [data-testid="stSidebarContent"] {
+        padding-top: 1.5rem !important;
+    }
 
     .block-container { padding-top: 1rem !important; max-width: 100% !important; padding-left: 3rem !important; padding-right: 3rem !important; }
     html, body, [class*="css"] { font-family: 'Inter', system-ui, -apple-system, sans-serif; color: var(--text-1) !important; -webkit-font-smoothing: antialiased; }
@@ -179,8 +188,11 @@ def render_header(title):
 
 
 def render_back_button():
-    """Back button removed — brand pages open in new tabs."""
-    pass
+    """Back button to return to the main hub (same tab)."""
+    st.markdown(
+        '<a href="?" target="_self" style="display:inline-flex;align-items:center;gap:0.4rem;padding:8px 20px;border-radius:10px;background:rgba(255,255,255,0.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(15,23,42,0.08);color:#1C4FC0;font-size:14px;font-weight:600;text-decoration:none;box-shadow:0 1px 2px rgba(15,23,42,0.04);transition:all 0.18s cubic-bezier(0.4,0,0.2,1);margin-bottom:12px;" onmouseover="this.style.background=\'#FFFFFF\';this.style.borderColor=\'rgba(28,79,192,0.35)\';" onmouseout="this.style.background=\'rgba(255,255,255,0.7)\';this.style.borderColor=\'rgba(15,23,42,0.08)\';">&#8592; Back to Hub</a>',
+        unsafe_allow_html=True
+    )
 
 
 def render_kpi_cards(cards):
@@ -279,6 +291,33 @@ def render_footer():
 # MAIN BRAND PAGE RENDERER
 # =====================================================
 
+def render_sidebar(brand_key, brand_config):
+    """Render the sidebar with brand navigation links matching the landing page design."""
+    with st.sidebar:
+        st.markdown(f"""
+        <div style="padding:0.2rem 0 0.8rem;">
+            <img src="{PFIZER_LOGO_URL}" style="height:26px;margin-bottom:10px;" />
+            <div style="font-family:'Manrope',sans-serif;font-weight:800;font-size:1.1rem;color:#0A1A3D;line-height:1.18;letter-spacing:-0.025em;">Primary Care OE<br>Maximization<br>Intelligence Hub</div>
+            <div style="font-size:0.72rem;color:#64748B;font-weight:500;margin-top:4px;">Pfizer Analytics</div>
+        </div>
+        <hr style="border:none;height:1px;background:rgba(15,23,42,0.08);margin:0.5rem 0;">
+        <div style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#64748B;padding:0.8rem 0 0.4rem;">Deep-Dive Dashboards</div>
+        """, unsafe_allow_html=True)
+
+        for key, cfg in brand_config.items():
+            is_active = (key == brand_key)
+            style = "background:linear-gradient(90deg,rgba(28,79,192,0.10),rgba(28,79,192,0.04));color:#163990;font-weight:600;border-left:3px solid #1C4FC0;" if is_active else "color:#475569;"
+            st.markdown(
+                f'<a href="?brand={key}" target="_self" style="display:block;padding:0.5rem 0.7rem;margin:0.08rem 0;border-radius:8px;font-size:0.84rem;text-decoration:none;{style}">{cfg["display_name"]}</a>',
+                unsafe_allow_html=True
+            )
+
+        st.markdown("""
+        <hr style="border:none;height:1px;background:rgba(15,23,42,0.08);margin:0.8rem 0;">
+        <a href="?" target="_self" style="display:block;padding:0.5rem 0.7rem;border-radius:8px;font-size:0.84rem;color:#1C4FC0;font-weight:600;text-decoration:none;">&#8592; Back to Hub</a>
+        """, unsafe_allow_html=True)
+
+
 def render_brand_page(brand_key, brand_config):
     """Main entry point: renders the brand deep dive page."""
     config = brand_config[brand_key]
@@ -286,8 +325,9 @@ def render_brand_page(brand_key, brand_config):
     market = config["market"]
     display_name = config["display_name"]
 
-    # Inject CSS + Header + Back button
+    # Inject CSS + Sidebar + Header + Back button
     inject_css()
+    render_sidebar(brand_key, brand_config)
     render_header(f"{display_name} Quarter on Quarter Report")
     render_back_button()
 
