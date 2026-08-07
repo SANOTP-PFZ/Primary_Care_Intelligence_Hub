@@ -464,6 +464,15 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
 .ds-collapse[open] summary::before{{transform:rotate(90deg)}}
 .ds-collapse summary::-webkit-details-marker{{display:none}}
 .ds-collapse .ds-table-wrap{{border:none;border-radius:0;border-top:1px solid var(--hairline)}}
+.ds-card{{border:1px solid var(--hairline);border-radius:8px;margin-bottom:0.6rem;background:rgba(255,255,255,0.8);transition:box-shadow 0.18s var(--ease),border-color 0.18s var(--ease)}}
+.ds-card:hover{{box-shadow:var(--shadow-sm);border-color:rgba(28,79,192,0.15)}}
+.ds-card summary{{padding:0.6rem 0.9rem;font-family:'Manrope',sans-serif;font-weight:600;font-size:0.82rem;color:var(--navy-900);cursor:pointer;list-style:none;display:flex;align-items:center;gap:0.4rem}}
+.ds-card summary::before{{content:'\25B8';font-size:0.65rem;color:var(--navy-700);transition:transform 0.2s var(--ease)}}
+.ds-card[open] summary::before{{transform:rotate(90deg)}}
+.ds-card summary::-webkit-details-marker{{display:none}}
+.ds-card-body{{padding:0.7rem 0.9rem;border-top:1px solid var(--hairline);font-size:0.78rem;color:var(--text-soft);line-height:1.6}}
+.ds-field{{margin-bottom:0.45rem}}
+.ds-label{{font-weight:600;color:var(--navy-700);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.03em;margin-right:0.3rem}}
 .filter-bar{{display:flex;flex-direction:column;gap:0.6rem;padding:0.7rem 0.9rem;background:rgba(255,255,255,0.6);border:1px solid var(--hairline);border-radius:10px;margin-bottom:1rem}}
 .filter-label{{font-size:0.7rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em}}
 .filter-group{{display:flex;align-items:center;gap:0.35rem;flex-wrap:wrap}}
@@ -658,58 +667,158 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
         <div class="section-head"><h2>Data Source Guide</h2><p>Dataset reference for Primary Care Vaccines OE — tables, brands covered, and data caveats.</p></div>
 
         <details class="ds-collapse" open>
-            <summary>Brands</summary>
-            <div class="ds-table-wrap">
-                <table class="ds-table">
-                    <thead><tr><th>Drug</th><th>Type</th><th>Market</th><th>Competitors</th></tr></thead>
-                    <tbody>
-                        <tr><td><strong>Nurtec</strong></td><td>Oral</td><td>Migraine</td><td>Ubrelvy, Qulipta</td></tr>
-                        <tr><td><strong>Eliquis</strong></td><td>Oral</td><td>OAC</td><td>Xarelto, Warfarin, Pradaxa, Savaysa, Jantoven, Dabigatran</td></tr>
-                        <tr><td><strong>Paxlovid</strong></td><td>Oral</td><td>Covid</td><td>Molnupiravir</td></tr>
-                        <tr><td><strong>Comirnaty</strong></td><td>Vaccines</td><td>Covid</td><td>Spikevax, Novavax, Mnexpike</td></tr>
-                        <tr><td><strong>Abrysvo</strong></td><td>Vaccines</td><td>RSV</td><td>Arexvy, Mresvia</td></tr>
-                        <tr><td><strong>Prevnar</strong></td><td>Vaccines</td><td>PCV</td><td>Pneumovax, Vaxneuvance, Capvaxive</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </details>
-
-        <details class="ds-collapse">
             <summary>Shipments (DDD / 867 / 852 / 844)</summary>
-            <div class="ds-table-wrap">
-                <table class="ds-table">
-                    <thead><tr><th>Dataset</th><th>Table</th><th>Brands</th><th>Data Caveats</th></tr></thead>
-                    <tbody>
-                        <tr><td><strong>DDD</strong></td><td>FCT_DDD_WK_VX</td><td>PFE Vaccines</td><td>Can't perform retail chain-level analytics (data at ZIP level). Kaiser shipments under-represented.</td></tr>
-                        <tr><td><strong>DDD</strong></td><td>DDD_FCT_SLS_M</td><td>PFE Vaccines + Orals (Nurtec, Paxlovid, Eliquis)</td><td>Only non-retail coverage of Nurtec, Paxlovid, and Eliquis.</td></tr>
-                        <tr><td><strong>867</strong></td><td>FCT_IND_867</td><td>PFE Vaccines</td><td>&#8212;</td></tr>
-                        <tr><td><strong>867</strong></td><td>EDI_867_TRD_INSGT_EXTRT_VW</td><td>PFE Vaccines + Orals</td><td>For retail, ~50% doses don't get mapping for PFZ_CUST_ID (blinded).</td></tr>
-                        <tr><td><strong>852</strong></td><td>EDI_852_TRD_INSGT_FCT</td><td>PFE Vaccines + Orals</td><td>&#8212;</td></tr>
-                        <tr><td><strong>844</strong></td><td>FCT_IND_844</td><td>PFE Vaccines</td><td>&#8212;</td></tr>
-                        <tr><td><strong>844</strong></td><td>FCT_CUST_END</td><td>PFE Vaccines</td><td>Filter for SRC_TYP_CD = '844' to get 844 shipments.</td></tr>
-                    </tbody>
-                </table>
+            <div style="padding:0.8rem;">
+                <details class="ds-card">
+                    <summary>DDD</summary>
+                    <div class="ds-card-body">
+                        <div class="ds-field"><span class="ds-label">Tables:</span> FCT_DDD_WK_VX, DDD_FCT_SLS_M</div>
+                        <div class="ds-field"><span class="ds-label">Brands:</span> PFE Vaccines; DDD_FCT_SLS_M also covers Nurtec, Paxlovid, Eliquis</div>
+                        <div class="ds-field"><span class="ds-label">Competitor Info:</span> Yes</div>
+                        <div class="ds-field"><span class="ds-label">Comments:</span> FCT_DDD_WK_VX has all account level information already present. DDD_FCT_SLS_M: PFZ_CUST_ID is actually OutletID — map using DIM_ACCT_IDN_HCOS_DDD to get HCOS_PFZ_CUST_ID.</div>
+                        <div class="ds-field"><span class="ds-label">Business Questions:</span> Retail/Non-Retail ratio. Chain level doses for non-retail. Weekly/Monthly shipments. MA/OA split for Abrysvo. Adult/Peds split for Prevnar.</div>
+                        <div class="ds-field"><span class="ds-label">Data Caveats:</span> Can't perform retail chain-level analytics (data at ZIP level). Kaiser shipments under-represented. DDD_FCT_SLS_M only has non-retail coverage of Nurtec, Paxlovid, Eliquis.</div>
+                    </div>
+                </details>
+                <details class="ds-card">
+                    <summary>867</summary>
+                    <div class="ds-card-body">
+                        <div class="ds-field"><span class="ds-label">Tables:</span> FCT_IND_867, EDI_867_TRD_INSGT_EXTRT_VW</div>
+                        <div class="ds-field"><span class="ds-label">Brands:</span> PFE Vaccines; EDI_867 also covers orals (Nurtec, Paxlovid)</div>
+                        <div class="ds-field"><span class="ds-label">Competitor Info:</span> No</div>
+                        <div class="ds-field"><span class="ds-label">Comments:</span> FCT_IND_867 has all account level info. EDI_867: map EDI_867_CUST_KEY using DIM_CUST_EXTL_ID → REL_CUST_LINKGS → HCOS_DIM_BUS. For retail/non-retail use BUSS CHANNEL DESC.</div>
+                        <div class="ds-field"><span class="ds-label">Business Questions:</span> Chain/Account level shipments. Retail/Non-Retail ratio.</div>
+                        <div class="ds-field"><span class="ds-label">Data Caveats:</span> For retail, ~50% doses don't get mapping for PFZ_CUST_ID (blinded).</div>
+                    </div>
+                </details>
+                <details class="ds-card">
+                    <summary>852</summary>
+                    <div class="ds-card-body">
+                        <div class="ds-field"><span class="ds-label">Tables:</span> EDI_852_TRD_INSGT_FCT</div>
+                        <div class="ds-field"><span class="ds-label">Brands:</span> PFE Vaccines including orals (Nurtec, Paxlovid)</div>
+                        <div class="ds-field"><span class="ds-label">Competitor Info:</span> No</div>
+                        <div class="ds-field"><span class="ds-label">Comments:</span> sum(OH_QTY) = WEEKLY_INVENTORY. sum(OMIT_QTY + WD_QTY) = TOTAL_WITHDRAWL_QTY. SUM(PFE_SHIP_QTY) = SHIPPED_QUANTITY.</div>
+                        <div class="ds-field"><span class="ds-label">Business Questions:</span> Inventory and withdrawal rates over time. Stocking analysis.</div>
+                        <div class="ds-field"><span class="ds-label">Data Caveats:</span> &#8212;</div>
+                    </div>
+                </details>
+                <details class="ds-card">
+                    <summary>844</summary>
+                    <div class="ds-card-body">
+                        <div class="ds-field"><span class="ds-label">Tables:</span> FCT_IND_844, FCT_CUST_END</div>
+                        <div class="ds-field"><span class="ds-label">Brands:</span> PFE Vaccines</div>
+                        <div class="ds-field"><span class="ds-label">Competitor Info:</span> No</div>
+                        <div class="ds-field"><span class="ds-label">Comments:</span> FCT_CUST_END: filter for SRC_TYP_CD = '844' to get 844 shipments.</div>
+                        <div class="ds-field"><span class="ds-label">Business Questions:</span> Weekly/Monthly level shipments. MA/OA split for Abrysvo.</div>
+                        <div class="ds-field"><span class="ds-label">Data Caveats:</span> &#8212;</div>
+                    </div>
+                </details>
             </div>
         </details>
 
         <details class="ds-collapse">
             <summary>Admins (LAAD / Optum / HV / Forsyth / NPA / CDS)</summary>
-            <div class="ds-table-wrap">
-                <table class="ds-table">
-                    <thead><tr><th>Dataset</th><th>Table</th><th>Brands</th><th>Data Caveats</th></tr></thead>
-                    <tbody>
-                        <tr><td><strong>ELAAD</strong></td><td>ELAAD_FACT_MX / ELAAD_FACT_RX</td><td>All brands</td><td>Low diagnosis capture. Need HCP affiliations to roll up to account level.</td></tr>
-                        <tr><td><strong>Weekly LAAD</strong></td><td>LAAD_FCT_PX_W / LAAD_FCT_RX_W / LAAD_FCT_DX_W</td><td>PCV, Covid, Flu, Eliquis</td><td>Low diagnosis capture. Need HCP affiliations to roll up to account level.</td></tr>
-                        <tr><td><strong>Migraine LAAD</strong></td><td>LAAD_MIG_FCT_MX_W / LAAD_MIG_FCT_RX_W</td><td>Migraine brands</td><td>Low diagnosis capture. Need HCP affiliations to roll up to account level.</td></tr>
-                        <tr><td><strong>Optum</strong></td><td>RX / MEDICAL_PROC / MEDICAL_DIAG / CONFINEMENT / MEDICAL</td><td>All brands</td><td>Low coverage (only UHG payer). No HCP info. Cannot do payer-level analysis. All claims are paid claims.</td></tr>
-                        <tr><td><strong>Health Verity</strong></td><td>PHARMACY_CLAIMS / EVENTS</td><td>All brands</td><td>Chain-level coverage inaccurate. Payer info largely "Unknown". Only retail admins.</td></tr>
-                        <tr><td><strong>Forsyth</strong></td><td>FH_COM_104_MIGRAINE_RX_PAID + 6 more tables</td><td>Migraine brands</td><td>Low coverage (only ESI payer). No HCP info in Diagnosis table.</td></tr>
-                        <tr><td><strong>NPA</strong></td><td>Flatfile (via email)</td><td>All brands</td><td>Only retail information.</td></tr>
-                        <tr><td><strong>Rapid NPA</strong></td><td>Flatfile (via email)</td><td>PCV, RSV, Covid</td><td>Only retail information.</td></tr>
-                        <tr><td><strong>Firstlook</strong></td><td>Flatfile (via email)</td><td>Oral CGRP (Nurtec, Ubrelvy, Qulipta) + Zavzpret</td><td>Only retail information.</td></tr>
-                        <tr><td><strong>CDS</strong></td><td>MDCR_PARTB_PROD_ORG_IND_MTH + 2 more</td><td>Covid, PCV, Flu vaccines</td><td>Coverage drops at granular levels. Medicare only (60+ age).</td></tr>
-                    </tbody>
-                </table>
+            <div style="padding:0.8rem;">
+                <details class="ds-card">
+                    <summary>ELAAD</summary>
+                    <div class="ds-card-body">
+                        <div class="ds-field"><span class="ds-label">Tables:</span> ELAAD_FACT_MX, ELAAD_FACT_RX</div>
+                        <div class="ds-field"><span class="ds-label">Brands:</span> All brands</div>
+                        <div class="ds-field"><span class="ds-label">Comments:</span> Use ELAAD_DIM_PROVIDER to get PFZ_CUST_ID. Use ELAAD_DIM_PLAN to get PFZ_PLAN_ID. Only use CLAIM_STATUS_CODE IN ('F','S').</div>
+                        <div class="ds-field"><span class="ds-label">Business Questions:</span> Weekly/monthly admins. Vaccination rates. HCP/speciality/payer analysis. Fill rates, Rx per patient, Pills per Rx. Market share. Plan level analysis.</div>
+                        <div class="ds-field"><span class="ds-label">Data Caveats:</span> Low diagnosis capture. Need HCP affiliations to roll up to account level.</div>
+                    </div>
+                </details>
+                <details class="ds-card">
+                    <summary>Weekly LAAD</summary>
+                    <div class="ds-card-body">
+                        <div class="ds-field"><span class="ds-label">Tables:</span> LAAD_FCT_PX_W, LAAD_FCT_RX_W, LAAD_FCT_DX_W</div>
+                        <div class="ds-field"><span class="ds-label">Brands:</span> PCV, Covid, Flu, Eliquis</div>
+                        <div class="ds-field"><span class="ds-label">Comments:</span> Has RSV info, but Pfizer stopped buying for RSV in 2025 season.</div>
+                        <div class="ds-field"><span class="ds-label">Business Questions:</span> Weekly/monthly admins. Vaccination rates. HCP/speciality/payer analysis. Fill rates, Rx per patient, Pills per Rx. Market share. Plan level analysis.</div>
+                        <div class="ds-field"><span class="ds-label">Data Caveats:</span> Low diagnosis capture. Need HCP affiliations to roll up to account level.</div>
+                    </div>
+                </details>
+                <details class="ds-card">
+                    <summary>Migraine LAAD</summary>
+                    <div class="ds-card-body">
+                        <div class="ds-field"><span class="ds-label">Tables:</span> LAAD_MIG_FCT_MX_W, LAAD_MIG_FCT_RX_W</div>
+                        <div class="ds-field"><span class="ds-label">Brands:</span> Migraine brands</div>
+                        <div class="ds-field"><span class="ds-label">Comments:</span> Best for analysis requiring most recent data.</div>
+                        <div class="ds-field"><span class="ds-label">Business Questions:</span> Weekly/monthly admins. HCP/speciality/payer analysis. Fill rates, Rx per patient, Pills per Rx. Market share. Plan level analysis.</div>
+                        <div class="ds-field"><span class="ds-label">Data Caveats:</span> Low diagnosis capture. Need HCP affiliations to roll up to account level.</div>
+                    </div>
+                </details>
+                <details class="ds-card">
+                    <summary>Optum</summary>
+                    <div class="ds-card-body">
+                        <div class="ds-field"><span class="ds-label">Tables:</span> RX, MEDICAL_PROC, MEDICAL_DIAG, CONFINEMENT, MEDICAL</div>
+                        <div class="ds-field"><span class="ds-label">Brands:</span> All brands</div>
+                        <div class="ds-field"><span class="ds-label">Comments:</span> Use MEMBER_ENROLLMENT for patient YOB/gender. Better diagnosis capture than LAAD. Better for patient journey assessment.</div>
+                        <div class="ds-field"><span class="ds-label">Business Questions:</span> UMC Risk/No-risk patient split. Vaccination rates. Historical analysis (LAAD only has data post 2019). Market share.</div>
+                        <div class="ds-field"><span class="ds-label">Data Caveats:</span> Low coverage (only UHG payer). No HCP info. Cannot do payer-level analysis (only Com and Mcr). All claims are paid claims.</div>
+                    </div>
+                </details>
+                <details class="ds-card">
+                    <summary>Health Verity (HV)</summary>
+                    <div class="ds-card-body">
+                        <div class="ds-field"><span class="ds-label">Tables:</span> PHARMACY_CLAIMS, EVENTS</div>
+                        <div class="ds-field"><span class="ds-label">Brands:</span> All brands</div>
+                        <div class="ds-field"><span class="ds-label">Comments:</span> Only retail admins. Events table only has C19 market for CVS and Walgreens. Use LOGICAL_DELETE_REASON IS NULL for PD claims. Use CONSOLIDATED_ENROLLMENT for patient YOB/age.</div>
+                        <div class="ds-field"><span class="ds-label">Business Questions:</span> Chain level admins. Market share.</div>
+                        <div class="ds-field"><span class="ds-label">Data Caveats:</span> Chain-level coverage inaccurate (Albertsons appears highest but CVS/Walgreens are higher per RWD). Payer info largely "Unknown".</div>
+                    </div>
+                </details>
+                <details class="ds-card">
+                    <summary>Forsyth</summary>
+                    <div class="ds-card-body">
+                        <div class="ds-field"><span class="ds-label">Tables:</span> FH_COM_104_MIGRAINE_RX_PAID, FH_COM_104_MIGRAINE_RX_REVERSAL, FH_COM_104_MIGRAINE_RX_REJECT, FH_COM_104_MIGRAINE_MEDICAL_CLAIMS, FH_COM_104_MIGRAINE_PRESCRIBING_ATTEMPT, FH_COM_104_MIGRAINE_PHARMACY, FH_COM_104_MIGRAINE_PATIENT_DIAGNOSIS</div>
+                        <div class="ds-field"><span class="ds-label">Brands:</span> Migraine brands</div>
+                        <div class="ds-field"><span class="ds-label">Comments:</span> &#8212;</div>
+                        <div class="ds-field"><span class="ds-label">Business Questions:</span> Better diagnosis coverage. Prior Authorization — detailed info of each PA attempt.</div>
+                        <div class="ds-field"><span class="ds-label">Data Caveats:</span> Low coverage (only ESI payer). No HCP info in Diagnosis table.</div>
+                    </div>
+                </details>
+                <details class="ds-card">
+                    <summary>NPA</summary>
+                    <div class="ds-card-body">
+                        <div class="ds-field"><span class="ds-label">Tables:</span> Flatfile (received via email)</div>
+                        <div class="ds-field"><span class="ds-label">Brands:</span> All brands</div>
+                        <div class="ds-field"><span class="ds-label">Comments:</span> Has weekly TRx and NBRx.</div>
+                        <div class="ds-field"><span class="ds-label">Business Questions:</span> Weekly admins. Market share.</div>
+                        <div class="ds-field"><span class="ds-label">Data Caveats:</span> Only retail information.</div>
+                    </div>
+                </details>
+                <details class="ds-card">
+                    <summary>Rapid NPA</summary>
+                    <div class="ds-card-body">
+                        <div class="ds-field"><span class="ds-label">Tables:</span> Flatfile (received via email)</div>
+                        <div class="ds-field"><span class="ds-label">Brands:</span> PCV, RSV, Covid</div>
+                        <div class="ds-field"><span class="ds-label">Comments:</span> Has weekly TRx.</div>
+                        <div class="ds-field"><span class="ds-label">Business Questions:</span> Weekly admins. Market share.</div>
+                        <div class="ds-field"><span class="ds-label">Data Caveats:</span> Only retail information.</div>
+                    </div>
+                </details>
+                <details class="ds-card">
+                    <summary>Firstlook</summary>
+                    <div class="ds-card-body">
+                        <div class="ds-field"><span class="ds-label">Tables:</span> Flatfile (received via email)</div>
+                        <div class="ds-field"><span class="ds-label">Brands:</span> Oral CGRP (Nurtec, Ubrelvy, Qulipta) and Zavzpret</div>
+                        <div class="ds-field"><span class="ds-label">Comments:</span> Already has monthly and quarterly TRx and NBRx rolled up data.</div>
+                        <div class="ds-field"><span class="ds-label">Business Questions:</span> Weekly/Monthly/Quarterly admins. Market share.</div>
+                        <div class="ds-field"><span class="ds-label">Data Caveats:</span> Only retail information.</div>
+                    </div>
+                </details>
+                <details class="ds-card">
+                    <summary>CDS</summary>
+                    <div class="ds-card-body">
+                        <div class="ds-field"><span class="ds-label">Tables:</span> MDCR_PARTB_PROD_ORG_IND_MTH, MDCR_PARTB_PROD_CHAIN, MDCR_PARTD_PROD_CHAIN_ST</div>
+                        <div class="ds-field"><span class="ds-label">Brands:</span> Covid, PCV, Flu vaccines</div>
+                        <div class="ds-field"><span class="ds-label">Comments:</span> EVENT_CNT = claims. BENE_CNT = patients.</div>
+                        <div class="ds-field"><span class="ds-label">Business Questions:</span> Account/Chain level admins. Referral information. Retail/Non-Retail ratio.</div>
+                        <div class="ds-field"><span class="ds-label">Data Caveats:</span> Coverage drops at granular levels (accounts with no info get removed). Medicare only (60+ age).</div>
+                    </div>
+                </details>
             </div>
         </details>
 
