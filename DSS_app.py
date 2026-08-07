@@ -609,11 +609,12 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
     <section class="section" id="tools">
         <div class="section-head"><h2>Analytical Tools</h2><p>Advanced analytical tools and utilities for the Primary Care team.</p></div>
         <div class="grid" style="grid-template-columns:repeat(2,1fr);">
-            <a class="card" href="https://dss-amer-design.pfizer.com:10000/webapps/USPRIMARYCAREADHOCANALYTICSPARTC/anzthPT/" target="_blank" rel="noopener" style="min-height:180px;padding:1.5rem 1.4rem;justify-content:center;align-items:center;text-align:center;text-decoration:none;">
+            <div class="card" style="min-height:180px;padding:1.5rem 1.4rem;justify-content:center;align-items:center;text-align:center;cursor:default;opacity:0.85;">
                 <div class="card-top" style="justify-content:center;margin-bottom:1rem;"><span class="icon-chip chip-s3" style="width:44px;height:44px;border-radius:12px;"><svg viewBox="0 0 24 24" style="width:22px;height:22px;"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span></div>
                 <div class="card-title" style="font-size:1.05rem;margin-bottom:0.4rem;">Rebate Decision Agent</div>
                 <div class="card-desc" style="font-size:0.78rem;color:var(--text-muted);line-height:1.5;">AI-powered rebate scenario modeling and decision support for Primary Care brands.</div>
-            </a>
+                <div style="margin-top:0.6rem;display:inline-block;padding:4px 12px;border-radius:6px;background:rgba(28,79,192,0.06);border:1px solid rgba(28,79,192,0.12);"><span style="font-size:11px;font-weight:700;color:var(--navy-600);letter-spacing:0.02em;">Coming Soon</span></div>
+            </div>
             <a class="card" href="https://dss-amer-design.pfizer.com:10000/webapps/USPRIMARYCAREADHOCANALYTICSPARTC/a1g5PlB/" target="_blank" rel="noopener" style="min-height:180px;padding:1.5rem 1.4rem;justify-content:center;align-items:center;text-align:center;text-decoration:none;">
                 <div class="card-top" style="justify-content:center;margin-bottom:1rem;"><span class="icon-chip chip-s1" style="width:44px;height:44px;border-radius:12px;"><svg viewBox="0 0 24 24" style="width:22px;height:22px;"><path d="M3 3v18h18M7 16l4-4 4 4 5-5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span></div>
                 <div class="card-title" style="font-size:1.05rem;margin-bottom:0.4rem;">Nurtec Waterfall Model</div>
@@ -625,7 +626,7 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
     <!-- DATA DICTIONARY SECTION -->
     <section class="section" id="datadict">
         <div class="section-head"><h2>Data Dictionary</h2><p>Definitions, metric calculations, and data source documentation.</p></div>
-        <div class="grid" style="grid-template-columns:repeat(3,1fr);">
+        <div class="grid" style="grid-template-columns:repeat(4,1fr);">
             <a class="card" href="https://pfizer.sharepoint.com/:f:/r/sites/EnterpriseDataSolutions1/Document%20Library/Supportive%20Docs/Real%20World%20Data/RWD%20Assets/FORSYTH%20HEALTH?d=w83554f015e7d4d9a938cf8e9a6b73941&csf=1&web=1&e=7wJ1Jr" target="_blank" rel="noopener" style="min-height:120px;align-items:center;text-align:center;justify-content:center;text-decoration:none;">
                 <div class="card-title" style="margin-bottom:0.5rem;">Forsyth Health</div>
                 <div style="display:inline-flex;align-items:center;gap:0.3rem;font-size:0.68rem;font-weight:600;color:var(--text-muted);padding:0.2rem 0.5rem;border-radius:5px;background:rgba(15,23,42,0.05);"><span style="color:#107C41;">&#9632;</span>SharePoint</div>
@@ -636,6 +637,10 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
             </a>
             <a class="card" href="https://pfizer.sharepoint.com/:f:/r/sites/EnterpriseDataSolutions1/Document%20Library/Supportive%20Docs/Real%20World%20Data/RWD%20Assets/HealthVerity%20(Supportive%20Docs)?d=w3354ff0025714b8592ae1735e84849a4&csf=1&web=1&e=TgXlS0" target="_blank" rel="noopener" style="min-height:120px;align-items:center;text-align:center;justify-content:center;text-decoration:none;">
                 <div class="card-title" style="margin-bottom:0.5rem;">Health Verity</div>
+                <div style="display:inline-flex;align-items:center;gap:0.3rem;font-size:0.68rem;font-weight:600;color:var(--text-muted);padding:0.2rem 0.5rem;border-radius:5px;background:rgba(15,23,42,0.05);"><span style="color:#107C41;">&#9632;</span>SharePoint</div>
+            </a>
+            <a class="card" href="https://pfizer.sharepoint.com/sites/PrimaryCareAnalytics2/Shared%20Documents/Forms/AllItems.aspx?d=w1a42c10e30284ebf8fe540238ffe3dd8&csf=1&web=1&e=l3nuL5&TeamsCID=e88163fa%2D055f%2D490c%2Db640%2D9897e1c27616&CID=e64aa16a%2D712b%2D42c9%2D8172%2Debee31c59efd&FolderCTID=0x01200071B2656EA41C1847B975D59494D59567&id=%2Fsites%2FPrimaryCareAnalytics2%2FShared%20Documents%2FGeneral%2FData%20Dictionaries" target="_blank" rel="noopener" style="min-height:120px;align-items:center;text-align:center;justify-content:center;text-decoration:none;">
+                <div class="card-title" style="margin-bottom:0.5rem;">eLAAD</div>
                 <div style="display:inline-flex;align-items:center;gap:0.3rem;font-size:0.68rem;font-weight:600;color:var(--text-muted);padding:0.2rem 0.5rem;border-radius:5px;background:rgba(15,23,42,0.05);"><span style="color:#107C41;">&#9632;</span>SharePoint</div>
             </a>
         </div>
