@@ -457,6 +457,13 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
 .ds-table td{{padding:0.55rem 0.8rem;border-bottom:1px solid rgba(15,23,42,0.04);color:var(--text-soft);vertical-align:top;line-height:1.5}}
 .ds-table tr:last-child td{{border-bottom:none}}
 .ds-table tr:hover td{{background:rgba(28,79,192,0.02)}}
+.ds-collapse{{border:1px solid var(--hairline);border-radius:10px;margin-bottom:0.8rem;background:var(--surface);overflow:hidden}}
+.ds-collapse summary{{padding:0.75rem 1rem;font-family:'Manrope',sans-serif;font-weight:600;font-size:0.85rem;color:var(--navy-700);cursor:pointer;list-style:none;display:flex;align-items:center;gap:0.5rem;transition:background 0.15s var(--ease)}}
+.ds-collapse summary:hover{{background:rgba(28,79,192,0.03)}}
+.ds-collapse summary::before{{content:'\25B8';font-size:0.7rem;transition:transform 0.2s var(--ease)}}
+.ds-collapse[open] summary::before{{transform:rotate(90deg)}}
+.ds-collapse summary::-webkit-details-marker{{display:none}}
+.ds-collapse .ds-table-wrap{{border:none;border-radius:0;border-top:1px solid var(--hairline)}}
 .filter-bar{{display:flex;flex-direction:column;gap:0.6rem;padding:0.7rem 0.9rem;background:rgba(255,255,255,0.6);border:1px solid var(--hairline);border-radius:10px;margin-bottom:1rem}}
 .filter-label{{font-size:0.7rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em}}
 .filter-group{{display:flex;align-items:center;gap:0.35rem;flex-wrap:wrap}}
@@ -649,11 +656,26 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
     <!-- DATA SOURCE GUIDE SECTION -->
     <section class="section" id="brandinfo">
         <div class="section-head"><h2>Data Source Guide</h2><p>Dataset reference for Primary Care Vaccines OE — tables, brands covered, and data caveats.</p></div>
-        <div class="tab-bar">
-            <button class="tab-btn active" onclick="switchTab(this,'shipments-tab')">Shipments (DDD / 867 / 852 / 844)</button>
-            <button class="tab-btn" onclick="switchTab(this,'admins-tab')">Admins (LAAD / Optum / HV / Forsyth / NPA / CDS)</button>
-        </div>
-        <div class="tab-content" id="shipments-tab" style="display:block;">
+
+        <details class="ds-collapse" open>
+            <summary>Brands</summary>
+            <div class="ds-table-wrap">
+                <table class="ds-table">
+                    <thead><tr><th>Drug</th><th>Type</th><th>Market</th><th>Competitors</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Nurtec</strong></td><td>Oral</td><td>Migraine</td><td>Ubrelvy, Qulipta</td></tr>
+                        <tr><td><strong>Eliquis</strong></td><td>Oral</td><td>OAC</td><td>Xarelto, Warfarin, Pradaxa, Savaysa, Jantoven, Dabigatran</td></tr>
+                        <tr><td><strong>Paxlovid</strong></td><td>Oral</td><td>Covid</td><td>Molnupiravir</td></tr>
+                        <tr><td><strong>Comirnaty</strong></td><td>Vaccines</td><td>Covid</td><td>Spikevax, Novavax, Mnexpike</td></tr>
+                        <tr><td><strong>Abrysvo</strong></td><td>Vaccines</td><td>RSV</td><td>Arexvy, Mresvia</td></tr>
+                        <tr><td><strong>Prevnar</strong></td><td>Vaccines</td><td>PCV</td><td>Pneumovax, Vaxneuvance, Capvaxive</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </details>
+
+        <details class="ds-collapse">
+            <summary>Shipments (DDD / 867 / 852 / 844)</summary>
             <div class="ds-table-wrap">
                 <table class="ds-table">
                     <thead><tr><th>Dataset</th><th>Table</th><th>Brands</th><th>Data Caveats</th></tr></thead>
@@ -668,8 +690,10 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
                     </tbody>
                 </table>
             </div>
-        </div>
-        <div class="tab-content" id="admins-tab" style="display:none;">
+        </details>
+
+        <details class="ds-collapse">
+            <summary>Admins (LAAD / Optum / HV / Forsyth / NPA / CDS)</summary>
             <div class="ds-table-wrap">
                 <table class="ds-table">
                     <thead><tr><th>Dataset</th><th>Table</th><th>Brands</th><th>Data Caveats</th></tr></thead>
@@ -687,7 +711,38 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
                     </tbody>
                 </table>
             </div>
-        </div>
+        </details>
+
+        <details class="ds-collapse">
+            <summary>Dimension Tables</summary>
+            <div class="ds-table-wrap">
+                <table class="ds-table">
+                    <thead><tr><th>Dataset</th><th>Table</th><th>Information</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Miscellaneous</strong></td><td>DIM_PROD</td><td>Product names using NDC</td></tr>
+                        <tr><td></td><td>DIM_TIME</td><td>Time related granularities</td></tr>
+                        <tr><td><strong>HCP/Account</strong></td><td>BAC_DIM_CUST_VX</td><td>Account information (processed dataset with all info for an account)</td></tr>
+                        <tr><td></td><td>DIM_CUST</td><td>Account/HCP information (use CUST_TYPE_CD to segregate)</td></tr>
+                        <tr><td></td><td>DIM_CUST_ADDR_BEST_CALL</td><td>HCP state, Zip</td></tr>
+                        <tr><td></td><td>DIM_CUST_EXTL_ID</td><td>NPI to CUST_ID mapping</td></tr>
+                        <tr><td></td><td>HCP Affiliation</td><td>HCP affiliated account</td></tr>
+                        <tr><td></td><td>HCOS_DIM_BUS</td><td>Account information (Cot classification, Cot speciality)</td></tr>
+                        <tr><td><strong>DDD</strong></td><td>DIM_ACCT_IDN_HCOS_DDD</td><td>PFZ_CUST_ID for DDD outlet ID</td></tr>
+                        <tr><td><strong>ELAAD</strong></td><td>ELAAD_DIM_PATIENT_DEMOGRAPHIC</td><td>Patient's YOB and gender</td></tr>
+                        <tr><td></td><td>ELAAD_DIM_PRODUCT</td><td>Product names using NDC</td></tr>
+                        <tr><td></td><td>ELAAD_DIM_PLAN</td><td>PFZ_PLAN_ID</td></tr>
+                        <tr><td></td><td>ELAAD_DIM_PROVIDER</td><td>PFZ_CUST_ID</td></tr>
+                        <tr><td></td><td>ELAAD_DIM_REJECT</td><td>Rejection reason</td></tr>
+                        <tr><td><strong>Plan/Payer</strong></td><td>DIM_CUST_PLAN_HIERY</td><td>Plan/MCO/Payer info</td></tr>
+                        <tr><td><strong>Optum</strong></td><td>MEMBER_ENROLLMENT</td><td>Patient's YOB and gender</td></tr>
+                        <tr><td><strong>Geography</strong></td><td>DIM_ZIP</td><td>ZIP5, MSA, County</td></tr>
+                        <tr><td></td><td>DIM_ST</td><td>State Code, State Description</td></tr>
+                        <tr><td></td><td>ZIP2MSA</td><td>Zip to MSA, DMA, Lat, Long</td></tr>
+                        <tr><td><strong>HV</strong></td><td>CONSOLIDATED_ENROLLMENT</td><td>Patient's YOB and gender</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </details>
     </section>
 
     <!-- RELEVANT LINKS SECTION -->
@@ -861,13 +916,6 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
         if (!e.target.closest('.dropdown-wrap')) document.querySelectorAll('.dropdown.show').forEach(function(d){{d.classList.remove('show')}});
     }});
 
-    // Tab switching for Data Source Guide
-    window.switchTab = function(btn, tabId) {{
-        document.querySelectorAll('.tab-btn').forEach(function(t){{ t.classList.remove('active'); }});
-        btn.classList.add('active');
-        document.querySelectorAll('.tab-content').forEach(function(c){{ c.style.display = 'none'; }});
-        document.getElementById(tabId).style.display = 'block';
-    }};
 
     // Agent panel switching
     window.showAgentPanel = function(panel) {{
