@@ -378,7 +378,7 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
 .sidebar-divider{{height:1px;background:var(--hairline);margin:0 0.85rem}}
 .sidebar-section-label{{font-family:'Manrope',sans-serif;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-muted);padding:0.7rem 1.15rem 0.3rem}}
 .nav{{padding:0 0.55rem}}
-.nav-item{{position:relative;display:flex;align-items:center;gap:0.7rem;padding:0.55rem 0.7rem;margin:0.08rem 0;border-radius:8px;font-size:0.84rem;font-weight:500;color:var(--text-soft);cursor:pointer;transition:background 0.18s var(--ease),color 0.18s var(--ease);background:transparent;border:none;width:100%;text-align:left;font-family:inherit}}
+.nav-item{{position:relative;display:flex;align-items:center;gap:0.7rem;padding:0.45rem 0.7rem;margin:0.05rem 0;border-radius:8px;font-size:0.84rem;font-weight:500;color:var(--text-soft);cursor:pointer;transition:background 0.18s var(--ease),color 0.18s var(--ease);background:transparent;border:none;width:100%;text-align:left;font-family:inherit}}
 .nav-item .nav-icon{{width:18px;height:18px;display:flex;align-items:center;justify-content:center;color:var(--text-muted);transition:color 0.18s var(--ease);flex-shrink:0}}
 .nav-item .nav-icon svg{{width:16px;height:16px;stroke-width:1.8;fill:none;stroke:currentColor}}
 .nav-item .nav-label{{flex:1;min-width:0}}
@@ -390,7 +390,7 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
 .nav-item.active .nav-count{{background:rgba(28,79,192,0.14);color:var(--navy-700)}}
 .nav-item.active::before{{content:'';position:absolute;left:-0.55rem;top:6px;bottom:6px;width:3px;border-radius:0 3px 3px 0;background:linear-gradient(180deg,var(--navy-600),var(--accent));box-shadow:0 0 8px rgba(28,79,192,0.3)}}
 .sidebar-spacer{{flex:1}}
-.sidebar-meta{{padding:0.85rem 1.15rem 1rem;font-size:0.7rem;color:var(--text-muted);line-height:1.55;border-top:1px solid var(--hairline);background:linear-gradient(180deg,transparent 0%,rgba(28,79,192,0.025) 100%)}}
+.sidebar-meta{{padding:0.6rem 1.15rem 0.7rem;font-size:0.7rem;color:var(--text-muted);line-height:1.45;border-top:1px solid var(--hairline);background:linear-gradient(180deg,transparent 0%,rgba(28,79,192,0.025) 100%)}}
 .sidebar-meta strong{{color:var(--text-soft);font-weight:600}}
 .sidebar-meta .meta-row{{margin-bottom:0.2rem}}
 .main{{background:rgba(255,255,255,0.55);backdrop-filter:saturate(180%) blur(14px);-webkit-backdrop-filter:saturate(180%) blur(14px);border:1px solid var(--hairline);border-radius:var(--panel-radius);box-shadow:var(--shadow-panel);display:flex;flex-direction:column;overflow:hidden;min-width:0;min-height:0}}
