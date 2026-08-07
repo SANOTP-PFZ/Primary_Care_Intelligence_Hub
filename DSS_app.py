@@ -460,14 +460,14 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
 .ds-collapse{{border:1px solid var(--hairline);border-radius:10px;margin-bottom:0.8rem;background:var(--surface);overflow:hidden}}
 .ds-collapse summary{{padding:0.75rem 1rem;font-family:'Manrope',sans-serif;font-weight:600;font-size:0.85rem;color:var(--navy-700);cursor:pointer;list-style:none;display:flex;align-items:center;gap:0.5rem;transition:background 0.15s var(--ease)}}
 .ds-collapse summary:hover{{background:rgba(28,79,192,0.03)}}
-.ds-collapse summary::before{{content:'\25B8';font-size:0.7rem;transition:transform 0.2s var(--ease)}}
+.ds-collapse summary::before{{content:'\203A';font-size:1rem;font-weight:700;color:var(--navy-600);transition:transform 0.2s var(--ease)}}
 .ds-collapse[open] summary::before{{transform:rotate(90deg)}}
 .ds-collapse summary::-webkit-details-marker{{display:none}}
 .ds-collapse .ds-table-wrap{{border:none;border-radius:0;border-top:1px solid var(--hairline)}}
 .ds-card{{border:1px solid var(--hairline);border-radius:8px;margin-bottom:0.6rem;background:rgba(255,255,255,0.8);transition:box-shadow 0.18s var(--ease),border-color 0.18s var(--ease)}}
 .ds-card:hover{{box-shadow:var(--shadow-sm);border-color:rgba(28,79,192,0.15)}}
 .ds-card summary{{padding:0.6rem 0.9rem;font-family:'Manrope',sans-serif;font-weight:600;font-size:0.82rem;color:var(--navy-900);cursor:pointer;list-style:none;display:flex;align-items:center;gap:0.4rem}}
-.ds-card summary::before{{content:'\25B8';font-size:0.65rem;color:var(--navy-700);transition:transform 0.2s var(--ease)}}
+.ds-card summary::before{{content:'\203A';font-size:0.9rem;font-weight:700;color:var(--navy-700);transition:transform 0.2s var(--ease)}}
 .ds-card[open] summary::before{{transform:rotate(90deg)}}
 .ds-card summary::-webkit-details-marker{{display:none}}
 .ds-card-body{{padding:0.7rem 0.9rem;border-top:1px solid var(--hairline);font-size:0.78rem;color:var(--text-soft);line-height:1.6}}
@@ -666,7 +666,7 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
     <section class="section" id="brandinfo">
         <div class="section-head"><h2>Data Source Guide</h2><p>Dataset reference for Primary Care Vaccines OE — tables, brands covered, and data caveats.</p></div>
 
-        <details class="ds-collapse" open>
+        <details class="ds-collapse">
             <summary>Shipments (DDD / 867 / 852 / 844)</summary>
             <div style="padding:0.8rem;">
                 <details class="ds-card">
@@ -824,32 +824,67 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
 
         <details class="ds-collapse">
             <summary>Dimension Tables</summary>
-            <div class="ds-table-wrap">
-                <table class="ds-table">
-                    <thead><tr><th>Dataset</th><th>Table</th><th>Information</th></tr></thead>
-                    <tbody>
-                        <tr><td><strong>Miscellaneous</strong></td><td>DIM_PROD</td><td>Product names using NDC</td></tr>
-                        <tr><td></td><td>DIM_TIME</td><td>Time related granularities</td></tr>
-                        <tr><td><strong>HCP/Account</strong></td><td>BAC_DIM_CUST_VX</td><td>Account information (processed dataset with all info for an account)</td></tr>
-                        <tr><td></td><td>DIM_CUST</td><td>Account/HCP information (use CUST_TYPE_CD to segregate)</td></tr>
-                        <tr><td></td><td>DIM_CUST_ADDR_BEST_CALL</td><td>HCP state, Zip</td></tr>
-                        <tr><td></td><td>DIM_CUST_EXTL_ID</td><td>NPI to CUST_ID mapping</td></tr>
-                        <tr><td></td><td>HCP Affiliation</td><td>HCP affiliated account</td></tr>
-                        <tr><td></td><td>HCOS_DIM_BUS</td><td>Account information (Cot classification, Cot speciality)</td></tr>
-                        <tr><td><strong>DDD</strong></td><td>DIM_ACCT_IDN_HCOS_DDD</td><td>PFZ_CUST_ID for DDD outlet ID</td></tr>
-                        <tr><td><strong>ELAAD</strong></td><td>ELAAD_DIM_PATIENT_DEMOGRAPHIC</td><td>Patient's YOB and gender</td></tr>
-                        <tr><td></td><td>ELAAD_DIM_PRODUCT</td><td>Product names using NDC</td></tr>
-                        <tr><td></td><td>ELAAD_DIM_PLAN</td><td>PFZ_PLAN_ID</td></tr>
-                        <tr><td></td><td>ELAAD_DIM_PROVIDER</td><td>PFZ_CUST_ID</td></tr>
-                        <tr><td></td><td>ELAAD_DIM_REJECT</td><td>Rejection reason</td></tr>
-                        <tr><td><strong>Plan/Payer</strong></td><td>DIM_CUST_PLAN_HIERY</td><td>Plan/MCO/Payer info</td></tr>
-                        <tr><td><strong>Optum</strong></td><td>MEMBER_ENROLLMENT</td><td>Patient's YOB and gender</td></tr>
-                        <tr><td><strong>Geography</strong></td><td>DIM_ZIP</td><td>ZIP5, MSA, County</td></tr>
-                        <tr><td></td><td>DIM_ST</td><td>State Code, State Description</td></tr>
-                        <tr><td></td><td>ZIP2MSA</td><td>Zip to MSA, DMA, Lat, Long</td></tr>
-                        <tr><td><strong>HV</strong></td><td>CONSOLIDATED_ENROLLMENT</td><td>Patient's YOB and gender</td></tr>
-                    </tbody>
-                </table>
+            <div style="padding:0.8rem;">
+                <details class="ds-card">
+                    <summary>Miscellaneous</summary>
+                    <div class="ds-card-body">
+                        <div class="ds-field"><span class="ds-label">DIM_PROD:</span> Product names using NDC</div>
+                        <div class="ds-field"><span class="ds-label">DIM_TIME:</span> Time related granularities</div>
+                    </div>
+                </details>
+                <details class="ds-card">
+                    <summary>HCP / Account</summary>
+                    <div class="ds-card-body">
+                        <div class="ds-field"><span class="ds-label">BAC_DIM_CUST_VX:</span> Account information (processed dataset with all info for an account)</div>
+                        <div class="ds-field"><span class="ds-label">DIM_CUST:</span> Account/HCP information (use CUST_TYPE_CD to segregate)</div>
+                        <div class="ds-field"><span class="ds-label">DIM_CUST_ADDR_BEST_CALL:</span> HCP state, Zip</div>
+                        <div class="ds-field"><span class="ds-label">DIM_CUST_EXTL_ID:</span> NPI to CUST_ID mapping</div>
+                        <div class="ds-field"><span class="ds-label">HCP Affiliation:</span> HCP affiliated account</div>
+                        <div class="ds-field"><span class="ds-label">HCOS_DIM_BUS:</span> Account information (Cot classification, Cot speciality)</div>
+                    </div>
+                </details>
+                <details class="ds-card">
+                    <summary>DDD</summary>
+                    <div class="ds-card-body">
+                        <div class="ds-field"><span class="ds-label">DIM_ACCT_IDN_HCOS_DDD:</span> PFZ_CUST_ID for DDD outlet ID</div>
+                    </div>
+                </details>
+                <details class="ds-card">
+                    <summary>ELAAD</summary>
+                    <div class="ds-card-body">
+                        <div class="ds-field"><span class="ds-label">ELAAD_DIM_PATIENT_DEMOGRAPHIC:</span> Patient's YOB and gender</div>
+                        <div class="ds-field"><span class="ds-label">ELAAD_DIM_PRODUCT:</span> Product names using NDC</div>
+                        <div class="ds-field"><span class="ds-label">ELAAD_DIM_PLAN:</span> PFZ_PLAN_ID</div>
+                        <div class="ds-field"><span class="ds-label">ELAAD_DIM_PROVIDER:</span> PFZ_CUST_ID</div>
+                        <div class="ds-field"><span class="ds-label">ELAAD_DIM_REJECT:</span> Rejection reason</div>
+                    </div>
+                </details>
+                <details class="ds-card">
+                    <summary>Plan / Payer</summary>
+                    <div class="ds-card-body">
+                        <div class="ds-field"><span class="ds-label">DIM_CUST_PLAN_HIERY:</span> Plan/MCO/Payer info</div>
+                    </div>
+                </details>
+                <details class="ds-card">
+                    <summary>Optum</summary>
+                    <div class="ds-card-body">
+                        <div class="ds-field"><span class="ds-label">MEMBER_ENROLLMENT:</span> Patient's YOB and gender</div>
+                    </div>
+                </details>
+                <details class="ds-card">
+                    <summary>Geography</summary>
+                    <div class="ds-card-body">
+                        <div class="ds-field"><span class="ds-label">DIM_ZIP:</span> ZIP5, MSA, County</div>
+                        <div class="ds-field"><span class="ds-label">DIM_ST:</span> State Code, State Description</div>
+                        <div class="ds-field"><span class="ds-label">ZIP2MSA:</span> Zip to MSA, DMA, Lat, Long</div>
+                    </div>
+                </details>
+                <details class="ds-card">
+                    <summary>Health Verity (HV)</summary>
+                    <div class="ds-card-body">
+                        <div class="ds-field"><span class="ds-label">CONSOLIDATED_ENROLLMENT:</span> Patient's YOB and gender</div>
+                    </div>
+                </details>
             </div>
         </details>
     </section>
