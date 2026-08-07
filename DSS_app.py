@@ -371,12 +371,12 @@ body{{font-family:'Inter',system-ui,sans-serif;background:radial-gradient(ellips
 h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-0.015em}}
 .app{{height:100vh;display:grid;grid-template-columns:var(--sidebar-w) 1fr;gap:var(--shell-pad);padding:var(--shell-pad);overflow:hidden}}
 .sidebar{{position:sticky;top:var(--shell-pad);height:calc(100vh - 2*var(--shell-pad));background:rgba(255,255,255,0.62);backdrop-filter:saturate(180%) blur(22px);-webkit-backdrop-filter:saturate(180%) blur(22px);border:1px solid var(--hairline);border-radius:var(--panel-radius);box-shadow:var(--shadow-panel);display:flex;flex-direction:column;overflow:hidden}}
-.sidebar-brand{{padding:1.4rem 1.2rem 1.2rem;display:flex;flex-direction:column;gap:0.7rem}}
+.sidebar-brand{{padding:1rem 1.2rem 0.8rem;display:flex;flex-direction:column;gap:0.5rem}}
 .sidebar-brand img{{height:28px;align-self:flex-start}}
 .sidebar-brand .title{{font-family:'Manrope',sans-serif;font-weight:800;font-size:1.22rem;color:var(--navy-900);line-height:1.18;letter-spacing:-0.025em}}
 .sidebar-brand .subtitle{{font-size:0.72rem;color:var(--text-muted);font-weight:500}}
 .sidebar-divider{{height:1px;background:var(--hairline);margin:0 0.85rem}}
-.sidebar-section-label{{font-family:'Manrope',sans-serif;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-muted);padding:0.95rem 1.15rem 0.4rem}}
+.sidebar-section-label{{font-family:'Manrope',sans-serif;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-muted);padding:0.7rem 1.15rem 0.3rem}}
 .nav{{padding:0 0.55rem}}
 .nav-item{{position:relative;display:flex;align-items:center;gap:0.7rem;padding:0.55rem 0.7rem;margin:0.08rem 0;border-radius:8px;font-size:0.84rem;font-weight:500;color:var(--text-soft);cursor:pointer;transition:background 0.18s var(--ease),color 0.18s var(--ease);background:transparent;border:none;width:100%;text-align:left;font-family:inherit}}
 .nav-item .nav-icon{{width:18px;height:18px;display:flex;align-items:center;justify-content:center;color:var(--text-muted);transition:color 0.18s var(--ease);flex-shrink:0}}
