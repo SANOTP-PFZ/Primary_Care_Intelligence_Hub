@@ -460,14 +460,14 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
 .ds-collapse{{border:1px solid var(--hairline);border-radius:10px;margin-bottom:0.8rem;background:var(--surface);overflow:hidden}}
 .ds-collapse summary{{padding:0.75rem 1rem;font-family:'Manrope',sans-serif;font-weight:600;font-size:0.85rem;color:var(--navy-700);cursor:pointer;list-style:none;display:flex;align-items:center;gap:0.5rem;transition:background 0.15s var(--ease)}}
 .ds-collapse summary:hover{{background:rgba(28,79,192,0.03)}}
-.ds-collapse summary::before{{content:'\203A';font-size:1rem;font-weight:700;color:var(--navy-600);transition:transform 0.2s var(--ease)}}
+.ds-collapse summary::before{{content:'\276F';font-size:0.7rem;font-weight:700;color:var(--navy-600);transition:transform 0.2s var(--ease)}}
 .ds-collapse[open] summary::before{{transform:rotate(90deg)}}
 .ds-collapse summary::-webkit-details-marker{{display:none}}
 .ds-collapse .ds-table-wrap{{border:none;border-radius:0;border-top:1px solid var(--hairline)}}
 .ds-card{{border:1px solid var(--hairline);border-radius:8px;margin-bottom:0.6rem;background:rgba(255,255,255,0.8);transition:box-shadow 0.18s var(--ease),border-color 0.18s var(--ease)}}
 .ds-card:hover{{box-shadow:var(--shadow-sm);border-color:rgba(28,79,192,0.15)}}
 .ds-card summary{{padding:0.6rem 0.9rem;font-family:'Manrope',sans-serif;font-weight:600;font-size:0.82rem;color:var(--navy-900);cursor:pointer;list-style:none;display:flex;align-items:center;gap:0.4rem}}
-.ds-card summary::before{{content:'\203A';font-size:0.9rem;font-weight:700;color:var(--navy-700);transition:transform 0.2s var(--ease)}}
+.ds-card summary::before{{content:'\276F';font-size:0.6rem;font-weight:700;color:var(--navy-700);transition:transform 0.2s var(--ease)}}
 .ds-card[open] summary::before{{transform:rotate(90deg)}}
 .ds-card summary::-webkit-details-marker{{display:none}}
 .ds-card-body{{padding:0.7rem 0.9rem;border-top:1px solid var(--hairline);font-size:0.78rem;color:var(--text-soft);line-height:1.6}}
