@@ -561,8 +561,7 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
     <div class="sidebar-spacer"></div>
     <div class="sidebar-meta">
         <div class="meta-row"><strong>Primary Care Analytics</strong></div>
-        <div class="meta-row">Team_ZS_PC_Analytics@zs.com</div>
-        <div class="meta-row">Data till {max_date_raw}</div>
+        <div class="meta-row">Last refreshed on {max_date_raw}</div>
     </div>
 </aside>
 <div class="main">
