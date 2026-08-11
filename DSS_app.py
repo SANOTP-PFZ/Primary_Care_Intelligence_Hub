@@ -473,6 +473,12 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
 .ds-card-body{{padding:0.7rem 0.9rem;border-top:1px solid var(--hairline);font-size:0.78rem;color:var(--text-soft);line-height:1.6}}
 .ds-field{{margin-bottom:0.45rem}}
 .ds-label{{font-weight:600;color:var(--navy-700);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.03em;margin-right:0.3rem}}
+.ds-section{{margin-bottom:0.7rem}}
+.ds-section:last-child{{margin-bottom:0}}
+.ds-section-title{{display:block;font-weight:700;color:var(--navy-700);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.25rem}}
+.ds-code{{display:block;font-family:'JetBrains Mono','Fira Code',monospace;font-size:0.72rem;background:rgba(15,23,42,0.04);border:1px solid var(--hairline);border-radius:5px;padding:0.35rem 0.6rem;color:var(--navy-900);word-break:break-all;margin-top:0.15rem}}
+.ds-list{{margin:0.2rem 0 0 1.1rem;padding:0;font-size:0.78rem;line-height:1.7}}
+.ds-list li{{margin-bottom:0.15rem;color:var(--text-soft)}}
 .filter-bar{{display:flex;flex-direction:column;gap:0.6rem;padding:0.7rem 0.9rem;background:rgba(255,255,255,0.6);border:1px solid var(--hairline);border-radius:10px;margin-bottom:1rem}}
 .filter-label{{font-size:0.7rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em}}
 .filter-group{{display:flex;align-items:center;gap:0.35rem;flex-wrap:wrap}}
@@ -669,153 +675,524 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
             <summary>Shipments (DDD / 867 / 852 / 844)</summary>
             <div style="padding:0.8rem;">
                 <details class="ds-card">
-                    <summary>DDD</summary>
+                    <summary>DDD &mdash; FCT_DDD_WK_VX</summary>
                     <div class="ds-card-body">
-                        <div class="ds-field"><span class="ds-label">Tables:</span> FCT_DDD_WK_VX, DDD_FCT_SLS_M</div>
-                        <div class="ds-field"><span class="ds-label">Brands:</span> PFE Vaccines; DDD_FCT_SLS_M also covers Nurtec, Paxlovid, Eliquis</div>
-                        <div class="ds-field"><span class="ds-label">Competitor Info:</span> Yes</div>
-                        <div class="ds-field"><span class="ds-label">Comments:</span> FCT_DDD_WK_VX has all account level information already present. DDD_FCT_SLS_M: PFZ_CUST_ID is actually OutletID — map using DIM_ACCT_IDN_HCOS_DDD to get HCOS_PFZ_CUST_ID.</div>
-                        <div class="ds-field"><span class="ds-label">Business Questions:</span> Retail/Non-Retail ratio. Chain level doses for non-retail. Weekly/Monthly shipments. MA/OA split for Abrysvo. Adult/Peds split for Prevnar.</div>
-                        <div class="ds-field"><span class="ds-label">Data Caveats:</span> Can't perform retail chain-level analytics (data at ZIP level). Kaiser shipments under-represented. DDD_FCT_SLS_M only has non-retail coverage of Nurtec, Paxlovid, Eliquis.</div>
+                        <div class="ds-section"><span class="ds-section-title">Tables</span>
+                            <div>FCT_DDD_WK_VX</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">Brands Covered</span>
+                            <div>PFE Vaccines</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Reference It</span>
+                            <code class="ds-code">"COMM_US_BA_PROD_DB"."BA_US_CORE_VACCINES"."FCT_DDD_WK_VX"</code>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Use It</span>
+                            <ul class="ds-list">
+                                <li>All account level information already present</li>
+                                <li>Competitor info available</li>
+                            </ul>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">What You Can Answer</span>
+                            <ul class="ds-list">
+                                <li>Retail / Non-Retail ratio</li>
+                                <li>Chain level doses for non-retail setting</li>
+                                <li>Weekly / monthly shipments</li>
+                                <li>MA / OA split for Abrysvo</li>
+                                <li>Adult / Peds split for Prevnar</li>
+                            </ul>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">Important Considerations</span>
+                            <ul class="ds-list">
+                                <li>Can&#8217;t perform retail chain-level analytics &mdash; data captured at ZIP level</li>
+                                <li>Kaiser shipments under-represented</li>
+                            </ul>
+                        </div>
                     </div>
                 </details>
                 <details class="ds-card">
-                    <summary>867</summary>
+                    <summary>DDD &mdash; DDD_FCT_SLS_M</summary>
                     <div class="ds-card-body">
-                        <div class="ds-field"><span class="ds-label">Tables:</span> FCT_IND_867, EDI_867_TRD_INSGT_EXTRT_VW</div>
-                        <div class="ds-field"><span class="ds-label">Brands:</span> PFE Vaccines; EDI_867 also covers orals (Nurtec, Paxlovid)</div>
-                        <div class="ds-field"><span class="ds-label">Competitor Info:</span> No</div>
-                        <div class="ds-field"><span class="ds-label">Comments:</span> FCT_IND_867 has all account level info. EDI_867: map EDI_867_CUST_KEY using DIM_CUST_EXTL_ID → REL_CUST_LINKGS → HCOS_DIM_BUS. For retail/non-retail use BUSS CHANNEL DESC.</div>
-                        <div class="ds-field"><span class="ds-label">Business Questions:</span> Chain/Account level shipments. Retail/Non-Retail ratio.</div>
-                        <div class="ds-field"><span class="ds-label">Data Caveats:</span> For retail, ~50% doses don't get mapping for PFZ_CUST_ID (blinded).</div>
+                        <div class="ds-section"><span class="ds-section-title">Tables</span>
+                            <div>DDD_FCT_SLS_M</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">Brands Covered</span>
+                            <div>PFE Vaccines including orals (Nurtec, Paxlovid, Eliquis)</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Reference It</span>
+                            <code class="ds-code">"COMM_US_PUB_PROD_DB"."BI_US_RNA"."DDD_FCT_SLS_M"</code>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Use It</span>
+                            <ul class="ds-list">
+                                <li>PFZ_CUST_ID here is actually OutletID &mdash; map using DIM_ACCT_IDN_HCOS_DDD to get HCOS_PFZ_CUST_ID</li>
+                                <li>Competitor info available</li>
+                            </ul>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">What You Can Answer</span>
+                            <ul class="ds-list">
+                                <li>Weekly / monthly level shipments for brands</li>
+                            </ul>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">Important Considerations</span>
+                            <ul class="ds-list">
+                                <li>Only non-retail coverage of Nurtec, Paxlovid, and Eliquis</li>
+                            </ul>
+                        </div>
                     </div>
                 </details>
                 <details class="ds-card">
-                    <summary>852</summary>
+                    <summary>867 &mdash; FCT_IND_867</summary>
                     <div class="ds-card-body">
-                        <div class="ds-field"><span class="ds-label">Tables:</span> EDI_852_TRD_INSGT_FCT</div>
-                        <div class="ds-field"><span class="ds-label">Brands:</span> PFE Vaccines including orals (Nurtec, Paxlovid)</div>
-                        <div class="ds-field"><span class="ds-label">Competitor Info:</span> No</div>
-                        <div class="ds-field"><span class="ds-label">Comments:</span> sum(OH_QTY) = WEEKLY_INVENTORY. sum(OMIT_QTY + WD_QTY) = TOTAL_WITHDRAWL_QTY. SUM(PFE_SHIP_QTY) = SHIPPED_QUANTITY.</div>
-                        <div class="ds-field"><span class="ds-label">Business Questions:</span> Inventory and withdrawal rates over time. Stocking analysis.</div>
-                        <div class="ds-field"><span class="ds-label">Data Caveats:</span> &#8212;</div>
+                        <div class="ds-section"><span class="ds-section-title">Tables</span>
+                            <div>FCT_IND_867</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">Brands Covered</span>
+                            <div>PFE Vaccines</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Reference It</span>
+                            <code class="ds-code">"COMM_US_BA_PROD_DB"."BA_US_CORE_VACCINES"."FCT_IND_867"</code>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Use It</span>
+                            <ul class="ds-list">
+                                <li>All account level information already present</li>
+                                <li>No competitor info</li>
+                            </ul>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">What You Can Answer</span>
+                            <ul class="ds-list">
+                                <li>Chain / Account level shipments</li>
+                                <li>Retail / Non-Retail ratio</li>
+                            </ul>
+                        </div>
                     </div>
                 </details>
                 <details class="ds-card">
-                    <summary>844</summary>
+                    <summary>867 &mdash; EDI_867_TRD_INSGT_EXTRT_VW</summary>
                     <div class="ds-card-body">
-                        <div class="ds-field"><span class="ds-label">Tables:</span> FCT_IND_844, FCT_CUST_END</div>
-                        <div class="ds-field"><span class="ds-label">Brands:</span> PFE Vaccines</div>
-                        <div class="ds-field"><span class="ds-label">Competitor Info:</span> No</div>
-                        <div class="ds-field"><span class="ds-label">Comments:</span> FCT_CUST_END: filter for SRC_TYP_CD = '844' to get 844 shipments.</div>
-                        <div class="ds-field"><span class="ds-label">Business Questions:</span> Weekly/Monthly level shipments. MA/OA split for Abrysvo.</div>
-                        <div class="ds-field"><span class="ds-label">Data Caveats:</span> &#8212;</div>
+                        <div class="ds-section"><span class="ds-section-title">Tables</span>
+                            <div>EDI_867_TRD_INSGT_EXTRT_VW</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">Brands Covered</span>
+                            <div>PFE Vaccines including orals (Nurtec, Paxlovid)</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Reference It</span>
+                            <code class="ds-code">"MARM_TRDINSIGHTP_DB"."INSIGHT_RPT"."EDI_867_TRD_INSGT_EXTRT_VW"</code>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Use It</span>
+                            <ul class="ds-list">
+                                <li>Map EDI_867_CUST_KEY using DIM_CUST_EXTL_ID &#8594; REL_CUST_LINKGS &#8594; HCOS_DIM_BUS to get account info</li>
+                                <li>For retail/non-retail split use BUSS CHANNEL DESC</li>
+                                <li>No competitor info</li>
+                            </ul>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">What You Can Answer</span>
+                            <ul class="ds-list">
+                                <li>Chain / Account level shipments</li>
+                                <li>Retail / Non-Retail ratio</li>
+                            </ul>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">Important Considerations</span>
+                            <ul class="ds-list">
+                                <li>For retail, ~50% doses don&#8217;t get a mapping for PFZ_CUST_ID (blinded data)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </details>
+                <details class="ds-card">
+                    <summary>852 &mdash; EDI_852_TRD_INSGT_FCT</summary>
+                    <div class="ds-card-body">
+                        <div class="ds-section"><span class="ds-section-title">Tables</span>
+                            <div>EDI_852_TRD_INSGT_FCT</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">Brands Covered</span>
+                            <div>PFE Vaccines including orals (Nurtec, Paxlovid)</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Reference It</span>
+                            <code class="ds-code">"COMM_US_PUB_PROD_DB"."BI_US_RNA"."EDI_852_TRD_INSGT_FCT"</code>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Use It</span>
+                            <ul class="ds-list">
+                                <li>sum("OH_QTY") gives WEEKLY_INVENTORY</li>
+                                <li>sum("OMIT_QTY" + "WD_QTY") gives TOTAL_WITHDRAWL_QTY</li>
+                                <li>sum("PFE_SHIP_QTY") gives SHIPPED_QUANTITY</li>
+                                <li>No competitor info</li>
+                            </ul>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">What You Can Answer</span>
+                            <ul class="ds-list">
+                                <li>Inventory and withdrawal rates over time</li>
+                                <li>Stocking analysis</li>
+                            </ul>
+                        </div>
+                    </div>
+                </details>
+                <details class="ds-card">
+                    <summary>844 &mdash; FCT_IND_844 / FCT_CUST_END</summary>
+                    <div class="ds-card-body">
+                        <div class="ds-section"><span class="ds-section-title">Tables</span>
+                            <div>FCT_IND_844</div>
+                            <div>FCT_CUST_END</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">Brands Covered</span>
+                            <div>PFE Vaccines</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Reference It</span>
+                            <code class="ds-code">"COMM_US_BA_PROD_DB"."BA_US_CORE_VACCINES"."FCT_IND_844"</code>
+                            <code class="ds-code" style="margin-top:0.3rem;">"COMM_US_BA_PROD_DB"."BA_US_CORE_VACCINES"."FCT_CUST_END"</code>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Use It</span>
+                            <ul class="ds-list">
+                                <li>Filter FCT_CUST_END for SRC_TYP_CD = '844' to get 844 shipments</li>
+                                <li>No competitor info</li>
+                            </ul>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">What You Can Answer</span>
+                            <ul class="ds-list">
+                                <li>Weekly / monthly level shipments for brands</li>
+                                <li>MA / OA split for Abrysvo</li>
+                            </ul>
+                        </div>
                     </div>
                 </details>
             </div>
         </details>
 
         <details class="ds-collapse">
-            <summary>Admins (LAAD / Optum / HV / Forsyth / NPA / CDS)</summary>
+            <summary>Admins (ELAAD / LAAD / Optum / HV / Forsyth / NPA / CDS)</summary>
             <div style="padding:0.8rem;">
                 <details class="ds-card">
                     <summary>ELAAD</summary>
                     <div class="ds-card-body">
-                        <div class="ds-field"><span class="ds-label">Tables:</span> ELAAD_FACT_MX, ELAAD_FACT_RX</div>
-                        <div class="ds-field"><span class="ds-label">Brands:</span> All brands</div>
-                        <div class="ds-field"><span class="ds-label">Comments:</span> Use ELAAD_DIM_PROVIDER to get PFZ_CUST_ID. Use ELAAD_DIM_PLAN to get PFZ_PLAN_ID. Only use CLAIM_STATUS_CODE IN ('F','S').</div>
-                        <div class="ds-field"><span class="ds-label">Business Questions:</span> Weekly/monthly admins. Vaccination rates. HCP/speciality/payer analysis. Fill rates, Rx per patient, Pills per Rx. Market share. Plan level analysis.</div>
-                        <div class="ds-field"><span class="ds-label">Data Caveats:</span> Low diagnosis capture. Need HCP affiliations to roll up to account level.</div>
+                        <div class="ds-section"><span class="ds-section-title">Tables</span>
+                            <div>ELAAD_FACT_MX</div>
+                            <div>ELAAD_FACT_RX</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">Brands Covered</span>
+                            <div>All brands</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Reference It</span>
+                            <code class="ds-code">"COMM_US_PUB_PROD_DB"."BI_US_DMART_ELAAD"."ELAAD_FACT_RX"</code>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Use It</span>
+                            <ul class="ds-list">
+                                <li>Join ELAAD_DIM_PROVIDER to get PFZ_CUST_ID</li>
+                                <li>Join ELAAD_DIM_PLAN to get PFZ_PLAN_ID</li>
+                                <li>Filter CLAIM_STATUS_CODE IN ('F','S') for any analysis &mdash; other statuses skew the numbers</li>
+                            </ul>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">What You Can Answer</span>
+                            <ul class="ds-list">
+                                <li>Weekly / monthly administrations</li>
+                                <li>Vaccination rates</li>
+                                <li>HCP, specialty, and payer-level cuts</li>
+                                <li>Fill rates, Rx per patient, Pills per Rx</li>
+                                <li>Market share</li>
+                                <li>Plan-level analysis</li>
+                            </ul>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">Important Considerations</span>
+                            <ul class="ds-list">
+                                <li>Diagnosis capture is low &mdash; don&#8217;t rely on this source for Dx-driven analyses</li>
+                                <li>To roll up to account level, you&#8217;ll need to layer in HCP affiliations</li>
+                            </ul>
+                        </div>
                     </div>
                 </details>
                 <details class="ds-card">
                     <summary>Weekly LAAD</summary>
                     <div class="ds-card-body">
-                        <div class="ds-field"><span class="ds-label">Tables:</span> LAAD_FCT_PX_W, LAAD_FCT_RX_W, LAAD_FCT_DX_W</div>
-                        <div class="ds-field"><span class="ds-label">Brands:</span> PCV, Covid, Flu, Eliquis</div>
-                        <div class="ds-field"><span class="ds-label">Comments:</span> Has RSV info, but Pfizer stopped buying for RSV in 2025 season.</div>
-                        <div class="ds-field"><span class="ds-label">Business Questions:</span> Weekly/monthly admins. Vaccination rates. HCP/speciality/payer analysis. Fill rates, Rx per patient, Pills per Rx. Market share. Plan level analysis.</div>
-                        <div class="ds-field"><span class="ds-label">Data Caveats:</span> Low diagnosis capture. Need HCP affiliations to roll up to account level.</div>
+                        <div class="ds-section"><span class="ds-section-title">Tables</span>
+                            <div>LAAD_FCT_PX_W</div>
+                            <div>LAAD_FCT_RX_W</div>
+                            <div>LAAD_FCT_DX_W</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">Brands Covered</span>
+                            <div>PCV, Covid, Flu, Eliquis</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Reference It</span>
+                            <code class="ds-code">"COMM_US_PUB_PROD_DB"."BI_US_RNA"."LAAD_FCT_RX_W"</code>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Use It</span>
+                            <ul class="ds-list">
+                                <li>Has RSV info, but Pfizer stopped buying for RSV in 2025 season</li>
+                                <li>Similar column structure as ELAAD</li>
+                            </ul>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">What You Can Answer</span>
+                            <ul class="ds-list">
+                                <li>Weekly / monthly administrations</li>
+                                <li>Vaccination rates</li>
+                                <li>HCP, specialty, and payer-level cuts</li>
+                                <li>Fill rates, Rx per patient, Pills per Rx</li>
+                                <li>Market share</li>
+                                <li>Plan-level analysis</li>
+                            </ul>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">Important Considerations</span>
+                            <ul class="ds-list">
+                                <li>Low diagnosis capture</li>
+                                <li>To roll up to account level, layer in HCP affiliations</li>
+                            </ul>
+                        </div>
                     </div>
                 </details>
                 <details class="ds-card">
                     <summary>Migraine LAAD</summary>
                     <div class="ds-card-body">
-                        <div class="ds-field"><span class="ds-label">Tables:</span> LAAD_MIG_FCT_MX_W, LAAD_MIG_FCT_RX_W</div>
-                        <div class="ds-field"><span class="ds-label">Brands:</span> Migraine brands</div>
-                        <div class="ds-field"><span class="ds-label">Comments:</span> Best for analysis requiring most recent data.</div>
-                        <div class="ds-field"><span class="ds-label">Business Questions:</span> Weekly/monthly admins. HCP/speciality/payer analysis. Fill rates, Rx per patient, Pills per Rx. Market share. Plan level analysis.</div>
-                        <div class="ds-field"><span class="ds-label">Data Caveats:</span> Low diagnosis capture. Need HCP affiliations to roll up to account level.</div>
+                        <div class="ds-section"><span class="ds-section-title">Tables</span>
+                            <div>LAAD_MIG_FCT_MX_W</div>
+                            <div>LAAD_MIG_FCT_RX_W</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">Brands Covered</span>
+                            <div>Migraine brands</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Reference It</span>
+                            <code class="ds-code">"COMM_US_PUB_PROD_DB"."BI_US_RNA"."LAAD_MIG_FCT_RX_W"</code>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Use It</span>
+                            <ul class="ds-list">
+                                <li>Best for analysis requiring most recent data</li>
+                                <li>Similar column structure as ELAAD</li>
+                            </ul>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">What You Can Answer</span>
+                            <ul class="ds-list">
+                                <li>Weekly / monthly administrations</li>
+                                <li>HCP, specialty, and payer-level cuts</li>
+                                <li>Fill rates, Rx per patient, Pills per Rx</li>
+                                <li>Market share</li>
+                                <li>Plan-level analysis</li>
+                            </ul>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">Important Considerations</span>
+                            <ul class="ds-list">
+                                <li>Low diagnosis capture</li>
+                                <li>To roll up to account level, layer in HCP affiliations</li>
+                            </ul>
+                        </div>
                     </div>
                 </details>
                 <details class="ds-card">
                     <summary>Optum</summary>
                     <div class="ds-card-body">
-                        <div class="ds-field"><span class="ds-label">Tables:</span> RX, MEDICAL_PROC, MEDICAL_DIAG, CONFINEMENT, MEDICAL</div>
-                        <div class="ds-field"><span class="ds-label">Brands:</span> All brands</div>
-                        <div class="ds-field"><span class="ds-label">Comments:</span> Use MEMBER_ENROLLMENT for patient YOB/gender. Better diagnosis capture than LAAD. Better for patient journey assessment.</div>
-                        <div class="ds-field"><span class="ds-label">Business Questions:</span> UMC Risk/No-risk patient split. Vaccination rates. Historical analysis (LAAD only has data post 2019). Market share.</div>
-                        <div class="ds-field"><span class="ds-label">Data Caveats:</span> Low coverage (only UHG payer). No HCP info. Cannot do payer-level analysis (only Com and Mcr). All claims are paid claims.</div>
+                        <div class="ds-section"><span class="ds-section-title">Tables</span>
+                            <div>RX</div>
+                            <div>MEDICAL_PROC</div>
+                            <div>MEDICAL_DIAG</div>
+                            <div>CONFINEMENT</div>
+                            <div>MEDICAL</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">Brands Covered</span>
+                            <div>All brands</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Reference It</span>
+                            <code class="ds-code">"RWD_PROD"."OPTUMDOD_MTHLY"."RX"</code>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Use It</span>
+                            <ul class="ds-list">
+                                <li>Use MEMBER_ENROLLMENT to get patient info (YOB, gender)</li>
+                                <li>Better diagnosis capture than LAAD</li>
+                                <li>Better for patient journey assessment</li>
+                            </ul>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">What You Can Answer</span>
+                            <ul class="ds-list">
+                                <li>UMC &mdash; Risk / No-risk split of patients</li>
+                                <li>Vaccination rates</li>
+                                <li>Historical analysis (LAAD only has data post 2019)</li>
+                                <li>Market share</li>
+                            </ul>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">Important Considerations</span>
+                            <ul class="ds-list">
+                                <li>Low data coverage &mdash; only one payer (UHG)</li>
+                                <li>No HCP info available</li>
+                                <li>Cannot do payer-level analysis (only Commercial and Medicare)</li>
+                                <li>All claims are paid claims</li>
+                            </ul>
+                        </div>
                     </div>
                 </details>
                 <details class="ds-card">
                     <summary>Health Verity (HV)</summary>
                     <div class="ds-card-body">
-                        <div class="ds-field"><span class="ds-label">Tables:</span> PHARMACY_CLAIMS, EVENTS</div>
-                        <div class="ds-field"><span class="ds-label">Brands:</span> All brands</div>
-                        <div class="ds-field"><span class="ds-label">Comments:</span> Only retail admins. Events table only has C19 market for CVS and Walgreens. Use LOGICAL_DELETE_REASON IS NULL for PD claims. Use CONSOLIDATED_ENROLLMENT for patient YOB/age.</div>
-                        <div class="ds-field"><span class="ds-label">Business Questions:</span> Chain level admins. Market share.</div>
-                        <div class="ds-field"><span class="ds-label">Data Caveats:</span> Chain-level coverage inaccurate (Albertsons appears highest but CVS/Walgreens are higher per RWD). Payer info largely "Unknown".</div>
+                        <div class="ds-section"><span class="ds-section-title">Tables</span>
+                            <div>PHARMACY_CLAIMS</div>
+                            <div>EVENTS</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">Brands Covered</span>
+                            <div>All brands</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Reference It</span>
+                            <code class="ds-code">"RWD_PROD"."HV_RX_PHARMACY"."PHARMACY_CLAIMS"</code>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Use It</span>
+                            <ul class="ds-list">
+                                <li>Only retail admins</li>
+                                <li>Events table only has admins for C19 market (CVS and Walgreens)</li>
+                                <li>Use LOGICAL_DELETE_REASON IS NULL for PD claims</li>
+                                <li>Use CONSOLIDATED_ENROLLMENT for patient YOB/age</li>
+                            </ul>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">What You Can Answer</span>
+                            <ul class="ds-list">
+                                <li>Chain level admins</li>
+                                <li>Market share</li>
+                            </ul>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">Important Considerations</span>
+                            <ul class="ds-list">
+                                <li>Chain-level coverage not accurate (e.g., Albertsons appears highest but CVS/Walgreens are higher per RWD)</li>
+                                <li>Payer info largely &#8220;Unknown&#8221;</li>
+                            </ul>
+                        </div>
                     </div>
                 </details>
                 <details class="ds-card">
                     <summary>Forsyth</summary>
                     <div class="ds-card-body">
-                        <div class="ds-field"><span class="ds-label">Tables:</span> FH_COM_104_MIGRAINE_RX_PAID, FH_COM_104_MIGRAINE_RX_REVERSAL, FH_COM_104_MIGRAINE_RX_REJECT, FH_COM_104_MIGRAINE_MEDICAL_CLAIMS, FH_COM_104_MIGRAINE_PRESCRIBING_ATTEMPT, FH_COM_104_MIGRAINE_PHARMACY, FH_COM_104_MIGRAINE_PATIENT_DIAGNOSIS</div>
-                        <div class="ds-field"><span class="ds-label">Brands:</span> Migraine brands</div>
-                        <div class="ds-field"><span class="ds-label">Comments:</span> &#8212;</div>
-                        <div class="ds-field"><span class="ds-label">Business Questions:</span> Better diagnosis coverage. Prior Authorization — detailed info of each PA attempt.</div>
-                        <div class="ds-field"><span class="ds-label">Data Caveats:</span> Low coverage (only ESI payer). No HCP info in Diagnosis table.</div>
+                        <div class="ds-section"><span class="ds-section-title">Tables</span>
+                            <div>FH_COM_104_MIGRAINE_RX_PAID</div>
+                            <div>FH_COM_104_MIGRAINE_RX_REVERSAL</div>
+                            <div>FH_COM_104_MIGRAINE_RX_REJECT</div>
+                            <div>FH_COM_104_MIGRAINE_MEDICAL_CLAIMS</div>
+                            <div>FH_COM_104_MIGRAINE_PRESCRIBING_ATTEMPT</div>
+                            <div>FH_COM_104_MIGRAINE_PHARMACY</div>
+                            <div>FH_COM_104_MIGRAINE_PATIENT_DIAGNOSIS</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">Brands Covered</span>
+                            <div>Migraine brands</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Reference It</span>
+                            <code class="ds-code">"RWD_PROD"."FORSYTH_MIGRAINE_ONC"."FH_COM_104_MIGRAINE_RX_PAID"</code>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">What You Can Answer</span>
+                            <ul class="ds-list">
+                                <li>Better coverage for Diagnosis</li>
+                                <li>Prior Authorization &mdash; detailed info of each PA attempt</li>
+                            </ul>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">Important Considerations</span>
+                            <ul class="ds-list">
+                                <li>Low data coverage &mdash; only one payer (ESI)</li>
+                                <li>HCP info not present in Diagnosis table</li>
+                            </ul>
+                        </div>
                     </div>
                 </details>
                 <details class="ds-card">
                     <summary>NPA</summary>
                     <div class="ds-card-body">
-                        <div class="ds-field"><span class="ds-label">Tables:</span> Flatfile (received via email)</div>
-                        <div class="ds-field"><span class="ds-label">Brands:</span> All brands</div>
-                        <div class="ds-field"><span class="ds-label">Comments:</span> Has weekly TRx and NBRx.</div>
-                        <div class="ds-field"><span class="ds-label">Business Questions:</span> Weekly admins. Market share.</div>
-                        <div class="ds-field"><span class="ds-label">Data Caveats:</span> Only retail information.</div>
+                        <div class="ds-section"><span class="ds-section-title">Tables</span>
+                            <div>Flatfile (received via email)</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">Brands Covered</span>
+                            <div>All brands</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Use It</span>
+                            <ul class="ds-list">
+                                <li>Has weekly TRx and NBRx</li>
+                            </ul>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">What You Can Answer</span>
+                            <ul class="ds-list">
+                                <li>Weekly admins</li>
+                                <li>Market share</li>
+                            </ul>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">Important Considerations</span>
+                            <ul class="ds-list">
+                                <li>Only has retail information</li>
+                            </ul>
+                        </div>
                     </div>
                 </details>
                 <details class="ds-card">
                     <summary>Rapid NPA</summary>
                     <div class="ds-card-body">
-                        <div class="ds-field"><span class="ds-label">Tables:</span> Flatfile (received via email)</div>
-                        <div class="ds-field"><span class="ds-label">Brands:</span> PCV, RSV, Covid</div>
-                        <div class="ds-field"><span class="ds-label">Comments:</span> Has weekly TRx.</div>
-                        <div class="ds-field"><span class="ds-label">Business Questions:</span> Weekly admins. Market share.</div>
-                        <div class="ds-field"><span class="ds-label">Data Caveats:</span> Only retail information.</div>
+                        <div class="ds-section"><span class="ds-section-title">Tables</span>
+                            <div>Flatfile (received via email)</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">Brands Covered</span>
+                            <div>PCV, RSV, Covid</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Use It</span>
+                            <ul class="ds-list">
+                                <li>Has weekly TRx</li>
+                            </ul>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">What You Can Answer</span>
+                            <ul class="ds-list">
+                                <li>Weekly admins</li>
+                                <li>Market share</li>
+                            </ul>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">Important Considerations</span>
+                            <ul class="ds-list">
+                                <li>Only has retail information</li>
+                            </ul>
+                        </div>
                     </div>
                 </details>
                 <details class="ds-card">
                     <summary>Firstlook</summary>
                     <div class="ds-card-body">
-                        <div class="ds-field"><span class="ds-label">Tables:</span> Flatfile (received via email)</div>
-                        <div class="ds-field"><span class="ds-label">Brands:</span> Oral CGRP (Nurtec, Ubrelvy, Qulipta) and Zavzpret</div>
-                        <div class="ds-field"><span class="ds-label">Comments:</span> Already has monthly and quarterly TRx and NBRx rolled up data.</div>
-                        <div class="ds-field"><span class="ds-label">Business Questions:</span> Weekly/Monthly/Quarterly admins. Market share.</div>
-                        <div class="ds-field"><span class="ds-label">Data Caveats:</span> Only retail information.</div>
+                        <div class="ds-section"><span class="ds-section-title">Tables</span>
+                            <div>Flatfile (received via email)</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">Brands Covered</span>
+                            <div>Oral CGRP (Nurtec, Ubrelvy, Qulipta) and Zavzpret</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Use It</span>
+                            <ul class="ds-list">
+                                <li>Already has monthly and quarterly TRx and NBRx rolled up data</li>
+                            </ul>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">What You Can Answer</span>
+                            <ul class="ds-list">
+                                <li>Weekly / monthly / quarterly admins</li>
+                                <li>Market share</li>
+                            </ul>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">Important Considerations</span>
+                            <ul class="ds-list">
+                                <li>Only has retail information</li>
+                            </ul>
+                        </div>
                     </div>
                 </details>
                 <details class="ds-card">
                     <summary>CDS</summary>
                     <div class="ds-card-body">
-                        <div class="ds-field"><span class="ds-label">Tables:</span> MDCR_PARTB_PROD_ORG_IND_MTH, MDCR_PARTB_PROD_CHAIN, MDCR_PARTD_PROD_CHAIN_ST</div>
-                        <div class="ds-field"><span class="ds-label">Brands:</span> Covid, PCV, Flu vaccines</div>
-                        <div class="ds-field"><span class="ds-label">Comments:</span> EVENT_CNT = claims. BENE_CNT = patients.</div>
-                        <div class="ds-field"><span class="ds-label">Business Questions:</span> Account/Chain level admins. Referral information. Retail/Non-Retail ratio.</div>
-                        <div class="ds-field"><span class="ds-label">Data Caveats:</span> Coverage drops at granular levels (accounts with no info get removed). Medicare only (60+ age).</div>
+                        <div class="ds-section"><span class="ds-section-title">Tables</span>
+                            <div>MDCR_PARTB_PROD_ORG_IND_MTH</div>
+                            <div>MDCR_PARTB_PROD_CHAIN</div>
+                            <div>MDCR_PARTD_PROD_CHAIN_ST</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">Brands Covered</span>
+                            <div>Covid, PCV, and Flu vaccines</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Reference It</span>
+                            <code class="ds-code">"COMM_US_BA_PROD_DB"."BA_US_CORE_VACCINES"."MDCR_PARTB_PROD_CHAIN"</code>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Use It</span>
+                            <ul class="ds-list">
+                                <li>EVENT_CNT is claims</li>
+                                <li>BENE_CNT is patients</li>
+                            </ul>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">What You Can Answer</span>
+                            <ul class="ds-list">
+                                <li>Account / Chain level admins</li>
+                                <li>Referral information</li>
+                                <li>Retail / Non-Retail ratio</li>
+                            </ul>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">Important Considerations</span>
+                            <ul class="ds-list">
+                                <li>Coverage drops at granular levels (accounts with no info get removed)</li>
+                                <li>Medicare only (60+ age population)</li>
+                            </ul>
+                        </div>
                     </div>
                 </details>
             </div>
@@ -827,61 +1204,226 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
                 <details class="ds-card">
                     <summary>Miscellaneous</summary>
                     <div class="ds-card-body">
-                        <div class="ds-field"><span class="ds-label">DIM_PROD:</span> Product names using NDC</div>
-                        <div class="ds-field"><span class="ds-label">DIM_TIME:</span> Time related granularities</div>
+                        <div class="ds-section"><span class="ds-section-title">Tables</span>
+                            <div>DIM_PROD</div>
+                            <div>DIM_TIME</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Reference It</span>
+                            <code class="ds-code">"COMM_US_PUB_PROD_DB"."BI_US_RNA"."DIM_PROD"</code>
+                            <code class="ds-code" style="margin-top:0.3rem;">"COMM_US_PUB_PROD_DB"."BI_US_RNA"."DIM_TIME"</code>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Use It</span>
+                            <ul class="ds-list">
+                                <li>DIM_PROD &mdash; Product names using NDC</li>
+                                <li>DIM_TIME &mdash; Time-related granularities</li>
+                            </ul>
+                        </div>
                     </div>
                 </details>
                 <details class="ds-card">
                     <summary>HCP / Account</summary>
                     <div class="ds-card-body">
-                        <div class="ds-field"><span class="ds-label">BAC_DIM_CUST_VX:</span> Account information (processed dataset with all info for an account)</div>
-                        <div class="ds-field"><span class="ds-label">DIM_CUST:</span> Account/HCP information (use CUST_TYPE_CD to segregate)</div>
-                        <div class="ds-field"><span class="ds-label">DIM_CUST_ADDR_BEST_CALL:</span> HCP state, Zip</div>
-                        <div class="ds-field"><span class="ds-label">DIM_CUST_EXTL_ID:</span> NPI to CUST_ID mapping</div>
-                        <div class="ds-field"><span class="ds-label">HCP Affiliation:</span> HCP affiliated account</div>
-                        <div class="ds-field"><span class="ds-label">HCOS_DIM_BUS:</span> Account information (Cot classification, Cot speciality)</div>
+                        <div class="ds-section"><span class="ds-section-title">Tables</span>
+                            <div>BAC_DIM_CUST_VX</div>
+                            <div>DIM_CUST</div>
+                            <div>DIM_CUST_ADDR_BEST_CALL</div>
+                            <div>DIM_CUST_EXTL_ID</div>
+                            <div>BAC_HCP_PRIM_AFFLN</div>
+                            <div>HCOS_DIM_BUS</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Reference It</span>
+                            <code class="ds-code">"COMM_US_BA_PROD_DB"."BA_US_CORE_VACCINES"."BAC_DIM_CUST_VX"</code>
+                            <code class="ds-code" style="margin-top:0.3rem;">"COMM_US_PUB_PROD_DB"."BI_US_RNA"."DIM_CUST"</code>
+                            <code class="ds-code" style="margin-top:0.3rem;">"COMM_US_PUB_PROD_DB"."BI_US_RNA"."DIM_CUST_ADDR_BEST_CALL"</code>
+                            <code class="ds-code" style="margin-top:0.3rem;">"COMM_US_PUB_PROD_DB"."BI_US_RNA"."DIM_CUST_EXTL_ID"</code>
+                            <code class="ds-code" style="margin-top:0.3rem;">"COMM_US_BA_PROD_DB"."BA_US_CORE_VACCINES"."BAC_HCP_PRIM_AFFLN"</code>
+                            <code class="ds-code" style="margin-top:0.3rem;">"COMM_US_PUB_PROD_DB"."BI_US_RNA"."HCOS_DIM_BUS"</code>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Use It</span>
+                            <ul class="ds-list">
+                                <li>BAC_DIM_CUST_VX &mdash; Processed dataset with all info for an account</li>
+                                <li>DIM_CUST &mdash; Use CUST_TYPE_CD to segregate between account and HCP</li>
+                                <li>DIM_CUST_ADDR_BEST_CALL &mdash; HCP state and ZIP</li>
+                                <li>DIM_CUST_EXTL_ID &mdash; NPI to CUST_ID mapping (used in HV analysis for Pharmacy_NPI)</li>
+                                <li>BAC_HCP_PRIM_AFFLN &mdash; Identifies which account a particular HCP is affiliated with</li>
+                                <li>HCOS_DIM_BUS &mdash; Cot classification, Cot specialty</li>
+                            </ul>
+                        </div>
                     </div>
                 </details>
                 <details class="ds-card">
                     <summary>DDD</summary>
                     <div class="ds-card-body">
-                        <div class="ds-field"><span class="ds-label">DIM_ACCT_IDN_HCOS_DDD:</span> PFZ_CUST_ID for DDD outlet ID</div>
+                        <div class="ds-section"><span class="ds-section-title">Tables</span>
+                            <div>DIM_ACCT_IDN_HCOS_DDD</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Reference It</span>
+                            <code class="ds-code">"COMM_US_PUB_PROD_DB"."BI_US_RNA"."DIM_ACCT_IDN_HCOS_DDD"</code>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Use It</span>
+                            <ul class="ds-list">
+                                <li>Maps DDD Outlet ID to PFZ_CUST_ID</li>
+                            </ul>
+                        </div>
                     </div>
                 </details>
                 <details class="ds-card">
                     <summary>ELAAD</summary>
                     <div class="ds-card-body">
-                        <div class="ds-field"><span class="ds-label">ELAAD_DIM_PATIENT_DEMOGRAPHIC:</span> Patient's YOB and gender</div>
-                        <div class="ds-field"><span class="ds-label">ELAAD_DIM_PRODUCT:</span> Product names using NDC</div>
-                        <div class="ds-field"><span class="ds-label">ELAAD_DIM_PLAN:</span> PFZ_PLAN_ID</div>
-                        <div class="ds-field"><span class="ds-label">ELAAD_DIM_PROVIDER:</span> PFZ_CUST_ID</div>
-                        <div class="ds-field"><span class="ds-label">ELAAD_DIM_REJECT:</span> Rejection reason</div>
+                        <div class="ds-section"><span class="ds-section-title">Tables</span>
+                            <div>ELAAD_DIM_PATIENT_DEMOGRAPHIC</div>
+                            <div>ELAAD_DIM_PRODUCT</div>
+                            <div>ELAAD_DIM_PLAN</div>
+                            <div>ELAAD_DIM_PROVIDER</div>
+                            <div>ELAAD_DIM_REJECT</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Reference It</span>
+                            <code class="ds-code">"COMM_US_PUB_PROD_DB"."BI_US_DMART_ELAAD"."ELAAD_DIM_PROVIDER"</code>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Use It</span>
+                            <ul class="ds-list">
+                                <li>ELAAD_DIM_PATIENT_DEMOGRAPHIC &mdash; Patient&#8217;s YOB and gender</li>
+                                <li>ELAAD_DIM_PRODUCT &mdash; Product names using NDC</li>
+                                <li>ELAAD_DIM_PLAN &mdash; Get PFZ_PLAN_ID</li>
+                                <li>ELAAD_DIM_PROVIDER &mdash; Get PFZ_CUST_ID</li>
+                                <li>ELAAD_DIM_REJECT &mdash; Get rejection reason</li>
+                            </ul>
+                        </div>
                     </div>
                 </details>
                 <details class="ds-card">
                     <summary>Plan / Payer</summary>
                     <div class="ds-card-body">
-                        <div class="ds-field"><span class="ds-label">DIM_CUST_PLAN_HIERY:</span> Plan/MCO/Payer info</div>
+                        <div class="ds-section"><span class="ds-section-title">Tables</span>
+                            <div>DIM_CUST_PLAN_HIERY</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Reference It</span>
+                            <code class="ds-code">"COMM_US_PUB_PROD_DB"."BI_US_RNA"."DIM_CUST_PLAN_HIERY"</code>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Use It</span>
+                            <ul class="ds-list">
+                                <li>Plan / MCO / Payer information</li>
+                            </ul>
+                        </div>
                     </div>
                 </details>
                 <details class="ds-card">
                     <summary>Optum</summary>
                     <div class="ds-card-body">
-                        <div class="ds-field"><span class="ds-label">MEMBER_ENROLLMENT:</span> Patient's YOB and gender</div>
+                        <div class="ds-section"><span class="ds-section-title">Tables</span>
+                            <div>MEMBER_ENROLLMENT</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Reference It</span>
+                            <code class="ds-code">"RWD_PROD"."OPTUMDOD_MTHLY"."MEMBER_ENROLLMENT"</code>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Use It</span>
+                            <ul class="ds-list">
+                                <li>Patient&#8217;s YOB and gender</li>
+                            </ul>
+                        </div>
                     </div>
                 </details>
                 <details class="ds-card">
                     <summary>Geography</summary>
                     <div class="ds-card-body">
-                        <div class="ds-field"><span class="ds-label">DIM_ZIP:</span> ZIP5, MSA, County</div>
-                        <div class="ds-field"><span class="ds-label">DIM_ST:</span> State Code, State Description</div>
-                        <div class="ds-field"><span class="ds-label">ZIP2MSA:</span> Zip to MSA, DMA, Lat, Long</div>
+                        <div class="ds-section"><span class="ds-section-title">Tables</span>
+                            <div>DIM_ZIP</div>
+                            <div>DIM_ST</div>
+                            <div>ZIP2MSA</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Reference It</span>
+                            <code class="ds-code">"COMM_US_PUB_PROD_DB"."BI_US_RNA"."DIM_ZIP"</code>
+                            <code class="ds-code" style="margin-top:0.3rem;">"COMM_US_PUB_PROD_DB"."BI_US_RNA"."DIM_ST"</code>
+                            <code class="ds-code" style="margin-top:0.3rem;">COMM_US_BA_PROD_DB.CDW_US_ASB_GBA_DB.ZIP2MSA</code>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Use It</span>
+                            <ul class="ds-list">
+                                <li>DIM_ZIP &mdash; ZIP5, MSA, County</li>
+                                <li>DIM_ST &mdash; State Code, State Description</li>
+                                <li>ZIP2MSA &mdash; Zip to MSA, DMA, Lat, Long</li>
+                            </ul>
+                        </div>
                     </div>
                 </details>
                 <details class="ds-card">
                     <summary>Health Verity (HV)</summary>
                     <div class="ds-card-body">
-                        <div class="ds-field"><span class="ds-label">CONSOLIDATED_ENROLLMENT:</span> Patient's YOB and gender</div>
+                        <div class="ds-section"><span class="ds-section-title">Tables</span>
+                            <div>CONSOLIDATED_ENROLLMENT</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Reference It</span>
+                            <code class="ds-code">"RWD_PROD"."HV_RX_PHARMACY"."CONSOLIDATED_ENROLLMENT"</code>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Use It</span>
+                            <ul class="ds-list">
+                                <li>Patient&#8217;s YOB and gender</li>
+                            </ul>
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="ds-collapse">
+            <summary>Alignment / Calls</summary>
+            <div style="padding:0.8rem;">
+                <details class="ds-card">
+                    <summary>IMAP</summary>
+                    <div class="ds-card-body">
+                        <div class="ds-section"><span class="ds-section-title">Tables</span>
+                            <div>IMAP_TARGET_LIST</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Reference It</span>
+                            <code class="ds-code">"VAW_AMER_DESIGN"."PRIMARYCARECEPDRIVERANALYTICS"."IMAP_TARGET_LIST"</code>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Use It</span>
+                            <ul class="ds-list">
+                                <li>HSS target list of accounts</li>
+                            </ul>
+                        </div>
+                    </div>
+                </details>
+                <details class="ds-card">
+                    <summary>Dart V (HSS Calls)</summary>
+                    <div class="ds-card-body">
+                        <div class="ds-section"><span class="ds-section-title">Tables</span>
+                            <div>BA_VACC_FCT_CALLS</div>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Reference It</span>
+                            <code class="ds-code">COMM_US_PUB_PROD_DB."BI_US_DMART_VACCINES"."BA_VACC_FCT_CALLS"</code>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">How to Use It</span>
+                            <ul class="ds-list">
+                                <li>HSS calls to HCPs/accounts</li>
+                                <li>Calls to HCPs are summed up at account level (also present in fact table)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </details>
+                <details class="ds-card">
+                    <summary>Sem 360 (HSS Calls with Priority)</summary>
+                    <div class="ds-card-body">
+                        <div class="ds-section"><span class="ds-section-title">How to Use It</span>
+                            <ul class="ds-list">
+                                <li>HSS calls to HCPs/accounts with priority information</li>
+                                <li>Calls to HCPs are summed up at account level (also present in fact table)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </details>
+                <details class="ds-card">
+                    <summary>Valkyrie (VAM Goals/Meetings)</summary>
+                    <div class="ds-card-body">
+                        <div class="ds-section"><span class="ds-section-title">How to Use It</span>
+                            <ul class="ds-list">
+                                <li>Goals and meetings for VAM</li>
+                            </ul>
+                        </div>
+                        <div class="ds-section"><span class="ds-section-title">Important Considerations</span>
+                            <ul class="ds-list">
+                                <li>Meeting agenda information is missing</li>
+                            </ul>
+                        </div>
                     </div>
                 </details>
             </div>
