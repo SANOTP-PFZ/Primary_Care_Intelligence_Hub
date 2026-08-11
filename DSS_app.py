@@ -479,6 +479,9 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
 .ds-code{{display:block;font-family:'JetBrains Mono','Fira Code',monospace;font-size:0.72rem;background:rgba(15,23,42,0.04);border:1px solid var(--hairline);border-radius:5px;padding:0.35rem 0.6rem;color:var(--navy-900);word-break:break-all;margin-top:0.15rem}}
 .ds-list{{margin:0.2rem 0 0 1.1rem;padding:0;font-size:0.78rem;line-height:1.7}}
 .ds-list li{{margin-bottom:0.15rem;color:var(--text-soft)}}
+.ds-collapse-btn{{display:none;margin-top:0.6rem;padding:0.3rem 0.7rem;font-size:0.7rem;font-weight:600;color:var(--navy-700);background:rgba(28,79,192,0.06);border:1px solid rgba(28,79,192,0.15);border-radius:5px;cursor:pointer;font-family:inherit;transition:all 0.15s var(--ease)}}
+.ds-collapse-btn:hover{{background:rgba(28,79,192,0.12);border-color:rgba(28,79,192,0.25)}}
+.ds-card[open] .ds-collapse-btn{{display:inline-block}}
 .filter-bar{{display:flex;flex-direction:column;gap:0.6rem;padding:0.7rem 0.9rem;background:rgba(255,255,255,0.6);border:1px solid var(--hairline);border-radius:10px;margin-bottom:1rem}}
 .filter-label{{font-size:0.7rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em}}
 .filter-group{{display:flex;align-items:center;gap:0.35rem;flex-wrap:wrap}}
@@ -670,6 +673,10 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
     <!-- DATA SOURCE GUIDE SECTION -->
     <section class="section" id="brandinfo">
         <div class="section-head"><h2>Data Source Guide</h2><p>Dataset reference for Primary Care Vaccines OE — tables, brands covered, and data caveats.</p></div>
+        <div style="background:rgba(28,79,192,0.04);border:1px solid rgba(28,79,192,0.12);border-radius:8px;padding:0.6rem 1rem;margin-bottom:1.2rem;font-size:0.78rem;color:var(--text-soft);display:flex;align-items:center;gap:0.5rem;">
+            <span style="font-size:1rem;">&#128221;</span>
+            Notes from the team&#8217;s hands-on experience with all these data sources.
+        </div>
 
         <details class="ds-collapse">
             <summary>Shipments (DDD / 867 / 852 / 844)</summary>
@@ -1679,6 +1686,18 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
             // Reset agent panels when navigating away
             if (item.dataset.target !== 'agents') hideAgentPanels();
         }});
+    }});
+    // DS card collapse buttons
+    document.querySelectorAll('.ds-card-body').forEach(function(body) {{
+        var btn = document.createElement('button');
+        btn.className = 'ds-collapse-btn';
+        btn.textContent = '\u2191 Collapse';
+        btn.addEventListener('click', function(e) {{
+            e.stopPropagation();
+            var card = body.closest('details.ds-card');
+            if (card) card.removeAttribute('open');
+        }});
+        body.appendChild(btn);
     }});
 }})();
 </script>
