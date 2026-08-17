@@ -325,11 +325,11 @@ else:
     [data-testid="stHeader"],[data-testid="stToolbar"],[data-testid="stDecoration"],
     [data-testid="stSidebar"],[data-testid="collapsedControl"],[data-testid="stSidebarCollapseButton"],
     #MainMenu,footer,.stApp>header{display:none!important}
-    .block-container{padding:0!important;max-width:100%!important;margin:0!important;height:100%!important}
-    [data-testid="stAppViewBlockContainer"]{padding:0!important;margin:0!important}
-    [data-testid="stMainBlockContainer"]{padding:0!important;margin:0!important}
-    [data-testid="stVerticalBlock"]{gap:0!important;height:100%!important}
-    .stApp,[data-testid="stAppViewContainer"],[data-testid="stMain"]{overflow:hidden!important;height:100vh!important}
+    .block-container{padding:0!important;max-width:100%!important}
+    [data-testid="stAppViewBlockContainer"]{padding:0!important}
+    [data-testid="stMainBlockContainer"]{padding:0!important}
+    [data-testid="stVerticalBlock"]{gap:0!important}
+    .stApp,[data-testid="stAppViewContainer"],[data-testid="stMain"]{overflow:auto!important}
     </style>
     """, unsafe_allow_html=True)
 
@@ -389,18 +389,16 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
 .nav-item.active .nav-icon{{color:var(--navy-700)}}
 .nav-item.active .nav-count{{background:rgba(28,79,192,0.14);color:var(--navy-700)}}
 .nav-item.active::before{{content:'';position:absolute;left:-0.55rem;top:6px;bottom:6px;width:3px;border-radius:0 3px 3px 0;background:linear-gradient(180deg,var(--navy-600),var(--accent));box-shadow:0 0 8px rgba(28,79,192,0.3)}}
-.sidebar-nav-scroll{{flex:1;min-height:0;overflow-y:auto}}
-.sidebar-nav-scroll::-webkit-scrollbar{{width:4px}}
-.sidebar-nav-scroll::-webkit-scrollbar-thumb{{background:rgba(15,23,42,0.10);border-radius:2px}}
+.sidebar-spacer{{flex:1}}
 .sidebar-meta{{padding:0.6rem 1.15rem 0.7rem;font-size:0.7rem;color:var(--text-muted);line-height:1.45;border-top:1px solid var(--hairline);background:linear-gradient(180deg,transparent 0%,rgba(28,79,192,0.025) 100%)}}
 .sidebar-meta strong{{color:var(--text-soft);font-weight:600}}
 .sidebar-meta .meta-row{{margin-bottom:0.2rem}}
 .main{{background:rgba(255,255,255,0.55);backdrop-filter:saturate(180%) blur(14px);-webkit-backdrop-filter:saturate(180%) blur(14px);border:1px solid var(--hairline);border-radius:var(--panel-radius);box-shadow:var(--shadow-panel);display:flex;flex-direction:column;overflow:hidden;min-width:0;min-height:0}}
-.content{{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:1.4rem;display:flex;flex-direction:column}}
+.content{{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:1.4rem}}
 .content::-webkit-scrollbar{{width:6px}}
 .content::-webkit-scrollbar-thumb{{background:rgba(15,23,42,0.14);border-radius:3px}}
 .section{{display:none;opacity:0;transform:translateY(4px);transition:opacity 0.22s var(--ease),transform 0.22s var(--ease-out)}}
-.section.is-active{{display:flex;flex-direction:column;flex:1;min-height:0}}
+.section.is-active{{display:block}}
 .section.is-visible{{opacity:1;transform:translateY(0)}}
 .section-head{{margin-bottom:1rem}}
 .section-head h2{{font-size:1.35rem;font-weight:700;color:var(--navy-900);letter-spacing:-0.02em;margin-bottom:0.2rem}}
@@ -536,7 +534,6 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
         </div>
     </div>
     <div class="sidebar-divider"></div>
-    <div class="sidebar-nav-scroll">
     <div class="sidebar-section-label">Primary Care Workspace</div>
     <nav class="nav" id="sidebarNav">
         <button class="nav-item" data-target="dashboards">
@@ -570,7 +567,7 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
             <span class="nav-label">Relevant Links</span>
         </button>
     </nav>
-    </div>
+    <div class="sidebar-spacer"></div>
     <div class="sidebar-meta">
         <div class="meta-row"><strong>Primary Care Analytics</strong></div>
         <div class="meta-row">Last refreshed on {max_date_raw}</div>
@@ -603,7 +600,7 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
 
     <!-- HOME SECTION (default) -->
     <section class="section is-active is-visible" id="home">
-        <div style="position:relative;background:radial-gradient(ellipse 90% 80% at 20% 20%,rgba(28,79,192,0.06) 0%,transparent 50%),radial-gradient(ellipse 60% 70% at 80% 80%,rgba(65,182,230,0.05) 0%,transparent 50%),linear-gradient(135deg,rgba(255,255,255,0.9) 0%,rgba(248,250,253,0.95) 100%);border-radius:16px;padding:2.5rem 2rem;border:1px solid rgba(15,23,42,0.05);box-shadow:0 2px 8px rgba(15,23,42,0.05),0 1px 2px rgba(15,23,42,0.04);overflow:hidden;text-align:center;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+        <div style="position:relative;background:radial-gradient(ellipse 90% 80% at 20% 20%,rgba(28,79,192,0.06) 0%,transparent 50%),radial-gradient(ellipse 60% 70% at 80% 80%,rgba(65,182,230,0.05) 0%,transparent 50%),linear-gradient(135deg,rgba(255,255,255,0.9) 0%,rgba(248,250,253,0.95) 100%);border-radius:16px;padding:2.5rem 2rem;border:1px solid rgba(15,23,42,0.05);box-shadow:0 2px 8px rgba(15,23,42,0.05),0 1px 2px rgba(15,23,42,0.04);overflow:hidden;text-align:center;min-height:calc(100vh - 380px);display:flex;flex-direction:column;align-items:center;justify-content:center;">
             <div style="position:absolute;top:-1px;left:0;right:0;height:3px;background:linear-gradient(90deg,#1C4FC0,#41B6E6,#3B6FD9);border-radius:16px 16px 0 0;opacity:0.7;"></div>
             <div style="display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:14px;background:rgba(28,79,192,0.06);margin-bottom:1.2rem;">
                 <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#1C4FC0" stroke-width="1.8"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg>
