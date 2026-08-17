@@ -325,11 +325,11 @@ else:
     [data-testid="stHeader"],[data-testid="stToolbar"],[data-testid="stDecoration"],
     [data-testid="stSidebar"],[data-testid="collapsedControl"],[data-testid="stSidebarCollapseButton"],
     #MainMenu,footer,.stApp>header{display:none!important}
-    .block-container{padding:0!important;max-width:100%!important}
-    [data-testid="stAppViewBlockContainer"]{padding:0!important}
-    [data-testid="stMainBlockContainer"]{padding:0!important}
-    [data-testid="stVerticalBlock"]{gap:0!important}
-    .stApp,[data-testid="stAppViewContainer"],[data-testid="stMain"]{overflow:auto!important}
+    .block-container{padding:0!important;max-width:100%!important;margin:0!important;height:100%!important}
+    [data-testid="stAppViewBlockContainer"]{padding:0!important;margin:0!important}
+    [data-testid="stMainBlockContainer"]{padding:0!important;margin:0!important}
+    [data-testid="stVerticalBlock"]{gap:0!important;height:100%!important}
+    .stApp,[data-testid="stAppViewContainer"],[data-testid="stMain"]{overflow:hidden!important;height:100vh!important}
     </style>
     """, unsafe_allow_html=True)
 
