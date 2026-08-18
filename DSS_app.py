@@ -389,8 +389,9 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
 .nav-item.active .nav-icon{{color:var(--navy-700)}}
 .nav-item.active .nav-count{{background:rgba(28,79,192,0.14);color:var(--navy-700)}}
 .nav-item.active::before{{content:'';position:absolute;left:-0.55rem;top:6px;bottom:6px;width:3px;border-radius:0 3px 3px 0;background:linear-gradient(180deg,var(--navy-600),var(--accent));box-shadow:0 0 8px rgba(28,79,192,0.3)}}
-.sidebar-spacer{{flex:1;min-height:0}}
-.sidebar-meta{{padding:0.45rem 1.15rem 0.5rem;font-size:0.68rem;color:var(--text-muted);line-height:1.4;border-top:1px solid var(--hairline);background:linear-gradient(180deg,transparent 0%,rgba(28,79,192,0.025) 100%)}}
+.sidebar-nav-wrap{{flex:1;min-height:0;overflow-y:auto}}
+.sidebar-nav-wrap::-webkit-scrollbar{{width:0;display:none}}
+.sidebar-meta{{flex-shrink:0;padding:0.45rem 1.15rem 0.5rem;font-size:0.68rem;color:var(--text-muted);line-height:1.4;border-top:1px solid var(--hairline);background:linear-gradient(180deg,transparent 0%,rgba(28,79,192,0.025) 100%)}}
 .sidebar-meta strong{{color:var(--text-soft);font-weight:600}}
 .sidebar-meta .meta-row{{margin-bottom:0.2rem}}
 .main{{background:rgba(255,255,255,0.55);backdrop-filter:saturate(180%) blur(14px);-webkit-backdrop-filter:saturate(180%) blur(14px);border:1px solid var(--hairline);border-radius:var(--panel-radius);box-shadow:var(--shadow-panel);display:flex;flex-direction:column;overflow:hidden;min-width:0;min-height:0}}
@@ -534,40 +535,41 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
         </div>
     </div>
     <div class="sidebar-divider"></div>
-    <div class="sidebar-section-label">Primary Care Workspace</div>
-    <nav class="nav" id="sidebarNav">
-        <button class="nav-item" data-target="dashboards">
-            <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
-            <span class="nav-label">Deep-Dive Dashboards</span>
-            <span class="nav-count">8</span>
-        </button>
-        <button class="nav-item" data-target="agents">
-            <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="10" rx="2"/><path d="M9 16v3M15 16v3M9 6V3M15 6V3M3 11h3M18 11h3"/></svg></span>
-            <span class="nav-label">CoWork Agents</span>
-            <span class="nav-count">32</span>
-        </button>
-        <button class="nav-item" data-target="tools">
-            <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span>
-            <span class="nav-label">Analytical Tools</span>
-        </button>
-    </nav>
-    <div class="sidebar-divider" style="margin-top:0.6rem;"></div>
-    <div class="sidebar-section-label">Knowledge Center</div>
-    <nav class="nav">
-        <button class="nav-item" data-target="datadict">
-            <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span>
-            <span class="nav-label">Data Dictionary</span>
-        </button>
-        <button class="nav-item" data-target="brandinfo">
-            <span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 16v-4M12 8h.01" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span>
-            <span class="nav-label">Data Source Guide</span>
-        </button>
-        <button class="nav-item" data-target="links">
-            <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span>
-            <span class="nav-label">Relevant Links</span>
-        </button>
-    </nav>
-    <div class="sidebar-spacer"></div>
+    <div class="sidebar-nav-wrap">
+        <div class="sidebar-section-label">Primary Care Workspace</div>
+        <nav class="nav" id="sidebarNav">
+            <button class="nav-item" data-target="dashboards">
+                <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
+                <span class="nav-label">Deep-Dive Dashboards</span>
+                <span class="nav-count">8</span>
+            </button>
+            <button class="nav-item" data-target="agents">
+                <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="10" rx="2"/><path d="M9 16v3M15 16v3M9 6V3M15 6V3M3 11h3M18 11h3"/></svg></span>
+                <span class="nav-label">CoWork Agents</span>
+                <span class="nav-count">32</span>
+            </button>
+            <button class="nav-item" data-target="tools">
+                <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span>
+                <span class="nav-label">Analytical Tools</span>
+            </button>
+        </nav>
+        <div class="sidebar-divider" style="margin-top:0.6rem;"></div>
+        <div class="sidebar-section-label">Knowledge Center</div>
+        <nav class="nav">
+            <button class="nav-item" data-target="datadict">
+                <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span>
+                <span class="nav-label">Data Dictionary</span>
+            </button>
+            <button class="nav-item" data-target="brandinfo">
+                <span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 16v-4M12 8h.01" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span>
+                <span class="nav-label">Data Source Guide</span>
+            </button>
+            <button class="nav-item" data-target="links">
+                <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span>
+                <span class="nav-label">Relevant Links</span>
+            </button>
+        </nav>
+    </div>
     <div class="sidebar-meta">
         <div class="meta-row"><strong>Primary Care Analytics</strong></div>
         <div class="meta-row">Last refreshed on {max_date_raw}</div>
