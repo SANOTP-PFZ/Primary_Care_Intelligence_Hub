@@ -394,19 +394,19 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
 .sidebar-meta strong{{color:var(--text-soft);font-weight:600}}
 .sidebar-meta .meta-row{{margin-bottom:0.2rem}}
 .main{{background:rgba(255,255,255,0.55);backdrop-filter:saturate(180%) blur(14px);-webkit-backdrop-filter:saturate(180%) blur(14px);border:1px solid var(--hairline);border-radius:var(--panel-radius);box-shadow:var(--shadow-panel);display:flex;flex-direction:column;overflow:hidden;min-width:0;min-height:0}}
-.content{{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:1.4rem}}
+.content{{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:1rem 1.4rem}}
 .content::-webkit-scrollbar{{width:6px}}
 .content::-webkit-scrollbar-thumb{{background:rgba(15,23,42,0.14);border-radius:3px}}
 .section{{display:none;opacity:0;transform:translateY(4px);transition:opacity 0.22s var(--ease),transform 0.22s var(--ease-out)}}
 .section.is-active{{display:block}}
 .section.is-visible{{opacity:1;transform:translateY(0)}}
-.section-head{{margin-bottom:1rem}}
-.section-head h2{{font-size:1.35rem;font-weight:700;color:var(--navy-900);letter-spacing:-0.02em;margin-bottom:0.2rem}}
+.section-head{{margin-bottom:0.6rem}}
+.section-head h2{{font-size:1.25rem;font-weight:700;color:var(--navy-900);letter-spacing:-0.02em;margin-bottom:0.15rem}}
 .section-head p{{font-size:0.84rem;color:var(--text-muted);max-width:680px}}
 .grid{{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}}
 .grid-4{{gap:1.4rem}}
-.grid-4 .card{{min-height:180px;padding:1.5rem 1.4rem;justify-content:center;align-items:center;text-align:center}}
-.grid-4 .card .card-top{{justify-content:center;margin-bottom:1rem}}
+.grid-4 .card{{min-height:140px;padding:1.2rem 1.4rem;justify-content:center;align-items:center;text-align:center}}
+.grid-4 .card .card-top{{justify-content:center;margin-bottom:0.6rem}}
 .grid-4 .card .card-title{{font-size:1.15rem;margin-bottom:0}}
 .grid-4 .card .icon-chip{{width:44px;height:44px;border-radius:12px}}
 .grid-4 .card .icon-chip svg{{width:22px;height:22px}}
@@ -491,24 +491,24 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
 .filter-chip.active{{background:linear-gradient(90deg,var(--navy-700),var(--accent));color:#fff;border-color:transparent;box-shadow:0 2px 8px rgba(22,57,144,0.2)}}
 .card-desc{{font-size:0.8rem;color:var(--text-muted);line-height:1.5;flex:1;margin-bottom:0.85rem}}
 .dest-pill{{display:inline-flex;align-items:center;gap:0.35rem;font-size:0.7rem;font-weight:600;color:var(--text-soft);padding:0.22rem 0.55rem;border-radius:6px;background:rgba(15,23,42,0.05);align-self:flex-start}}
-.hero{{position:relative;background:radial-gradient(ellipse 90% 80% at 20% 20%,rgba(28,79,192,0.06) 0%,transparent 50%),radial-gradient(ellipse 60% 70% at 80% 80%,rgba(65,182,230,0.05) 0%,transparent 50%),linear-gradient(135deg,rgba(255,255,255,0.9) 0%,rgba(248,250,253,0.95) 100%);border-radius:16px;padding:2rem 2rem 1.6rem;border:1px solid var(--hairline-2);box-shadow:var(--shadow-sm);overflow:hidden}}
+.hero{{position:relative;background:radial-gradient(ellipse 90% 80% at 20% 20%,rgba(28,79,192,0.06) 0%,transparent 50%),radial-gradient(ellipse 60% 70% at 80% 80%,rgba(65,182,230,0.05) 0%,transparent 50%),linear-gradient(135deg,rgba(255,255,255,0.9) 0%,rgba(248,250,253,0.95) 100%);border-radius:16px;padding:1.4rem 2rem 1.2rem;border:1px solid var(--hairline-2);box-shadow:var(--shadow-sm);overflow:hidden}}
 .hero::before{{content:'';position:absolute;top:-1px;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--navy-600),var(--accent),#3B6FD9);border-radius:16px 16px 0 0;opacity:0.7}}
-.hero-header{{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.5rem}}
-.hero-title{{font-family:'Manrope',sans-serif;font-size:1.65rem;font-weight:800;color:var(--navy-900);letter-spacing:-0.025em;line-height:1.15;margin-bottom:0.35rem}}
+.hero-header{{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1rem}}
+.hero-title{{font-family:'Manrope',sans-serif;font-size:1.45rem;font-weight:800;color:var(--navy-900);letter-spacing:-0.025em;line-height:1.15;margin-bottom:0.25rem}}
 .hero-subtitle{{font-size:0.82rem;font-weight:500;color:var(--text-muted);display:flex;align-items:center;gap:0.5rem}}
 .hero-subtitle .dot{{width:4px;height:4px;border-radius:50%;background:var(--text-muted);opacity:0.5}}
 .hero-kpis{{display:grid;grid-template-columns:repeat(5,1fr);gap:0.75rem}}
-.hero-kpi{{background:rgba(255,255,255,0.75);backdrop-filter:blur(8px);border:1px solid var(--hairline-2);border-radius:12px;padding:0.85rem 1rem 0.8rem;transition:transform 0.25s var(--ease-out),box-shadow 0.25s var(--ease)}}
+.hero-kpi{{background:rgba(255,255,255,0.75);backdrop-filter:blur(8px);border:1px solid var(--hairline-2);border-radius:12px;padding:0.7rem 1rem 0.65rem;transition:transform 0.25s var(--ease-out),box-shadow 0.25s var(--ease)}}
 .hero-kpi:hover{{transform:translateY(-2px);box-shadow:var(--shadow-md)}}
-.hero-kpi .kpi-label{{font-size:0.7rem;color:var(--text-muted);font-weight:500;margin-bottom:0.25rem}}
-.hero-kpi .kpi-value{{font-family:'Manrope',sans-serif;font-size:1.5rem;font-weight:700;color:var(--navy-900);line-height:1.1;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;margin-bottom:0.3rem}}
+.hero-kpi .kpi-label{{font-size:0.7rem;color:var(--text-muted);font-weight:500;margin-bottom:0.2rem}}
+.hero-kpi .kpi-value{{font-family:'Manrope',sans-serif;font-size:1.35rem;font-weight:700;color:var(--navy-900);line-height:1.1;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;margin-bottom:0.2rem}}
 .hero-kpi .kpi-delta{{display:inline-flex;align-items:center;gap:0.25rem;font-size:0.7rem;font-weight:600;font-variant-numeric:tabular-nums}}
 .hero-kpi .kpi-delta.up{{color:var(--up)}}
 .hero-kpi .kpi-delta.down{{color:var(--down)}}
 .hero-kpi .kpi-delta .tri{{font-size:0.65rem;line-height:1}}
 .hero-kpi .kpi-delta .vs{{color:var(--text-muted);font-weight:500}}
 .hero-kpi .kpi-period{{font-size:0.62rem;color:var(--text-muted);font-weight:500;margin-bottom:0.15rem;opacity:0.8}}
-.workspace-divider{{height:1px;background:var(--hairline);margin:1.4rem 0}}
+.workspace-divider{{height:1px;background:var(--hairline);margin:0.8rem 0}}
 .dropdown-wrap{{position:relative}}
 .icon-btn{{display:inline-flex;align-items:center;gap:0.4rem;padding:0.4rem 0.7rem;border-radius:7px;background:rgba(255,255,255,0.7);border:1px solid var(--hairline);color:var(--text-soft);font-size:0.75rem;font-weight:500;cursor:pointer;font-family:inherit;transition:all 0.18s var(--ease)}}
 .icon-btn:hover{{background:#fff;color:var(--navy-700);border-color:rgba(28,79,192,0.25)}}
@@ -633,13 +633,13 @@ h1,h2,h3,h4{{font-family:'Manrope','Inter',system-ui,sans-serif;letter-spacing:-
     <section class="section" id="tools">
         <div class="section-head"><h2>Analytical Tools</h2><p>Advanced analytical tools and utilities for the Primary Care team.</p></div>
         <div class="grid" style="grid-template-columns:repeat(2,1fr);">
-            <a class="card" href="https://dss-amer-design.pfizer.com:10000/webapps/USPRIMARYCAREADHOCANALYTICSPARTC/anzthPT/" target="_blank" rel="noopener" style="min-height:180px;padding:1.5rem 1.4rem;justify-content:center;align-items:center;text-align:center;text-decoration:none;">
-                <div class="card-top" style="justify-content:center;margin-bottom:1rem;"><span class="icon-chip chip-s3" style="width:44px;height:44px;border-radius:12px;"><svg viewBox="0 0 24 24" style="width:22px;height:22px;"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span></div>
+            <a class="card" href="https://dss-amer-design.pfizer.com:10000/webapps/USPRIMARYCAREADHOCANALYTICSPARTC/anzthPT/" target="_blank" rel="noopener" style="min-height:140px;padding:1.2rem 1.4rem;justify-content:center;align-items:center;text-align:center;text-decoration:none;">
+                <div class="card-top" style="justify-content:center;margin-bottom:0.6rem;"><span class="icon-chip chip-s3" style="width:44px;height:44px;border-radius:12px;"><svg viewBox="0 0 24 24" style="width:22px;height:22px;"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span></div>
                 <div class="card-title" style="font-size:1.05rem;margin-bottom:0.4rem;">Rebate Decision Agent</div>
                 <div class="card-desc" style="font-size:0.78rem;color:var(--text-muted);line-height:1.5;">AI-powered rebate scenario modeling and decision support for Primary Care brands.</div>
             </a>
-            <a class="card" href="https://dss-amer-design.pfizer.com:10000/webapps/USPRIMARYCAREADHOCANALYTICSPARTC/a1g5PlB/" target="_blank" rel="noopener" style="min-height:180px;padding:1.5rem 1.4rem;justify-content:center;align-items:center;text-align:center;text-decoration:none;">
-                <div class="card-top" style="justify-content:center;margin-bottom:1rem;"><span class="icon-chip chip-s1" style="width:44px;height:44px;border-radius:12px;"><svg viewBox="0 0 24 24" style="width:22px;height:22px;"><path d="M3 3v18h18M7 16l4-4 4 4 5-5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span></div>
+            <a class="card" href="https://dss-amer-design.pfizer.com:10000/webapps/USPRIMARYCAREADHOCANALYTICSPARTC/a1g5PlB/" target="_blank" rel="noopener" style="min-height:140px;padding:1.2rem 1.4rem;justify-content:center;align-items:center;text-align:center;text-decoration:none;">
+                <div class="card-top" style="justify-content:center;margin-bottom:0.6rem;"><span class="icon-chip chip-s1" style="width:44px;height:44px;border-radius:12px;"><svg viewBox="0 0 24 24" style="width:22px;height:22px;"><path d="M3 3v18h18M7 16l4-4 4 4 5-5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span></div>
                 <div class="card-title" style="font-size:1.05rem;margin-bottom:0.4rem;">Nurtec Waterfall Model</div>
                 <div class="card-desc" style="font-size:0.78rem;color:var(--text-muted);line-height:1.5;">Waterfall analysis for Nurtec prescription volume drivers and market share changes.</div>
             </a>
